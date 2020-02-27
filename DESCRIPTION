@@ -1,16 +1,22 @@
 Package: miRNetR
-Title: What the Package Does (One Line, Title Case)
+Title: A companion R package for the miRNet web server
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Authors@R: c(person("Jianguo", "Xia", email = "jeff.xia@mcgill.ca", role = "aut"), person("Le", "Chang", email = "le.chang@mail.mcgill.ca", role=c("aut", "cre")))
+Author: Jianguo Xia [aut], Le Chang [aut, cre]
+Maintainer: Le Chang <le.chang@mail.mcgill.ca>
+Description: This package contains the entire underlying R functionality of the web-based tool miRNet. 
+Depends: R (>= 3.5.3)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Suggests: 
-    testthat
 RoxygenNote: 7.0.2
+Imports: 
+    RSQLite,
+    Cairo,
+    fastmatch,
+    igraph,
+    RJSONIO,
+    RColorBrewer,
+    rTRM
+Suggests: 
+VignetteBuilder: knitr
