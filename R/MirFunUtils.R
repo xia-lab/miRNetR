@@ -4,6 +4,19 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname LoadKEGGLib
+#' @export 
 LoadKEGGLib<-function(){
     kegg.rda <- paste(lib.path, dataSet$org, "/kegg_", dataSet$org, ".rda", sep="");
     
@@ -21,6 +34,19 @@ LoadKEGGLib<-function(){
     current.universe <<- unique(unlist(current.geneset));
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname LoadREACTOMELib
+#' @export 
 LoadREACTOMELib<-function(){
 
     reactome.rda <- paste(lib.path, dataSet$org, "/reactome_", dataSet$org, ".rda", sep="");
@@ -37,6 +63,19 @@ LoadREACTOMELib<-function(){
     current.universe <<- unique(unlist(current.geneset));
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param onto PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname LoadGOLib
+#' @export 
 LoadGOLib<-function(onto){
 
     go.rda <- paste(lib.path, dataSet$org, "/go_", tolower(onto), ".rda", sep="");
@@ -68,6 +107,19 @@ LoadGOLib<-function(onto){
 }
 
 # loading miRNA tissue annotation library (human only)
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname LoadTissueLib
+#' @export 
 LoadTissueLib <- function(){
   tissue.rda <- paste(lib.path, "tissue.rda", sep="");
   load(tissue.rda);
@@ -82,6 +134,19 @@ LoadTissueLib <- function(){
 }
 
 # loading miRNA functional annotation library Tam 2.0 (human only)
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname LoadFuncLib
+#' @export 
 LoadFuncLib <- function(){
   func.rda <- paste(lib.path, dataSet$org, "/tam_func.rda", sep="");
   load(func.rda);
@@ -96,6 +161,19 @@ LoadFuncLib <- function(){
 }
 
 # loading miRNA hmdd disease annotation library Tam 2.0 (human only)
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname LoadHMDDLib
+#' @export 
 LoadHMDDLib <- function(){
   hmdd.rda <- paste(lib.path, dataSet$org, "/tam_hmdd.rda", sep="");
   load(hmdd.rda);
@@ -110,6 +188,19 @@ LoadHMDDLib <- function(){
 }
 
 # loading miRNA cluster annotation library Tam 2.0 (human only)
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname LoadClusterLib
+#' @export 
 LoadClusterLib <- function(){
   cluster.rda <- paste(lib.path, dataSet$org, "/tam_cluster.rda", sep="");
   load(cluster.rda);
@@ -124,6 +215,19 @@ LoadClusterLib <- function(){
 }
 
 # loading miRNA TF annotation library Tam 2.0 (human only)
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname LoadTFLib
+#' @export 
 LoadTFLib <- function(){
   tf.rda <- paste(lib.path, dataSet$org, "/tam_tf.rda", sep="");
   load(tf.rda);
@@ -138,6 +242,19 @@ LoadTFLib <- function(){
 }
 
 # loading mirfamily library accroding to the species. The names for set.ids are the same as set.ids.
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname LoadmiRFamLib
+#' @export 
 LoadmiRFamLib <- function(){
   mirfamily.rda <- paste(lib.path, "mirfamily.rda", sep="");
   load(mirfamily.rda);
@@ -224,6 +341,22 @@ LoadmiRFamLib <- function(){
 # If users click more than once using the empirical approach 
 # We can take advantage of the accumulating the permutation result to increase the significance 
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param fun.type PARAM_DESCRIPTION
+#' @param file.nm PARAM_DESCRIPTION
+#' @param IDs PARAM_DESCRIPTION
+#' @param algo PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformMirTargetEnrichAnalysis
+#' @export 
 PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
 
     perm.num <- 1000;
@@ -459,6 +592,20 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
 
 # return a list of gene targets from the same size but randomly selected mirs
 # qSize is the query mir vec size
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param qSize PARAM_DESCRIPTION
+#' @param perm.num PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetRandomMirTargetGenes
+#' @export 
 GetRandomMirTargetGenes <- function(qSize, perm.num){
 
     mir.db <- dbConnect(SQLite(), paste(sqlite.path, "mir2gene", sep=""));
@@ -483,6 +630,20 @@ GetRandomMirTargetGenes <- function(qSize, perm.num){
 
 # return a list of gene targets from the same size but randomly selected mirs
 # qSize is the query mir vec size
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param qSize PARAM_DESCRIPTION
+#' @param perm.num PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetRandomXenoMirTargetGenes
+#' @export 
 GetRandomXenoMirTargetGenes <- function(qSize, perm.num){
     mir.db <- dbConnect(SQLite(), paste(lib.path, "xenomirnet", sep=""));
     statement <- paste("SELECT exo_mirna,entrez FROM ",dataSet$org, sep="");
@@ -504,6 +665,20 @@ GetRandomXenoMirTargetGenes <- function(qSize, perm.num){
     return(res);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param nms PARAM_DESCRIPTION
+#' @param operation PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname CalculateMirTargetSet
+#' @export 
 CalculateMirTargetSet <- function(nms, operation){
     nms <- strsplit(nms, ";")[[1]];
 

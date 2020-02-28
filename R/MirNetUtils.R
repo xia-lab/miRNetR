@@ -4,6 +4,19 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param net.type PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname CreateMirNets
+#' @export 
 CreateMirNets <- function(net.type){
 
   dataSet$mirnet <<- net.type;
@@ -80,6 +93,21 @@ CreateMirNets <- function(net.type){
 }
 
 # decompose to individual connected subnetworks, discard very small ones (defined by minNodeNum)
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param net.type PARAM_DESCRIPTION
+#' @param gObj PARAM_DESCRIPTION
+#' @param minNodeNum PARAM_DESCRIPTION, Default: 2
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname DecomposeMirGraph
+#' @export 
 DecomposeMirGraph <- function(net.type, gObj, minNodeNum = 2){
     comps <-decompose.graph(gObj, min.vertices=minNodeNum);
 
@@ -143,6 +171,20 @@ DecomposeMirGraph <- function(net.type, gObj, minNodeNum = 2){
     return(sub.stats);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param net.type PARAM_DESCRIPTION
+#' @param nd.type PARAM_DESCRIPTION, Default: 'all'
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname ReduceEdgeDensity
+#' @export 
 ReduceEdgeDensity <- function(net.type, nd.type="all"){
     all.nms <- V(mir.graph)$name;
     edge.mat <- get.edgelist(mir.graph);
@@ -189,6 +231,22 @@ ReduceEdgeDensity <- function(net.type, nd.type="all"){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param net.type PARAM_DESCRIPTION
+#' @param nd.type PARAM_DESCRIPTION
+#' @param min.dgr PARAM_DESCRIPTION
+#' @param min.btw PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname FilterMirNet
+#' @export 
 FilterMirNet <- function(net.type, nd.type, min.dgr, min.btw){
     all.nms <- V(mir.graph)$name;
     edge.mat <- get.edgelist(mir.graph);
@@ -227,6 +285,21 @@ FilterMirNet <- function(net.type, nd.type, min.dgr, min.btw){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param net.type PARAM_DESCRIPTION
+#' @param ids PARAM_DESCRIPTION
+#' @param id.type PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname FilterMirNetByList
+#' @export 
 FilterMirNetByList <- function(net.type, ids, id.type){
 
     lines <- strsplit(ids, "\r|\n|\r\n")[[1]];
@@ -252,6 +325,20 @@ FilterMirNetByList <- function(net.type, ids, id.type){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param g PARAM_DESCRIPTION
+#' @param filenm PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname convertIgraph2JSON
+#' @export 
 convertIgraph2JSON <- function(g, filenm){
 
     nms <- V(g)$name;
@@ -399,10 +486,36 @@ convertIgraph2JSON <- function(g, filenm){
 }
 
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param net.nm PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PrepareGraphML
+#' @export 
 PrepareGraphML <- function(net.nm){
     write.graph(mir.nets[[net.nm]], file=paste(net.nm, ".graphml", sep=""), format="graphml");
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param table.nm PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PrepareCSV
+#' @export 
 PrepareCSV <- function(table.nm){
   if(anal.type == "multilist" || anal.type == "snp2mir" ){
     write.csv(dataSet[[table.nm]], file=paste(table.nm, ".csv", sep=""), row.names = FALSE);
@@ -411,6 +524,20 @@ PrepareCSV <- function(table.nm){
   }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param mir.nm PARAM_DESCRIPTION
+#' @param file.nm PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PrepareMirNet
+#' @export 
 PrepareMirNet <- function(mir.nm, file.nm){
    my.mirnet <- mir.nets[[mir.nm]];
    current.mirnet <<- my.mirnet;
@@ -418,6 +545,21 @@ PrepareMirNet <- function(mir.nm, file.nm){
    return(1);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param g PARAM_DESCRIPTION
+#' @param layers PARAM_DESCRIPTION
+#' @param algo PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformLayOut
+#' @export 
 PerformLayOut <- function(g, layers, algo){
     vc <- vcount(g);
     if(algo == "Default"){
@@ -450,6 +592,20 @@ PerformLayOut <- function(g, layers, algo){
     pos.xy;
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param algo PARAM_DESCRIPTION
+#' @param filenm PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname UpdateNetworkLayout
+#' @export 
 UpdateNetworkLayout <- function(algo, filenm){
     # get layers
     if(anal.type == "multilist"){
@@ -481,10 +637,36 @@ UpdateNetworkLayout <- function(algo, filenm){
     return(filenm);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetNetNames
+#' @export 
 GetNetNames <- function(){
     rownames(net.stats);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetTableNames
+#' @export 
 GetTableNames <- function(){
   if(anal.type == "multilist"){
     dataSet$mirtable;
@@ -495,14 +677,54 @@ GetTableNames <- function(){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetNetStats
+#' @export 
 GetNetStats <- function(){
     as.matrix(net.stats);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetNetsNameString
+#' @export 
 GetNetsNameString <- function(){
     paste(rownames(net.stats), collapse="||");
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param net.type PARAM_DESCRIPTION
+#' @param max.len PARAM_DESCRIPTION, Default: 200
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetMinConnectedGraphs
+#' @export 
 GetMinConnectedGraphs <- function(net.type, max.len = 200){
   set.seed(8574);
   # first get shortest paths for all pair-wise seeds
@@ -559,6 +781,19 @@ GetMinConnectedGraphs <- function(net.type, max.len = 200){
   }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname UpdateSubnetStats
+#' @export 
 UpdateSubnetStats <- function(){
     old.nms <- names(mir.nets);
     net.stats <- ComputeSubnetStats(mir.nets);
@@ -568,6 +803,19 @@ UpdateSubnetStats <- function(){
     net.stats <<- net.stats;
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param comps PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname ComputeSubnetStats
+#' @export 
 ComputeSubnetStats <- function(comps){
     net.stats <- as.data.frame(matrix(0, ncol = 3, nrow = length(comps)));
     colnames(net.stats) <- c("Node", "Edge", "Query");
@@ -580,6 +828,20 @@ ComputeSubnetStats <- function(comps){
 }
 
 # from to should be valid nodeIDs
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param from PARAM_DESCRIPTION
+#' @param to PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetShortestPaths
+#' @export 
 GetShortestPaths <- function(from, to){
 
     paths <- get.all.shortest.paths(current.mirnet, from, to)$res;
@@ -606,6 +868,19 @@ GetShortestPaths <- function(from, to){
     return(all.paths);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param nodeids PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname ExtractMirNetModule
+#' @export 
 ExtractMirNetModule<- function(nodeids){
     set.seed(8574);
     nodes <- strsplit(nodeids, ";")[[1]];
@@ -660,6 +935,20 @@ ExtractMirNetModule<- function(nodeids){
 
 
 # exclude nodes in current.net (networkview)
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param nodeids PARAM_DESCRIPTION
+#' @param filenm PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname ExcludeNodes
+#' @export 
 ExcludeNodes <- function(nodeids, filenm){
     nodes2rm <- strsplit(nodeids, ";")[[1]];
     current.mirnet <- delete.vertices(current.mirnet, nodes2rm);

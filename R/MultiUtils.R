@@ -4,6 +4,19 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname QueryMultiList
+#' @export 
 QueryMultiList <- function(){
 
   net.info <<- list();
@@ -83,6 +96,19 @@ QueryMultiList <- function(){
   return(1);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param input.type PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname SearchMultiNet
+#' @export 
 SearchMultiNet <- function(input.type){
 
   if (input.type == "gene2mir" || input.type == "mir2gene"){

@@ -5,6 +5,20 @@
 ###################################################
 
 # init resources for analysis
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param dataType PARAM_DESCRIPTION
+#' @param analType PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname Init.Data
+#' @export 
 Init.Data<-function(dataType, analType){
     dataSet <<- list(data=list());
     data.type <<- dataType; # mir or xeno.mir
@@ -41,6 +55,19 @@ Init.Data<-function(dataType, analType){
 # stored in dataSet list object
 # can have many classes, stored in meta.info
 # type: array, count, qpcr
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param dataName PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname ReadTabExpressData
+#' @export 
 ReadTabExpressData <- function(dataName) {
 
     dataSet <- ReadTabData(dataName);
@@ -91,14 +118,57 @@ ReadTabExpressData <- function(dataName) {
     return (1);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetClassInfo
+#' @export 
 GetClassInfo <- function(){
     return(levels(dataSet$cls));
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetAnotNames
+#' @export 
 GetAnotNames<-function(){
     return(rownames(dataSet$data.anot));
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param mirs PARAM_DESCRIPTION
+#' @param orgType PARAM_DESCRIPTION
+#' @param idType PARAM_DESCRIPTION
+#' @param tissue PARAM_DESCRIPTION
+#' @param targetOpt PARAM_DESCRIPTION, Default: NULL
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname SetupMirListData
+#' @export 
 SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
 
     dataSet$listData <- TRUE;
@@ -127,6 +197,23 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
     return (nrow(mir.mat));
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param listInput PARAM_DESCRIPTION
+#' @param orgType PARAM_DESCRIPTION
+#' @param inputType PARAM_DESCRIPTION
+#' @param idType PARAM_DESCRIPTION
+#' @param tissue PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname SetupIndListData
+#' @export 
 SetupIndListData <- function(listInput, orgType, inputType, idType, tissue){
 
   data.org <<- dataSet$org <- orgType;
@@ -149,6 +236,21 @@ SetupIndListData <- function(listInput, orgType, inputType, idType, tissue){
   return (nrow(in.mat));
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param orgType PARAM_DESCRIPTION, Default: 'hsa'
+#' @param tissue PARAM_DESCRIPTION
+#' @param idType PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname SetupItemFromPickList
+#' @export 
 SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
     if(!exists("picklist.vec")){
         print("Could not find user entered disease list!");
@@ -169,6 +271,19 @@ SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
     return(nrow(mir.mat));
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname SetupMirExpressData
+#' @export 
 SetupMirExpressData <- function(){
     idType <- dataSet$id.current;
     mydata <- data.matrix(dataSet$sig.mat[,"max.logFC",drop=FALSE]);
@@ -183,6 +298,20 @@ SetupMirExpressData <- function(){
 }
 
 # "ID", "Accession","Gene", "PMID"
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param netType PARAM_DESCRIPTION
+#' @param colInx PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetMirResCol
+#' @export 
 GetMirResCol <- function(netType, colInx){
   if (anal.type == "multilist"  || anal.type == "snp2mir" ) {
   if(netType == "gene2mir"){
@@ -220,6 +349,19 @@ GetMirResCol <- function(netType, colInx){
     return(res);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param netType PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetMirResRowNames
+#' @export 
 GetMirResRowNames <- function(netType){
   if (anal.type == "multilist"  || anal.type == "snp2mir" ) {
     if (netType == "gene2mir") {
@@ -259,6 +401,19 @@ GetMirResRowNames <- function(netType){
   rownames(resTable);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param mir.id PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname RemoveMirEntry
+#' @export 
 RemoveMirEntry <- function(mir.id) {
     inx <- which(rownames(dataSet$mir.res) == mir.id);
     if(length(inx) > 0){
@@ -266,6 +421,19 @@ RemoveMirEntry <- function(mir.id) {
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param node.id PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname RemoveMirNode
+#' @export 
 RemoveMirNode <- function(node.id) {
     # node ID is name of either gene or miRNA
     row.ids <- NULL;
@@ -288,6 +456,22 @@ RemoveMirNode <- function(node.id) {
 }
 
 # batch remove based on
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param col.id PARAM_DESCRIPTION
+#' @param method PARAM_DESCRIPTION
+#' @param value PARAM_DESCRIPTION
+#' @param action PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname UpdateMirEntries
+#' @export 
 UpdateMirEntries <- function(col.id, method, value, action) {
 
     if(col.id == "evidence"){
@@ -336,24 +520,76 @@ UpdateMirEntries <- function(col.id, method, value, action) {
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetUniqueDiseaseNames
+#' @export 
 GetUniqueDiseaseNames <- function(){
     db.path <- paste(sqlite.path, "mir2disease", sep="");
     statement <- "SELECT disease FROM disease";
     return(GetUniqueEntries(db.path, statement));
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param orgType PARAM_DESCRIPTION, Default: 'hsa'
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetUniqueMoleculeNames
+#' @export 
 GetUniqueMoleculeNames <- function(orgType="hsa"){
     db.path <- paste(sqlite.path, "mir2molecule", sep="");
     statement <- paste("SELECT molecule FROM ",orgType, sep="");
     return(GetUniqueEntries(db.path, statement));
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param orgType PARAM_DESCRIPTION, Default: 'hsa'
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetUniqueEpigeneNames
+#' @export 
 GetUniqueEpigeneNames <- function(orgType="hsa"){
     db.path <- paste(sqlite.path, "mir2epi", sep="");
     statement <- paste("SELECT epi_regulator FROM ",orgType, sep="");
     return(GetUniqueEntries(db.path, statement));
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname SetCurrentDataMulti
+#' @export 
 SetCurrentDataMulti <- function(){
   dataSet$type <- nms.vec;
   dataSet <<- dataSet;

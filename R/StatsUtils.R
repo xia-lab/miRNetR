@@ -5,6 +5,22 @@
 ###################################################
 
 # update result based on new cutoff
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param p.lvl PARAM_DESCRIPTION
+#' @param fc.lvl PARAM_DESCRIPTION
+#' @param direction PARAM_DESCRIPTION
+#' @param update PARAM_DESCRIPTION, Default: T
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetSigGenes
+#' @export 
 GetSigGenes<-function(p.lvl, fc.lvl, direction, update=T){
 
     resTable <- readRDS("resTable");
@@ -82,6 +98,19 @@ GetSigGenes<-function(p.lvl, fc.lvl, direction, update=T){
 }
 
 # note, here also update data type array/count
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param norm.opt PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformArrayDataNormalization
+#' @export 
 PerformArrayDataNormalization <- function(norm.opt){
 
     data <- dataSet$data.anot;
@@ -117,6 +146,19 @@ PerformArrayDataNormalization <- function(norm.opt){
     return(1);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param target.grp PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformLimma
+#' @export 
 PerformLimma<-function(target.grp){
 
     myargs <- list();
@@ -172,6 +214,20 @@ PerformLimma<-function(target.grp){
 ###########################
 ## for RNAseq data
 ##########################
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param norm.opt PARAM_DESCRIPTION
+#' @param disp.opt PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformCountDataNormalization
+#' @export 
 PerformCountDataNormalization <- function(norm.opt, disp.opt){
 
     msg <- NULL;
@@ -201,6 +257,19 @@ PerformCountDataNormalization <- function(norm.opt, disp.opt){
     return(1);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param target.grp PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformEdgeR
+#' @export 
 PerformEdgeR<-function(target.grp){
 
     myargs <- list();
@@ -245,6 +314,19 @@ PerformEdgeR<-function(target.grp){
 ## for QPCR data
 ##########################
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param norm.opt PARAM_DESCRIPTION, Default: 'quantile'
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformQpcrDataNormalization
+#' @export 
 PerformQpcrDataNormalization <- function(norm.opt = "quantile") {
     
     data <- dataSet$data.anot;
@@ -270,6 +352,20 @@ PerformQpcrDataNormalization <- function(norm.opt = "quantile") {
     return(1);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param target.grp PARAM_DESCRIPTION
+#' @param method PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformHTqPCR
+#' @export 
 PerformHTqPCR<-function(target.grp, method){
 
     if(method == "limma"){
@@ -306,6 +402,25 @@ PerformHTqPCR<-function(target.grp, method){
 }
 
 # utility method to get p values
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param my.dat PARAM_DESCRIPTION
+#' @param my.cls PARAM_DESCRIPTION
+#' @param grp1 PARAM_DESCRIPTION
+#' @param grp2 PARAM_DESCRIPTION
+#' @param paired PARAM_DESCRIPTION, Default: FALSE
+#' @param equal.var PARAM_DESCRIPTION, Default: TRUE
+#' @param nonpar PARAM_DESCRIPTION, Default: F
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetTtestP
+#' @export 
 GetTtestP <- function(my.dat, my.cls, grp1, grp2, paired=FALSE, equal.var=TRUE, nonpar=F){
 
     inx1 <- which(my.cls==grp1);
@@ -342,6 +457,22 @@ GetTtestP <- function(my.dat, my.cls, grp1, grp2, paired=FALSE, equal.var=TRUE, 
 }
 
 # utility method to calculate FC
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param my.dat PARAM_DESCRIPTION
+#' @param my.cls PARAM_DESCRIPTION
+#' @param grp1 PARAM_DESCRIPTION
+#' @param grp2 PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetFC
+#' @export 
 GetFC <- function(my.dat, my.cls, grp1, grp2){
     m1 <- rowMeans(my.dat[, which(my.cls==grp1)]);
     m2 <- rowMeans(my.dat[, which(my.cls==grp2)]);
@@ -351,6 +482,19 @@ GetFC <- function(my.dat, my.cls, grp1, grp2){
     return(fc);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param imgNm PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PlotDataOverview
+#' @export 
 PlotDataOverview<-function(imgNm){
     dat <- dataSet$data.anot;
     library('lattice');
