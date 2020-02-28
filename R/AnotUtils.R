@@ -4,6 +4,19 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformMirGeneMapping
+#' @export 
 PerformMirGeneMapping <- function(){
 
     mir.mat <- dataSet$mir.orig;
@@ -52,6 +65,19 @@ PerformMirGeneMapping <- function(){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformMolMapping
+#' @export 
 PerformMolMapping <- function(){
     orgType <- dataSet$org;
     if(orgType %in% c("bta", "dme", "gga","sma", "cel", "ssc")){
@@ -99,6 +125,19 @@ PerformMolMapping <- function(){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformDisMapping
+#' @export 
 PerformDisMapping <- function(){
     if(dataSet$org != "hsa" ){
        curent.msg <<- "Only huamn support the disease network."
@@ -145,6 +184,19 @@ PerformDisMapping <- function(){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformMir2EpiMapping
+#' @export 
 PerformMir2EpiMapping <- function(){
     orgType <- dataSet$org;
     if(orgType %in% c("bta", "dme","gga","sma", "cel","dre","rno", "ssc") ){
@@ -195,6 +247,19 @@ PerformMir2EpiMapping <- function(){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformLncRNAMapping
+#' @export 
 PerformLncRNAMapping <- function(){
     orgType <- dataSet$org;
     if(orgType != "hsa" ){
@@ -245,6 +310,19 @@ PerformLncRNAMapping <- function(){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformTFMapping
+#' @export 
 PerformTFMapping <- function(){
         orgType <- dataSet$org;
         if(orgType %in% c("bta", "ssc","gga","dme", "sma") ){
@@ -294,6 +372,19 @@ PerformTFMapping <- function(){
         }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformSNPMirGeneMapping
+#' @export 
 PerformSNPMirGeneMapping <- function(){
     snp.mat <- dataSet$mir.orig;
     snpidVec <- rownames(snp.mat);
@@ -339,6 +430,19 @@ PerformSNPMirGeneMapping <- function(){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformSNPMirDisMapping
+#' @export 
 PerformSNPMirDisMapping <- function(){
     snp.mat <- dataSet$mir.orig;
     snpidVec <- rownames(snp.mat);
@@ -384,6 +488,19 @@ PerformSNPMirDisMapping <- function(){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformSNPMirMolMapping
+#' @export 
 PerformSNPMirMolMapping <- function(){
     snp.mat <- dataSet$mir.orig;
     snpidVec <- rownames(snp.mat);
@@ -429,6 +546,19 @@ PerformSNPMirMolMapping <- function(){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformSNPMirLncMapping
+#' @export 
 PerformSNPMirLncMapping <- function(){
   snp.mat <- dataSet$mir.orig;
   snpidVec <- rownames(snp.mat);
@@ -479,6 +609,19 @@ PerformSNPMirLncMapping <- function(){
   }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformSNPMirTFMapping
+#' @export 
 PerformSNPMirTFMapping <- function(){
   snp.mat <- dataSet$mir.orig;
   snpidVec <- rownames(snp.mat);
@@ -528,6 +671,23 @@ PerformSNPMirTFMapping <- function(){
   }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param org PARAM_DESCRIPTION
+#' @param idType PARAM_DESCRIPTION
+#' @param tissue PARAM_DESCRIPTION
+#' @param lvlOpt PARAM_DESCRIPTION
+#' @param matchMin PARAM_DESCRIPTION, Default: 0.5
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformDataAnnot
+#' @export 
 PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
     data.org <<- dataSet$org <- org;
     dataSet$id.orig <- dataSet$id.current <- idType;
@@ -585,6 +745,20 @@ PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
 }
 
 ### convert to gene symbols!!! not entrez
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param id.vec PARAM_DESCRIPTION
+#' @param idType PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname doMirGeneAnnotation
+#' @export 
 doMirGeneAnnotation <- function(id.vec, idType){
      feature.vec <- id.vec;
      if(idType %in% c("entrez", "symbol", "refseq", "genbank", "emblgene", "embltranscript", "orfid","mir_id","mir_acc")){
@@ -598,6 +772,20 @@ doMirGeneAnnotation <- function(id.vec, idType){
      return(anot.id);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param id.vec PARAM_DESCRIPTION
+#' @param idType PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname doAnnotation
+#' @export 
 doAnnotation <- function(id.vec, idType){
      feature.vec <- id.vec;
      if(idType %in% c("entrez", "symbol", "refseq", "genbank", "emblgene", "embltranscript", "orfid","mir_id","mir_acc")){
@@ -609,6 +797,19 @@ doAnnotation <- function(id.vec, idType){
      return(anot.id);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformGeneAnnotation
+#' @export 
 PerformGeneAnnotation <- function(){
     if(!exists("entrez.vec")){
         print("Could not find Entrez ID list!");
@@ -626,6 +827,19 @@ PerformGeneAnnotation <- function(){
 }
 
 # probe based on built-in
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param platform PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformProbeAnnotation
+#' @export 
 PerformProbeAnnotation <- function(platform){
     if(!exists("probe.vec")){
         print("Could not find the Probe ID list!");
@@ -639,6 +853,20 @@ PerformProbeAnnotation <- function(platform){
 }
 
 # from probe ID to entrez ID
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param probe.vec PARAM_DESCRIPTION
+#' @param platform PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname doProbeMapping
+#' @export 
 doProbeMapping <- function(probe.vec, platform){
     platform.path <- paste(lib.path,  data.org, "/", platform, ".csv", sep="");
     probe.map <- read.csv(platform.path, header=T, as.is=T);
@@ -654,6 +882,20 @@ doProbeMapping <- function(probe.vec, platform){
 
 
 # mapping between genebank, refseq and entrez
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param q.vec PARAM_DESCRIPTION
+#' @param type PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname doGeneIDMapping
+#' @export 
 doGeneIDMapping <- function(q.vec, type){
     require('RSQLite');
     mir.db <- dbConnect(SQLite(), paste(sqlite.geneid.path, data.org, "_genes.sqlite", sep=""));
@@ -708,6 +950,19 @@ doGeneIDMapping <- function(q.vec, type){
     return(entrezs);
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param entrez.vec PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname doEntrez2SymbolMapping
+#' @export 
 doEntrez2SymbolMapping <- function(entrez.vec){
     gene.map <-  queryGeneDB("entrez", data.org);
     gene.map[] <- lapply(gene.map, as.character)
@@ -722,6 +977,21 @@ doEntrez2SymbolMapping <- function(entrez.vec){
 }
 
 # given a data with duplicates, dups is the one with duplicates
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param data PARAM_DESCRIPTION
+#' @param lvlOpt PARAM_DESCRIPTION
+#' @param quiet PARAM_DESCRIPTION, Default: T
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname RemoveDuplicates
+#' @export 
 RemoveDuplicates <- function(data, lvlOpt, quiet=T){
 
     all.nms <- rownames(data);
@@ -768,6 +1038,20 @@ RemoveDuplicates <- function(data, lvlOpt, quiet=T){
     }
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param table.nm PARAM_DESCRIPTION
+#' @param data.org PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname queryGeneDB
+#' @export 
 queryGeneDB <- function(table.nm, data.org){
     require('RSQLite')
 
