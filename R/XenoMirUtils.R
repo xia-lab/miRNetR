@@ -291,26 +291,6 @@ SetupSourceFromList <- function(source){
 
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
-#' @param exp PARAM_DESCRIPTION
-#' @param miranda PARAM_DESCRIPTION
-#' @param tarpmir PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname SetupFilterList
-#' @export 
-SetupFilterList <- function(exp, miranda, tarpmir){
-   dataSet$parameter <- c(exp, miranda, tarpmir);
-   dataSet <<- dataSet;
-}
-
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
 #' @param status PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
@@ -329,12 +309,12 @@ PerformSpeciesMapping <- function(status){
     idType <- "exo_species";
     det.vec <- dataSet$det;
     pre.vec <- dataSet$pre;
-    det.dic <- QueryXenoMirSQLite(paste(lib.path, "xenomirnet", sep=""), det.vec, orgType, idType, source);
+    det.dic <- QueryXenoMirSQLite(paste(sqlite.path, "xenomirnet", sep=""), det.vec, orgType, idType, source);
     det.res <- det.dic[, c("source", "exo_species", "exo_mirna", "mir_acc", "symbol", "entrez", "data", "exp","miranda", "tarpmir")];
 
     if (status == "true"){
         source.pre <- "predicted";
-        pre.dic <- QueryXenoMirSQLite(paste(lib.path, "xenomirnet", sep=""), pre.vec, paste(orgType, "_pre", sep=""), idType, source.pre);
+        pre.dic <- QueryXenoMirSQLite(paste(sqlite.path, "xenomirnet", sep=""), pre.vec, paste(orgType, "_pre", sep=""), idType, source.pre);
         pre.res <- pre.dic[, c("source", "exo_species", "exo_mirna", "mir_acc", "symbol", "entrez", "data", "exp", "miranda", "tarpmir")];
         res <- rbind(det.res, pre.res);
     } else {
@@ -374,6 +354,9 @@ PerformSpeciesMapping <- function(status){
        dataSet$mir.mapped <- mir.mapped;
        dataSet$mir.res <- res;
        dataSet$mirtarget <- "gene";
+       dataSet$mir2gene <- res
+       dataSet$mirtable <- "mir2gene"
+       mir.nmsu = mir.mapped;
        dataSet <<- dataSet;
        if(trimmed){
             return(2);
@@ -406,14 +389,12 @@ PerformXenoMirGeneMapping <- function(status){
 
     source.vec <- "";
 
-    det.dic <- QueryXenoMirSQLite(paste(lib.path, "xenomirnet", sep=""), idVec, orgType, idType, source.vec);
+    det.dic <- QueryXenoMirSQLite(paste(sqlite.path, "xenomirnet", sep=""), idVec, orgType, idType, source.vec);
     det.res <- det.dic[, c("source", "exo_species", "exo_mirna", "mir_acc", "symbol", "entrez", "data", "exp", "miranda", "tarpmir")];
 
     if(status == "true"){
-        pre.dic <- QueryXenoMirSQLite(paste(lib.path, "xenomirnet", sep=""), idVec, paste(orgType, "_pre", sep=""), idType, source.vec);
+        pre.dic <- QueryXenoMirSQLite(paste(sqlite.path, "xenomirnet", sep=""), idVec, paste(orgType, "_pre", sep=""), idType, source.vec);
         pre.res <- pre.dic[, c("source", "exo_species", "exo_mirna", "mir_acc", "symbol", "entrez", "data", "exp", "miranda", "tarpmir")];
-
-        #mir.dic <- QueryXenoMirSQLite(paste(lib.path, "xenomirnet", sep=""), idVec, orgType, idType);
         res <- rbind(det.res, pre.res);
     } else {
         res <- det.res;
@@ -462,6 +443,9 @@ PerformXenoMirGeneMapping <- function(status){
             trimmed <- TRUE;
        }
         dataSet$mir.res <- res;
+        dataSet$mir2gene <- res
+        mir.nmsu = mir.mat;
+        dataSet$mirtable <- "mir2gene"
         dataSet$mirtarget <- "gene";
         dataSet <<- dataSet;
         if(trimmed){
@@ -470,45 +454,6 @@ PerformXenoMirGeneMapping <- function(status){
             return(1);
         }
     }
-}
-
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param nms PARAM_DESCRIPTION
-#' @param operation PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname CalculateXenoMirTargetSet
-#' @export 
-CalculateXenoMirTargetSet <- function(nms, operation){
-    nms <- strsplit(nms, ";")[[1]];
-
-    valid.inx <- nms %in% dataSet$mir.filtered$miRNA;
-    nms <- nms[valid.inx];
-    if(length(nms) == 0){
-        print("No valid mir found!");
-        return("error||No valid miRNA IDs were selected!");
-    }
-
-    hit.inx <- dataSet$mir.filtered$miRNA == nms[1];
-    targets <- dataSet$mir.filtered[hit.inx, 3]; # targets at third column
-    for(i in 2:length(nms)){
-        hit.inx <- dataSet$mir.filtered$miRNA == nms[i];
-        if(operation == "intersect"){
-            targets <- intersect(targets, dataSet$mir.filtered[hit.inx,3]);
-        }else if(operation == "union"){
-            targets <- union(targets, dataSet$mir.filtered[hit.inx,3]);
-        }
-    }
-
-    # include original queries
-    return(paste(unique(c(nms, targets)), collapse="||"));
 }
 
 ##################################################

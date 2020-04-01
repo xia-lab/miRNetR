@@ -4,9 +4,18 @@
 \alias{PerformMirTargetEnrichAnalysis}
 \title{FUNCTION_TITLE}
 \usage{
-PerformMirTargetEnrichAnalysis(fun.type, file.nm, IDs, algo)
+PerformMirTargetEnrichAnalysis(
+  adjust.type,
+  fun.type,
+  file.nm,
+  IDs,
+  algo,
+  mode = "serial"
+)
 }
 \arguments{
+\item{adjust.type}{PARAM_DESCRIPTION}
+
 \item{fun.type}{PARAM_DESCRIPTION}
 
 \item{file.nm}{PARAM_DESCRIPTION}
@@ -14,6 +23,8 @@ PerformMirTargetEnrichAnalysis(fun.type, file.nm, IDs, algo)
 \item{IDs}{PARAM_DESCRIPTION}
 
 \item{algo}{PARAM_DESCRIPTION}
+
+\item{mode}{PARAM_DESCRIPTION, Default: 'serial'}
 }
 \value{
 OUTPUT_DESCRIPTION

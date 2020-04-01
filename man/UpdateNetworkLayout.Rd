@@ -4,12 +4,14 @@
 \alias{UpdateNetworkLayout}
 \title{FUNCTION_TITLE}
 \usage{
-UpdateNetworkLayout(algo, filenm)
+UpdateNetworkLayout(algo, filenm, focus)
 }
 \arguments{
 \item{algo}{PARAM_DESCRIPTION}
 
 \item{filenm}{PARAM_DESCRIPTION}
+
+\item{focus}{PARAM_DESCRIPTION}
 }
 \value{
 OUTPUT_DESCRIPTION

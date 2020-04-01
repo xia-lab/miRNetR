@@ -4,7 +4,7 @@
 \alias{FilterMirNetByList}
 \title{FUNCTION_TITLE}
 \usage{
-FilterMirNetByList(net.type, ids, id.type)
+FilterMirNetByList(net.type, ids, id.type, remove)
 }
 \arguments{
 \item{net.type}{PARAM_DESCRIPTION}
@@ -12,6 +12,8 @@ FilterMirNetByList(net.type, ids, id.type)
 \item{ids}{PARAM_DESCRIPTION}
 
 \item{id.type}{PARAM_DESCRIPTION}
+
+\item{remove}{PARAM_DESCRIPTION}
 }
 \value{
 OUTPUT_DESCRIPTION

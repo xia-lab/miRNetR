@@ -61,20 +61,20 @@ hsa-mir-510-5p", orgType="hsa", idType="mir_id", tissue="Kidney");
 
 ```{r, eval=FALSE}
 # Map from miRNAs to their target genes
-dataSet<-PerformMirGeneMapping();
+dataSet<-QueryMultiListMir();
 ```
 
 ## 2.2 Network Generation
 
 ```{r, eval=FALSE}
 # 
-dataSet<-CreateMirNets("mir2gene");
+dataSet<-CreateMirNets("multilist");
 PrepareMirNet("mirnet1", "mirnet_0.json");
 ```
 
 ## 3. Functional Enrichment Analysis
 
 ```{r, eval=FALSE}
-# Create Biomarker Sweave report 
-PerformMirTargetEnrichAnalysis(adjust.type="NA", fun.type="kegg", file.nm="network_enrichment_kegg_1", IDs, algo="hyp")
+#  
+PerformMirTargetEnrichAnalysis(adjust.type="NA", fun.type="mirfamily", file.nm="network_enrichment_mirfamily_1", IDs="hsa-mir-101-3p; hsa-mir-147a; hsa-mir-361-5p; hsa-mir-133b; hsa-mir-510-5p; hsa-mir-3140-3p", algo="hyp")
 ```

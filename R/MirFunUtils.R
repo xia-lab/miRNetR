@@ -1,6 +1,6 @@
 ##################################################
 ## R script for miRNet
-## Description: GO/Pathway ORA 
+## Description: GO/Pathway ORA
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
@@ -19,13 +19,13 @@
 #' @export 
 LoadKEGGLib<-function(){
     kegg.rda <- paste(lib.path, dataSet$org, "/kegg_", dataSet$org, ".rda", sep="");
-    
+
     print(paste("adding library:", kegg.rda));
     load(kegg.rda);
 
     current.setlink <- kegg$link;
     current.mset <- kegg$sets;
-    set.ids<- names(current.mset); 
+    set.ids<- names(current.mset);
     names(set.ids) <- names(current.mset) <- kegg$term;
 
     current.setlink <<- current.setlink;
@@ -55,7 +55,7 @@ LoadREACTOMELib<-function(){
     load(reactome.rda);
 
     current.mset <- reactome$sets;
-    set.ids<- names(current.mset); 
+    set.ids<- names(current.mset);
     names(set.ids) <- names(current.mset) <- reactome$term;
     current.setlink <<- reactome$link;
     current.setids <<- set.ids;
@@ -86,20 +86,20 @@ LoadGOLib<-function(onto){
     if(tolower(onto) == "bp"){
         current.link <- go_bp$link;
         current.mset <- go_bp$sets;
-        set.ids<- names(current.mset); 
+        set.ids<- names(current.mset);
         names(set.ids) <- names(current.mset) <- go_bp$term;
     }else if(tolower(onto) == "mf"){
         current.link <- go_mf$link;
         current.mset <- go_mf$sets;
-        set.ids<- names(current.mset); 
+        set.ids<- names(current.mset);
         names(set.ids) <- names(current.mset) <- go_mf$term;
     }else{
         current.link <- go_cc$link;
         current.mset <- go_cc$sets;
-        set.ids<- names(current.mset); 
+        set.ids<- names(current.mset);
         names(set.ids) <- names(current.mset) <- go_cc$term;
     }
-    
+
     current.setlink <<- current.link;
     current.setids <<- set.ids;
     current.geneset <<- current.mset;
@@ -152,7 +152,7 @@ LoadFuncLib <- function(){
   load(func.rda);
   print(paste("adding library: ", func.rda));
   current.mset <- tam_func$sets;
-  set.ids <- names(current.mset); 
+  set.ids <- names(current.mset);
   names(set.ids) <- names(current.mset) <- tam_func$term;
   current.setlink <<- "http://www.lirmed.com/tam2/";
   current.setids <<- set.ids;
@@ -179,7 +179,7 @@ LoadHMDDLib <- function(){
   load(hmdd.rda);
   print(paste("adding library: ", hmdd.rda));
   current.mset <- tam_hmdd$sets;
-  set.ids <- names(current.mset); 
+  set.ids <- names(current.mset);
   names(set.ids) <- names(current.mset) <- tam_hmdd$term;
   current.setlink <<- "http://www.lirmed.com/tam2/";
   current.setids <<- set.ids;
@@ -206,7 +206,7 @@ LoadClusterLib <- function(){
   load(cluster.rda);
   print(paste("adding library: ", cluster.rda));
   current.mset <- tam_cluster$sets;
-  set.ids <- names(current.mset); 
+  set.ids <- names(current.mset);
   names(set.ids) <- names(current.mset) <- tam_cluster$term;
   current.setlink <<- "http://www.lirmed.com/tam2/";
   current.setids <<- set.ids;
@@ -233,9 +233,36 @@ LoadTFLib <- function(){
   load(tf.rda);
   print(paste("adding library: ", tf.rda));
   current.mset <- tam_tf$sets;
-  set.ids <- names(current.mset); 
+  set.ids <- names(current.mset);
   names(set.ids) <- names(current.mset) <- tam_tf$term;
   current.setlink <<- "http://www.lirmed.com/tam2/";
+  current.setids <<- set.ids;
+  current.geneset <<- current.mset;
+  current.universe <<- unique(unlist(current.geneset));
+}
+
+# loading miRNA TF annotation library Tam 2.0 (human only)
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname LoadDiseaseLib
+#' @export 
+LoadDiseaseLib <- function(){
+  disease.path <- paste(lib.path, "hsa/disease.rds", sep="");
+  diss = readRDS(disease.path);
+  print(paste("adding library: ", disease.path));
+  current.mset <- diss$sets;
+  set.ids <- names(current.mset);
+  names(set.ids) <- names(current.mset) <- diss$term;
+  current.setlink <<- diss$link;
   current.setids <<- set.ids;
   current.geneset <<- current.mset;
   current.universe <<- unique(unlist(current.geneset));
@@ -259,7 +286,7 @@ LoadmiRFamLib <- function(){
   mirfamily.rda <- paste(lib.path, "mirfamily.rda", sep="");
   load(mirfamily.rda);
   print(paste("adding library: ", mirfamily.rda));
-  
+
   if(dataSet$org == "hsa"){
     current.mset <- mirfam$hsa;
     set.ids <- names(current.mset);
@@ -268,7 +295,7 @@ LoadmiRFamLib <- function(){
     current.setids <<- set.ids;
     current.geneset <<- current.mset;
     current.universe <<- unique(unlist(current.geneset));
-  
+
     } else if(dataSet$org == "mmu"){
     current.mset <- mirfam$mmu;
     set.ids <- names(current.mset);
@@ -277,7 +304,7 @@ LoadmiRFamLib <- function(){
     current.setids <<- set.ids;
     current.geneset <<- current.mset;
     current.universe <<- unique(unlist(current.geneset));
-    
+
     }else if(dataSet$org == "rno"){
     current.mset <- mirfam$rno;
     set.ids <- names(current.mset);
@@ -286,7 +313,7 @@ LoadmiRFamLib <- function(){
     current.setids <<- set.ids;
     current.geneset <<- current.mset;
     current.universe <<- unique(unlist(current.geneset));
-    
+
     }else if(dataSet$org == "gga"){
     current.mset <- mirfam$gga;
     set.ids <- names(current.mset);
@@ -295,7 +322,7 @@ LoadmiRFamLib <- function(){
     current.setids <<- set.ids;
     current.geneset <<- current.mset;
     current.universe <<- unique(unlist(current.geneset));
-    
+
     }else if(dataSet$org == "bta"){
     current.mset <- mirfam$bta;
     set.ids <- names(current.mset);
@@ -304,7 +331,7 @@ LoadmiRFamLib <- function(){
     current.setids <<- set.ids;
     current.geneset <<- current.mset;
     current.universe <<- unique(unlist(current.geneset));
-    
+
     }else if(dataSet$org == "dre"){
     current.mset <- mirfam$dre;
     set.ids <- names(current.mset);
@@ -313,7 +340,7 @@ LoadmiRFamLib <- function(){
     current.setids <<- set.ids;
     current.geneset <<- current.mset;
     current.universe <<- unique(unlist(current.geneset));
-    
+
     }else if(dataSet$org == "dme"){
     current.mset <- mirfam$dme;
     set.ids <- names(current.mset);
@@ -322,7 +349,7 @@ LoadmiRFamLib <- function(){
     current.setids <<- set.ids;
     current.geneset <<- current.mset;
     current.universe <<- unique(unlist(current.geneset));
-    
+
     }else {
     current.mset <- mirfam$cel;
     set.ids <- names(current.mset);
@@ -331,22 +358,24 @@ LoadmiRFamLib <- function(){
     current.setids <<- set.ids;
     current.geneset <<- current.mset;
     current.universe <<- unique(unlist(current.geneset));
-    
+
     }
 }
 
 # note: hit.query, resTable must synchronize
-# Due to bias in mirRNA targets, for mir2gene, the p value will be tested 
+# Due to bias in mirRNA targets, for mir2gene, the p value will be tested
 # using 1000 permutation. This should NOT be used for gene2mir
-# If users click more than once using the empirical approach 
-# We can take advantage of the accumulating the permutation result to increase the significance 
+# If users click more than once using the empirical approach
+# We can take advantage of the accumulating the permutation result to increase the significance
 
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
+#' @param adjust.type PARAM_DESCRIPTION
 #' @param fun.type PARAM_DESCRIPTION
 #' @param file.nm PARAM_DESCRIPTION
 #' @param IDs PARAM_DESCRIPTION
 #' @param algo PARAM_DESCRIPTION
+#' @param mode PARAM_DESCRIPTION, Default: 'serial'
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
 #' @examples 
@@ -357,14 +386,16 @@ LoadmiRFamLib <- function(){
 #' }
 #' @rdname PerformMirTargetEnrichAnalysis
 #' @export 
-PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
-
+PerformMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, IDs, algo, mode="serial"){
+    require(igraph); # keep this here as it is needed for remote calls
+    require('RSQLite');
+    require('RJSONIO');
     perm.num <- 1000;
 
     # prepare lib
-    if(tolower(fun.type) == 'kegg'){ 
+    if(tolower(fun.type) == 'kegg'){
         LoadKEGGLib();
-    }else if(tolower(fun.type) == 'reactome'){ 
+    }else if(tolower(fun.type) == 'reactome'){
         LoadREACTOMELib();
     }else if(tolower(fun.type) == 'mirfamily'){ # when user choose to perform miRNA family enrichment analysis.
         LoadmiRFamLib();
@@ -378,6 +409,8 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
         LoadClusterLib();
     }else if(tolower(fun.type) == 'tf'){
         LoadTFLib();
+    }else if(tolower(fun.type) == 'disease'){
+        LoadDiseaseLib();
     }else{ # GO
         LoadGOLib(fun.type);
     }
@@ -386,25 +419,46 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
 
     # prepare query, current.mirnet may be subset of all networks
     nodeList <- get.data.frame(current.mirnet, "vertices");
-    
+    if(all(colnames(dataSet$mir.filtered) == c("Name1","ID1","Name2","ID2"))){
+        colnames(dataSet$mir.filtered) = c("ID","Accession","Gene","Entrez")
+    }
     if(data.type == "xeno.mir"){
         if(tolower(fun.type) == 'mirfamily'){
             hit.inx <- dataSet$mir.filtered$miRNA %in% nodeList[,1];
-  
+
             mir.query <- unique(dataSet$mir.filtered$miRNA[hit.inx]);
             my.data <- unique(dataSet$mir.filtered[hit.inx,c("Accession", "miRNA")]); # The original dataset contains miRNA Accession number, you can consider it as entrez id.
-  
+
             ora.vec <- my.data[hit.inx,"Accession"];
             sybls <- my.data[hit.inx,"miRNA"];
             names(ora.vec) <- sybls;
         } else{
-            hit.inx <- dataSet$mir.filtered$Gene %in% nodeList[,1];
+            colnms = colnames(dataSet$mir.filtered)
+            if("Entrez" %in% colnms){
+            hit.inx <- dataSet$mir.filtered$Gene %in% nodeList[, 1];
 
-            mir.query <- unique(dataSet$mir.filtered$miRNA[hit.inx]);
+            mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
+
             my.data <- unique(dataSet$mir.filtered[hit.inx,c("Entrez", "Gene")]);
-       
-            ora.vec <- my.data[hit.inx,"Entrez"];
-            sybls <- my.data[hit.inx,"Gene"];
+            ora.vec <- my.data[hit.inx, "Entrez"];
+            sybls <- my.data[hit.inx, "Gene"];
+            }else if("Name2" %in% colnms){
+            hit.inx <- dataSet$mir.filtered$Name2 %in% nodeList[, 1];
+            mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
+            my.data <- unique(dataSet$mir.filtered[hit.inx,c("ID2", "Name2")]);
+            ora.vec <- my.data[hit.inx, "ID2"];
+            sybls <- my.data[hit.inx, "Name2"];
+
+            }else{
+            hit.inx <- dataSet$mir.filtered$Target %in% nodeList[, 1];
+
+            mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
+            my.data <- unique(dataSet$mir.filtered[hit.inx,c("TargetID", "Target")]);
+            ora.vec <- my.data[hit.inx, "TargetID"];
+            sybls <- my.data[hit.inx, "Target"];
+
+            }
+
             names(ora.vec) <- sybls;
         }
     }else{
@@ -412,7 +466,7 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
             hit.inx <- dataSet$mir.filtered$ID %in% nodeList[,1];
             mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
             my.data <- unique(dataSet$mir.filtered[hit.inx, c("Accession", "ID")]); # The original dataset contains miRNA Accession number, you can consider it as entrez id.
-  
+
             ora.vec <- my.data[hit.inx, "Accession"];
             sybls <- my.data[hit.inx, "ID"];
             names(ora.vec) <- sybls;
@@ -420,7 +474,7 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
             hit.inx <- dataSet$mir.filtered$ID %in% nodeList[,1];
             mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
             my.data <- unique(dataSet$mir.filtered[hit.inx, c("Accession", "ID")]);# The original dataset contains miRNA Accession number, you can consider it as entrez id.
-       
+
             ora.vec <- my.data[hit.inx, "Accession"];
             sybls <- my.data[hit.inx, "ID"];
             names(ora.vec) <- sybls;
@@ -453,18 +507,39 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
           sybls <- my.data[hit.inx, "ID"];
           names(ora.vec) <- sybls;
         }else {
+            colnms = colnames(dataSet$mir.filtered)
+            if("Entrez" %in% colnms){
             hit.inx <- dataSet$mir.filtered$Gene %in% nodeList[, 1];
 
             mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
-            my.data <- unique(dataSet$mir.filtered[hit.inx, c("Entrez", "Gene")]);
+
+            my.data <- unique(dataSet$mir.filtered[hit.inx,c("Entrez", "Gene")]);
             ora.vec <- my.data[hit.inx, "Entrez"];
             sybls <- my.data[hit.inx, "Gene"];
+            }else if("Name2" %in% colnms){
+            hit.inx <- dataSet$mir.filtered$Name2 %in% nodeList[, 1];
+
+            mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
+            my.data <- unique(dataSet$mir.filtered[hit.inx,c("ID2", "Name2")]);
+            ora.vec <- my.data[hit.inx, "ID2"];
+            sybls <- my.data[hit.inx, "Name2"];
+
+            }else{
+            hit.inx <- dataSet$mir.filtered$Target %in% nodeList[, 1];
+
+            mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
+            my.data <- unique(dataSet$mir.filtered[hit.inx,c("TargetID", "Target")]);
+            ora.vec <- my.data[hit.inx, "TargetID"];
+            sybls <- my.data[hit.inx, "Target"];
+
+            }
+
             names(ora.vec) <- sybls;
         }
     }
     q.vec <-  unlist(strsplit(IDs, "; "));
     ora.vec <- ora.vec[q.vec];
-    
+
     ora.vec <- ora.vec[!is.na(ora.vec)];
     ora.nms <- names(ora.vec);
 
@@ -475,7 +550,7 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
     colnames(res.mat) <- c("Total", "Expected", "Hits", "Pval");
     rownames(res.mat) <- names(current.geneset);
 
-    # not all query genes can be used, need to cut query to only the universe covered 
+    # not all query genes can be used, need to cut query to only the universe covered
     hits.inx <- ora.vec %in% current.universe;
     ora.vec <- ora.vec[hits.inx];
     ora.nms <- ora.nms[hits.inx];
@@ -483,7 +558,7 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
     q.size<-length(ora.vec);
 
     # get the matched query for each pathway
-    hits.query <- lapply(current.geneset, 
+    hits.query <- lapply(current.geneset,
         function(x) {
             ora.nms[ora.vec %in% x];
         }
@@ -493,7 +568,7 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
 
     # total unique gene number
     uniq.count <- length(current.universe);
-    
+
     # unique gene count in each pathway
     set.size <- unlist(lapply(current.geneset, length));
 
@@ -503,7 +578,7 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
 
     if(algo == 'emp'){
         # empirical sampling
-        # do stepped permutations 
+        # do stepped permutations
         # assume 1000 ==> 200
         # 300, 500 to remove those genesets that are already >20% , to save computing time
         library(fastmatch); # ~20% faster
@@ -513,15 +588,37 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
         }else{
             myRandQs <- GetRandomMirTargetGenes(length(mir.query), perm.num);
         }
-        for(i in 1:perm.num){
-            perm.out[, i]<- sapply(current.geneset, function(x) {sum(fmatch(myRandQs[[i]], x, nomatch = 0L) > 0L)}); 
+
+
+        if(mode == "parallel"){
+            library(foreach)
+            library(doParallel)
+
+            #setup parallel backend to use many processors
+            cores=detectCores()
+            cl <- makeCluster(cores[1]-2, type="FORK")
+            registerDoParallel(cl)
+
+            perm.out <- foreach(i=1:perm.num, .combine=cbind) %dopar% {
+              perm.res <- sapply(current.geneset, function(x) {
+                require(fastmatch);
+                sum(fmatch(myRandQs[[i]], x, nomatch = 0L) > 0L)
+                });
+            }
+
+            stopCluster(cl)
+        }else{
+            for(i in 1:perm.num){
+                perm.out[, i]<- sapply(current.geneset, function(x) {sum(fmatch(myRandQs[[i]], x, nomatch = 0L) > 0L)});
+            }
         }
-    
+
         #empirical p from permutation - percentage of number large than original
         hmat <- perm.out - hit.num > 0;
         # now, see if we can combine with previous previous permutation with the same query size
-        if(is.null(dataSet$perm.res)){ 
-            dataSet$perm.res <<- list();
+        if(is.null(dataSet$perm.res)){
+            dataSet$perm.res <- list();
+            dataSet$perm.res <<- dataSet$perm.res
         }
         perm.nm <- paste("Q", length(mir.query), sep="");
         if(perm.nm %in% names(dataSet$perm.res)){ # same query size and we can combine
@@ -530,14 +627,12 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
         dataSet$perm.res[[perm.nm]] <<- hmat;
         perm.pvals <- apply(hmat, 1, sum)/ncol(hmat);
 
-        res.mat[,4] <- perm.pvals; 
+        res.mat[,4] <- perm.pvals;
     }else{
         # standard hypergeometric tests use lower.tail = F for P(X>x)
         raw.pvals <- phyper(hit.num-1, set.size, uniq.count-set.size, q.size, lower.tail=F);
-        #res.mat[,4]<- raw.pvals;
-    
-        fdr.pvals <- p.adjust(raw.pvals, "fdr");
-        res.mat[,4] <- fdr.pvals;
+        #fdr.pvals <- p.adjust(raw.pvals, "fdr");
+        res.mat[,4] <- raw.pvals;
     }
 
     res.mat <- res.mat[hit.num>0,,drop = F];
@@ -551,35 +646,43 @@ PerformMirTargetEnrichAnalysis <- function(fun.type, file.nm, IDs, algo){
     }
 
     #get gene symbols
-    resTable <- data.frame(Pathway=rownames(res.mat), res.mat);
+    resTable <- data.frame(Pathway=rownames(res.mat), res.mat, stringsAsFactor=F);
     if(nrow(resTable) == 0){
         current.msg <<- "No hits found for your query!";
         print(current.msg);
         return(0);
+    }else{
+        if(nrow(resTable)>100){
+        resTable <- resTable[c(1:100),]
+        }
     }
     current.msg <<- "Functional enrichment analysis was completed";
 
     # write json
-    fun.anot <- hits.query; 
+    
 
     hit.num <- resTable[,4]; if(length(hit.num) ==1) { hit.num <- matrix(hit.num) };
-    fun.ids <- as.vector(current.setids[names(fun.anot)]); 
+    fun.ids <- as.vector(resTable$Pathway)
+    fun.anot <- hits.query[fun.ids];
     if(length(fun.ids) ==1) { fun.ids <- matrix(fun.ids) };
-
+    print(fun.ids);
     pval <- resTable[,5]; if(length(pval) ==1) { pval <- matrix(pval) };
     if(algo == "emp"){
         hit.inx <- pval == 0;
         pval[hit.inx] <- paste("<", 1/perm.num);
     }
+    adj.p <- p.adjust(pval, "fdr");
+    
     json.res <- list(
                     fun.anot = fun.anot,
                     fun.ids = fun.ids,
                     pval = pval,
+                    adj.p = adj.p,
                     hit.num = hit.num
         );
      json.mat <- toJSON(json.res, .na='null');
      json.nm <- paste(file.nm, ".json", sep="");
-     
+
      sink(json.nm)
      cat(json.mat);
      sink();
@@ -610,11 +713,11 @@ GetRandomMirTargetGenes <- function(qSize, perm.num){
 
     mir.db <- dbConnect(SQLite(), paste(sqlite.path, "mir2gene", sep=""));
     statement <- paste("SELECT mir_id,entrez FROM ",dataSet$org, sep="");
-    mir.dic <- .query.sqlite(mir.db, statement); 
+    mir.dic <- .query.sqlite(mir.db, statement);
 
     # now get the unique mirs
     mirs <- unique(mir.dic[,1]);
-    
+
     # sample with replacement
     res <- vector(length=perm.num, mode="list");
     for(i in 1:perm.num){
@@ -645,13 +748,13 @@ GetRandomMirTargetGenes <- function(qSize, perm.num){
 #' @rdname GetRandomXenoMirTargetGenes
 #' @export 
 GetRandomXenoMirTargetGenes <- function(qSize, perm.num){
-    mir.db <- dbConnect(SQLite(), paste(lib.path, "xenomirnet", sep=""));
+    mir.db <- dbConnect(SQLite(), paste(sqlite.path, "xenomirnet", sep=""));
     statement <- paste("SELECT exo_mirna,entrez FROM ",dataSet$org, sep="");
     mir.dic <- .query.sqlite(mir.db, statement);
 
     # now get the unique mirs
     mirs <- unique(mir.dic[,1]);
-    
+
     # sample without replacement
     res <- vector(length=perm.num, mode="list");
     for(i in 1:perm.num){

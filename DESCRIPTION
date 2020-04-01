@@ -24,4 +24,7 @@ Imports:
     HTqPCR,
     genefilter
 Suggests: 
+    knitr,
+    rmarkdown,
+    devtools
 VignetteBuilder: knitr

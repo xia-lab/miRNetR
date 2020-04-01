@@ -4,7 +4,7 @@
 \alias{SetupIndListData}
 \title{FUNCTION_TITLE}
 \usage{
-SetupIndListData(listInput, orgType, inputType, idType, tissue)
+SetupIndListData(listInput, orgType, inputType, idType, tissue, target)
 }
 \arguments{
 \item{listInput}{PARAM_DESCRIPTION}
@@ -16,6 +16,8 @@ SetupIndListData(listInput, orgType, inputType, idType, tissue)
 \item{idType}{PARAM_DESCRIPTION}
 
 \item{tissue}{PARAM_DESCRIPTION}
+
+\item{target}{PARAM_DESCRIPTION}
 }
 \value{
 OUTPUT_DESCRIPTION

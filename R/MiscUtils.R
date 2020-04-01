@@ -1,5 +1,5 @@
 ##################################################
-## R scripts for miRNet 
+## R scripts for miRNet
 ## Various utility methods
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
@@ -78,26 +78,6 @@ LogNorm<-function(x, min.val){
     log2((x + sqrt(x^2 + min.val^2))/2)
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param n PARAM_DESCRIPTION
-#' @param col.from PARAM_DESCRIPTION, Default: 'white'
-#' @param col.to PARAM_DESCRIPTION, Default: 'red'
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname getColorGradient
-#' @export 
-getColorGradient <- function(n, col.from="white", col.to="red"){
-    colfunc <- colorRampPalette(c(col.from, col.to))
-    colfunc(n)
-}
-
 # #FFFFFF to rgb(1, 0, 0)
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
@@ -113,7 +93,7 @@ getColorGradient <- function(n, col.from="white", col.to="red"){
 #' @rdname hex2rgba
 #' @export 
 hex2rgba <- function(cols){
-  return(apply(sapply(cols, col2rgb), 2, function(x){paste("rgba(", x[1], ",", x[2], ",", x[3], ",0.8)", sep="")})); 
+  return(apply(sapply(cols, col2rgb), 2, function(x){paste("rgba(", x[1], ",", x[2], ",", x[3], ",0.8)", sep="")}));
 }
 
 # re-arrange one vector elements according to another vector values
@@ -228,9 +208,9 @@ all.numeric <- function (x, what = c("test", "vector"), extras = c(".", "NA")){
     inx <- x %in% c("", extras);
     xs <- x[!inx];
     isnum <- !any(is.na(as.numeric(xs)))
-    if (what == "test") 
+    if (what == "test")
         isnum
-    else if (isnum) 
+    else if (isnum)
         as.numeric(x)
     else x
 }
@@ -263,6 +243,7 @@ ClearStrings<-function(query){
 }
 
 # need to obtain the full path to convert (from imagemagik) for cropping images
+
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 
@@ -399,7 +380,7 @@ ClearFactorStrings<-function(cls.nm, query){
 
     # kill multiple white space
     query <- gsub(" +","_",query);
-    # remove non alphabets and non numbers 
+    # remove non alphabets and non numbers
     query <- gsub("[^[:alnum:] ]", "_", query);
 
     # test all numbers (i.e. Time points)
@@ -440,7 +421,7 @@ ClearFactorStrings<-function(cls.nm, query){
 
 # read tab delimited file
 # stored in dataSet list object
-# can have many classes, stored in meta.info  
+# can have many classes, stored in meta.info
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 #' @param dataName PARAM_DESCRIPTION
@@ -463,7 +444,7 @@ ReadTabData <- function(dataName) {
     # look for #CLASS, could have more than 1 class labels, store in a list
     meta.info <- list();
     cls.inx <- grep("^#CLASS", dat1[,1]);
-    if(length(cls.inx) > 0){ 
+    if(length(cls.inx) > 0){
         for(i in 1:length(cls.inx)){
             inx <- cls.inx[i];
             cls.nm <- substring(dat1[inx, 1],2); # discard the first char #
@@ -475,7 +456,7 @@ ReadTabData <- function(dataName) {
             na.inx <- is.na(cls.lbls);
             cls.lbls[na.inx] <- "NA";
             cls.lbls <- ClearFactorStrings(cls.nm, cls.lbls);
-   
+
             meta.info[[cls.nm]] <- cls.lbls;
         }
     }else{
@@ -523,13 +504,13 @@ ReadTabData <- function(dataName) {
             data.table::fread(fileName, header=TRUE, check.names=FALSE, blank.lines.skip=TRUE, data.table=FALSE),
             error=function(e){
                 print(e);
-                return(.my.slowreaders(fileName));    
-            }, 
+                return(.my.slowreaders(fileName));
+            },
             warning=function(w){
                 print(w);
                 return(.my.slowreaders(fileName));
             });
-            
+
     if(any(dim(dat) == 0)){
         dat <- .my.slowreaders(fileName);
     }
@@ -543,7 +524,7 @@ ReadTabData <- function(dataName) {
     dat <- try(read.table(fileName, header=TRUE, comment.char = "", check.names=F, as.is=T));
   }else{ # note, read.csv is more than read.table with sep=","
     dat <- try(read.csv(fileName, header=TRUE, comment.char = "", check.names=F, as.is=T));
-  }  
+  }
   return(dat);
 }
 
@@ -564,121 +545,178 @@ ReadTabData <- function(dataName) {
 #' @rdname Query.miRNetDB
 #' @export 
 Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
-    mir.db <- dbConnect(SQLite(), db.path);
-    query <- paste (shQuote(q.vec),collapse=",");
-    statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query, ")", sep="");
-    mir.dic <- .query.sqlite(mir.db, statement);
+  mir.db <- dbConnect(SQLite(), db.path);
+  query <- paste (shQuote(q.vec),collapse=",");
+  statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query, ")", sep="");
+  mir.dic <- .query.sqlite(mir.db, statement);
 
-    #Check the matched miRNA from upload list to database
-    if (col.nm == "mir_id"){
-       mir.lib <- as.vector(unique(mir.dic$mir_id));
-       notMatch <- setdiff(q.vec, mir.lib);
-       
-        if (length(notMatch) > 0){ # Converting miRBase version and mature id.
-            print("Converting ids for different miRBase versions ....");
-            notMatch <- gsub("mir", "miR", notMatch);
-            load("../../data/libs/mbcdata.rda");
+  #Check the matched miRNA from upload list to database
+  if (col.nm == "mir_id"){
+    mir.lib <- as.vector(unique(mir.dic$mir_id));
+    notMatch <- setdiff(q.vec, mir.lib);
 
-            miRNANames <- gsub(" ","", as.character(notMatch));
-            targetVersion <- "v22";
-  
-            ver_index <- match(tolower(targetVersion), VER)
-            if (!is.na(ver_index)) {
-                MiRNAs <- as.matrix(miRNA_data[[ver_index]])
-                MiRNAs <- rbind(MiRNAs[, c(1,2,4)], MiRNAs[, c(5,6,7)], MiRNAs[, c(8,9,10)])
-                colnames(MiRNAs) <- c("ACC","SYM","SEQ")
+    if (length(notMatch) > 0){ # Converting miRBase version and mature id.
+      print("Converting ids for different miRBase versions ....");
+      notMatch <- gsub("mir", "miR", notMatch);
+      load("../../data/libs/mbcdata.rda");
 
-                ##check the rows with all NA
-                ind <- apply(MiRNAs, 1, function(x) all(is.na(x)))  
-                VMAP <- as.data.frame(unique(MiRNAs[-ind,]))[, c("ACC", "SYM")];
-  
-                uid <- unique(as.vector(miRNANames))
-                SYM_ID <- match(uid, SYM)
-                df <- data.frame(uid = uid, SYM = SYM_ID, stringsAsFactors=FALSE)
-                df <- merge(df, ACC_SYM)[, c("uid", "ACC")]
-                df <- unique( merge(df, VMAP, by="ACC") )
-  
-                target <- data.frame(
-                    OriginalName = df$uid,
-                    TargetName = SYM[df$SYM],
-                    Accession = ACC[df$ACC],
-                    stringsAsFactors = FALSE
-                );
+      miRNANames <- gsub(" ","", as.character(notMatch));
+      targetVersion <- "v22";
 
-                idx <- (target$OriginalName == target$TargetName) | (!target$OriginalName %in% target$TargetName)
-                target <- target[idx, , drop=FALSE]
-                
-                ## collapse 1:many maps
-                splitpaste <- function(x, f) {
-                    result <- vapply(split(x, f), paste, character(1), collapse="&")
-                    result[!nzchar(result)] <- NA
-                    result
-                }
-                f <- factor(target$OriginalName, levels=uid)
-                target <- data.frame(
-                    OriginalName = uid,
-                    TargetName = splitpaste(target$TargetName, f),
-                    Accession = splitpaste(target$Accession, f),
-                    row.names=NULL, stringsAsFactors = FALSE);
+      ver_index <- match(tolower(targetVersion), VER)
+      if (!is.na(ver_index)) {
+        MiRNAs <- as.matrix(miRNA_data[[ver_index]])
+        MiRNAs <- rbind(MiRNAs[, c(1,2,4)], MiRNAs[, c(5,6,7)], MiRNAs[, c(8,9,10)])
+        colnames(MiRNAs) <- c("ACC","SYM","SEQ")
 
-                target <- target[match(miRNANames, target$OriginalName),];            
-                mir.vec <- tolower(as.vector(target$TargetName));
-                mir.vec <- unique(unlist(strsplit(mir.vec, split="&")));
-                query2 <- paste(shQuote(mir.vec), collapse=",");
-                statement2 <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query2, ")", sep="");
-                mir.db <- dbConnect(SQLite(), db.path);
-                mir.dic2 <- .query.sqlite(mir.db, statement2);
+        ##check the rows with all NA
+        ind <- apply(MiRNAs, 1, function(x) all(is.na(x)))
+        VMAP <- as.data.frame(unique(MiRNAs[-ind,]))[, c("ACC", "SYM")];
 
-                # now add back to the main data
-                mir.dic <- rbind(mir.dic, mir.dic2);
-                
-                # remove duplicates
-                dup.inx <- duplicated(mir.dic$mirnet);
-                mir.dic <- mir.dic[!dup.inx, ];
-            }
+        uid <- unique(as.vector(miRNANames))
+        SYM_ID <- match(uid, SYM)
+        df <- data.frame(uid = uid, SYM = SYM_ID, stringsAsFactors=FALSE)
+        df <- merge(df, ACC_SYM)[, c("uid", "ACC")]
+        df <- unique( merge(df, VMAP, by="ACC") )
+
+        target <- data.frame(
+          OriginalName = df$uid,
+          TargetName = SYM[df$SYM],
+          Accession = ACC[df$ACC],
+          stringsAsFactors = FALSE
+        );
+
+        idx <- (target$OriginalName == target$TargetName) | (!target$OriginalName %in% target$TargetName)
+        target <- target[idx, , drop=FALSE]
+
+        ## collapse 1:many maps
+        splitpaste <- function(x, f) {
+          result <- vapply(split(x, f), paste, character(1), collapse="&")
+          result[!nzchar(result)] <- NA
+          result
         }
-    }
 
-    if(col.nm == "mir_acc"){
-        # when use Accession number, it can match both new and old version, use the new one (old one is ranked later)
-        dup.inx <- duplicated(mir.dic[, c("mir_acc", "symbol")]);
+        f <- factor(target$OriginalName, levels=uid)
+        target <- data.frame(
+          OriginalName = uid,
+          TargetName = splitpaste(target$TargetName, f),
+          Accession = splitpaste(target$Accession, f),
+          row.names=NULL, stringsAsFactors = FALSE);
+
+        target <- target[match(miRNANames, target$OriginalName),];
+
+        # map to mature form
+        VMAP <-miRNA_data[[ver_index]][,c(2,6,9)]
+        # [1] "Precursor" "Mature1"   "Mature2"
+        VMAP[,1]=SYM[VMAP[,1]]
+        VMAP[,2]=SYM[VMAP[,2]] # mature 1
+        VMAP[,3]=SYM[VMAP[,3]] # mature 2
+        miRNANames <- gsub("miR", "mir", miRNANames);
+        miRNANames=as.character(miRNANames)
+        miRNANames=gsub(" ","",miRNANames)##Remove the possible space
+        uid = unique(as.vector(miRNANames))
+
+        uid=na.omit(uid)
+        ind=apply(VMAP,2,function(x){match(uid,x)})
+        if(length(miRNANames) == 1){
+          ind <- rbind(ind, rep(NA, 3));
+        }else if(length(miRNANames) > 1){
+          ind <- ind;
+        }
+        ind[which(is.na(ind[,1])),1]=ind[which(is.na(ind[,1])),2]
+        ind[which(is.na(ind[,1])),1]=ind[which(is.na(ind[,1])),3]
+        target2 <- data.frame(
+          OriginalName = uid,
+          Mature1 = VMAP[ind[,1],2],
+          Mature2 = VMAP[ind[,1],3],
+          row.names=NULL, stringsAsFactors = FALSE)
+        target2=target2[match(miRNANames, target2$OriginalName),]
+
+        #merge
+        mir.vec <- tolower(as.vector(target$TargetName));
+        mir.vec2 <- c(tolower(as.vector(target2$Mature1)),tolower(as.vector(target2$Mature2)));
+        mir.vec3 <- tolower(paste(target$OriginalName,"-3p",sep=""));
+        mir.vec4 <- tolower(paste(target$OriginalName,"-5p",sep=""));
+        mir.vec <- na.omit(c(mir.vec, mir.vec2,mir.vec3,mir.vec4))
+        mir.vec <- unique(unlist(strsplit(mir.vec, split="&")));
+        query2 <- paste(shQuote(mir.vec), collapse=",");
+        statement2 <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query2, ")", sep="");
+        mir.db <- dbConnect(SQLite(), db.path);
+        mir.dic2 <- .query.sqlite(mir.db, statement2);
+
+        # now add back to the main data
+        mir.dic <- rbind(mir.dic, mir.dic2);
+
+        # remove duplicates
+        dup.inx <- duplicated(mir.dic$mirnet);
         mir.dic <- mir.dic[!dup.inx, ];
+      }
     }
+  }
 
-    # Perform tissue annotation if specified
-    if (nrow(mir.dic) > 0){
-        tissue <- dataSet$tissue;
-        if(dataSet$org != "hsa" || tissue == "na"){
-            mir.dic[, "tissue"] <- "Unspecified";
-        }else{
-            path <- paste(lib.path, "hsa/mir_tissue.csv", sep="");
-            mir_tissue <- read.csv(file=path);
-            if (tissue == "Others"){
-                ts_df <- mir_tissue[!(mir_tissue$tissue %in% ts_count$tissue), ];
-                ts_ano <- aggregate(tissue ~ mir_acc, data = ts_df, paste, collapse = "//");
-                mir.dic <- merge(mir.dic, ts_ano, by="mir_acc");
-            } else if (tissue != "na" && tissue != "Others"){
-                tissue.acc <- unique(mir_tissue[which(mir_tissue$tissue == tissue), "mir_acc"]);
-                mir.dic <- mir.dic[which(mir.dic$mir_acc %in% tissue.acc), ];
-                if (nrow(mir.dic) > 0){
-                    mir.dic[, "tissue"] <- tissue;
-                }
-            } else {
-                mir.acc <- unique(mir.dic$mir_acc);
-                ts_df <- mir_tissue[which(mir_tissue$mir_acc %in% mir.acc), ];
-                if (nrow(ts_df) > 0){
-                    ts_df <- ts_df[order(ts_df$tissue), ];
-                    ts_ano <- aggregate(tissue ~ mir_acc, data = ts_df, paste, collapse = "//");
-                    mir.dic <- merge(mir.dic, ts_ano, by="mir_acc", all.x=T);
-                    mir.dic[is.na(mir.dic$tissue), "tissue"] <- "Not specified";
-                } else {
-                    mir.dic[, "tissue"] <- "Not specified";
-                } 
-            }
+  if(col.nm == "mir_acc"){
+    # when use Accession number, it can match both new and old version, use the new one (old one is ranked later)
+    dup.inx <- duplicated(mir.dic[, c("mir_acc", "symbol")]);
+    mir.dic <- mir.dic[!dup.inx, ];
+  }
+
+  # Perform tissue annotation if specified
+  if (nrow(mir.dic) > 0){
+    tissue <- dataSet$tissue;
+    if(dataSet$org != "hsa" || tissue == "na"){
+      mir.dic[, "tissue"] <- "Unspecified";
+    }else{
+      path <- paste(lib.path, "hsa/mir_tissue.csv", sep="");
+      mir_tissue <- read.csv(file=path);
+      if (tissue == "Others"){
+        ts_df <- mir_tissue[!(mir_tissue$tissue %in% ts_count$tissue), ];
+        ts_ano <- aggregate(tissue ~ mir_acc, data = ts_df, paste, collapse = "//");
+        mir.dic <- merge(mir.dic, ts_ano, by="mir_acc");
+      } else if (tissue != "na" && tissue != "Others"){
+        tissue.acc <- unique(mir_tissue[which(mir_tissue$tissue == tissue), "mir_acc"]);
+        mir.dic <- mir.dic[which(mir.dic$mir_acc %in% tissue.acc), ];
+        if (nrow(mir.dic) > 0){
+          mir.dic[, "tissue"] <- tissue;
         }
+      } else {
+        mir.acc <- unique(mir.dic$mir_acc);
+        ts_df <- mir_tissue[which(mir_tissue$mir_acc %in% mir.acc), ];
+        if (nrow(ts_df) > 0){
+          ts_df <- ts_df[order(ts_df$tissue), ];
+          ts_ano <- aggregate(tissue ~ mir_acc, data = ts_df, paste, collapse = "//");
+          mir.dic <- merge(mir.dic, ts_ano, by="mir_acc", all.x=T);
+          mir.dic[is.na(mir.dic$tissue), "tissue"] <- "Not specified";
+        } else {
+          mir.dic[, "tissue"] <- "Not specified";
+        }
+      }
     }
+  }
 
-    return(mir.dic);
+  return(mir.dic);
+}
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param table.nm PARAM_DESCRIPTION
+#' @param q.vec PARAM_DESCRIPTION
+#' @param col.nm PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname QueryTFSQLite
+#' @export 
+QueryTFSQLite<- function(table.nm, q.vec, col.nm){
+  require('RSQLite');
+  tf.db <- dbConnect(SQLite(), paste(sqlite.tfgene.path, "tfac.sqlite", sep=""));
+  query <- paste (shQuote(q.vec),collapse=",");
+  statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (",query,")", sep="");
+  return(.query.sqlite(tf.db, statement));
 }
 
 #' @title FUNCTION_TITLE
@@ -760,7 +798,7 @@ generate_breaks = function(x, n, center = F){
 #' @export 
 ComputeColorGradient <- function(nd.vec, background="black"){
     library("RColorBrewer");
-    if(sum(nd.vec<0, na.rm=TRUE) > 0){ 
+    if(sum(nd.vec<0, na.rm=TRUE) > 0){
         centered <- T;
     }else{
         centered <- F;
@@ -889,6 +927,7 @@ ShowMemoryUse <- function(..., n=30) {
     print(warnings());
 }
 
+
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 
@@ -903,7 +942,7 @@ ShowMemoryUse <- function(..., n=30) {
 #' @rdname CleanMemory
 #' @export 
 CleanMemory <- function(){
-    for (i in 1:10){ 
+    for (i in 1:10){
         gc(reset = T);
     }
 }
@@ -918,4 +957,99 @@ CleanMemory <- function(){
   }
   cleanMem();
   return(res);
+}
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param table.nm PARAM_DESCRIPTION
+#' @param q.vec PARAM_DESCRIPTION
+#' @param requireExp PARAM_DESCRIPTION
+#' @param min.score PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname QueryPpiSQLiteZero
+#' @export 
+QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
+    require('RSQLite')
+    ppi.db <- dbConnect(SQLite(), paste(sqlite.ppi.path, "omics.net.sqlite", sep=""));
+    query <- paste(shQuote(q.vec),collapse=",");
+
+    if(grepl("string$", table.nm)){
+        if(requireExp){
+            statement <- paste("SELECT * FROM ",table.nm, " WHERE ((id1 IN (", query, ")) OR (id2 IN (", query, ")) OR (name1 IN (", query, "))OR (name2 IN (", query, ")))  AND combined_score >=", min.score, " AND experimental > 0", sep="");
+        }else{
+            statement <- paste("SELECT * FROM ",table.nm, " WHERE ((id1 IN (", query, ")) OR (id2 IN (", query, ")) OR (name1 IN (", query, "))OR (name2 IN (", query, ")))  AND combined_score >=", min.score, sep="");
+        }
+    }else{
+        statement <- paste("SELECT * FROM ",table.nm, " WHERE ((id1 IN (", query, ")) OR (id2 IN (", query, ")) OR (name1 IN (", query, "))OR (name2 IN (", query, ")))", sep="");
+    }
+
+    ppi.res <- .query.sqlite(ppi.db, statement);
+    hit.inx1 <- ppi.res[,1] %in% q.vec
+    hit.inx2 <- ppi.res[,2] %in% q.vec
+    ppi.res1 <- ppi.res[(hit.inx1 & hit.inx2),]
+
+    hit.inx3 <- ppi.res[,3] %in% q.vec
+    hit.inx4 <- ppi.res[,4] %in% q.vec
+    ppi.res2 <- ppi.res[(hit.inx3 & hit.inx4),]
+    ppi.res = rbind(ppi.res1,ppi.res2)
+
+    return(ppi.res);
+}
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname simpleCap
+#' @export 
+simpleCap <- function(x) {
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+      sep="", collapse=" ")
+}
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param grp.num PARAM_DESCRIPTION
+#' @param filenm PARAM_DESCRIPTION, Default: NULL
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname gg_color_hue
+#' @export 
+gg_color_hue <- function(grp.num, filenm=NULL) {
+    grp.num <- as.numeric(grp.num)
+    pal18 <- c( "#911eb4", "#3cb44b", "#4363d8",  "#f032e6", "#ffe119", "#e6194B", "#f58231", "#bfef45", "#fabebe", "#469990", "#e6beff", "#9A6324", "#800000", "#aaffc3", "#808000", "#ffd8b1", "#42d4f4","#000075");
+    if(grp.num <= 18){ # update color and respect default
+        colArr <- pal18[1:grp.num];
+    }else{
+        colArr <- colorRampPalette(pal18)(grp.num);
+    }
+    if(is.null(filenm)){
+        return(colArr);
+    }else{
+        sink(filenm);
+        cat(toJSON(colArr));
+        sink();
+        return(filenm);
+    }
 }
