@@ -19,7 +19,7 @@
 #' @export
 LoadKEGGLib<-function(){
     kegg.rda <- paste(lib.path, dataSet$org, "/kegg_", dataSet$org, ".rda", sep="");
-    download.file(kegg.rda);
+    download.file(kegg.rda, "kegg.rda");
 
     print(paste("adding library:", kegg.rda));
     load(kegg.rda);
@@ -51,7 +51,7 @@ LoadKEGGLib<-function(){
 LoadREACTOMELib<-function(){
 
     reactome.rda <- paste(lib.path, dataSet$org, "/reactome_", dataSet$org, ".rda", sep="");
-    download.file(reactome.rda);
+    download.file(reactome.rda, "reactome.rda");
 
 
     print(paste("adding library:", reactome.rda));
@@ -82,7 +82,7 @@ LoadREACTOMELib<-function(){
 LoadGOLib<-function(onto){
 
     go.rda <- paste(lib.path, dataSet$org, "/go_", tolower(onto), ".rda", sep="");
-    download.file(go.rda);
+    download.file(go.rda,"go.rda");
 
     print(paste("adding library:", go.rda));
     load(go.rda);
@@ -126,7 +126,7 @@ LoadGOLib<-function(onto){
 #' @export
 LoadTissueLib <- function(){
   tissue.rda <- paste(lib.path, "tissue.rda", sep="");
-  download.file(tissue.rda);
+  download.file(tissue.rda,"tissue.rda");
   load(tissue.rda);
   print(paste("adding library: ", tissue.rda));
   current.mset <- tissue;
@@ -154,7 +154,7 @@ LoadTissueLib <- function(){
 #' @export
 LoadFuncLib <- function(){
   func.rda <- paste(lib.path, dataSet$org, "/tam_func.rda", sep="");
-  download.file(func.rda);
+  download.file(func.rda,"tam_func.rda");
   load(func.rda);
   print(paste("adding library: ", func.rda));
   current.mset <- tam_func$sets;
@@ -182,7 +182,7 @@ LoadFuncLib <- function(){
 #' @export
 LoadHMDDLib <- function(){
   hmdd.rda <- paste(lib.path, dataSet$org, "/tam_hmdd.rda", sep="");
-  download.file(hmdd.rda);
+  download.file(hmdd.rda,"tam_hmdd.rda");
   load(hmdd.rda);
   print(paste("adding library: ", hmdd.rda));
   current.mset <- tam_hmdd$sets;
@@ -210,7 +210,7 @@ LoadHMDDLib <- function(){
 #' @export
 LoadClusterLib <- function(){
   cluster.rda <- paste(lib.path, dataSet$org, "/tam_cluster.rda", sep="");
-  download.file(cluster.rda);
+  download.file(cluster.rda,"tam_cluster.rda");
   load(cluster.rda);
   print(paste("adding library: ", cluster.rda));
   current.mset <- tam_cluster$sets;
@@ -238,7 +238,7 @@ LoadClusterLib <- function(){
 #' @export
 LoadTFLib <- function(){
   tf.rda <- paste(lib.path, dataSet$org, "/tam_tf.rda", sep="");
-  download.file(tf.rda);
+  download.file(tf.rda,"tam_tf.rda");
   load(tf.rda);
   print(paste("adding library: ", tf.rda));
   current.mset <- tam_tf$sets;
@@ -266,7 +266,7 @@ LoadTFLib <- function(){
 #' @export
 LoadDiseaseLib <- function(){
   disease.path <- paste(lib.path, "hsa/disease.rds", sep="");
-  download.file(disease.path);
+  download.file(disease.path,"disease.rds");
   diss = readRDS(disease.path);
   print(paste("adding library: ", disease.path));
   current.mset <- diss$sets;
@@ -294,7 +294,7 @@ LoadDiseaseLib <- function(){
 #' @export
 LoadmiRFamLib <- function(){
   mirfamily.rda <- paste(lib.path, "mirfamily.rda", sep="");
-  download.file(mirfamily.rda);
+  download.file(mirfamily.rda,"mirfamily.rda");
   load(mirfamily.rda);
   print(paste("adding library: ", mirfamily.rda));
 
