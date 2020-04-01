@@ -33,7 +33,7 @@ library(devtools)
 devtools::install_github("xia-lab/miRNetR", build = TRUE, build_opts = c("--no-resave-data", "--no-manual", "--no-build-vignettes"))
 
 # Step 2: Install miRNetR WITH documentation
-devtools::install_github("xia-lab/miRNetR", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
+devtools::install_github("xia-lab/miRNetR", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"), build_vignettes = TRUE)
 
 ```
 ## Tutorials
