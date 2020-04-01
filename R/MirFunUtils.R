@@ -19,10 +19,11 @@
 #' @export
 LoadKEGGLib<-function(){
     kegg.rda <- paste(lib.path, dataSet$org, "/kegg_", dataSet$org, ".rda", sep="");
-    download.file(kegg.rda, "kegg.rda");
+    destfile <- paste("kegg_", dataSet$org, ".rda", sep="");
+    download.file(kegg.rda, destfile);
 
     print(paste("adding library:", kegg.rda));
-    load(kegg.rda);
+    load(destfile);
 
     current.setlink <- kegg$link;
     current.mset <- kegg$sets;
@@ -51,11 +52,10 @@ LoadKEGGLib<-function(){
 LoadREACTOMELib<-function(){
 
     reactome.rda <- paste(lib.path, dataSet$org, "/reactome_", dataSet$org, ".rda", sep="");
-    download.file(reactome.rda, "reactome.rda");
-
-
+    destfile <- paste("reactome_", dataSet$org, ".rda", sep="");
+    download.file(reactome.rda, destfile);
     print(paste("adding library:", reactome.rda));
-    load(reactome.rda);
+    load(destfile);
 
     current.mset <- reactome$sets;
     set.ids<- names(current.mset);
@@ -82,10 +82,11 @@ LoadREACTOMELib<-function(){
 LoadGOLib<-function(onto){
 
     go.rda <- paste(lib.path, dataSet$org, "/go_", tolower(onto), ".rda", sep="");
-    download.file(go.rda,"go.rda");
+    destfile <- paste("go_", tolower(onto), ".rda", sep="");
+    download.file(go.rda, destfile);
 
     print(paste("adding library:", go.rda));
-    load(go.rda);
+    load(destfile);
 
     if(tolower(onto) == "bp"){
         current.link <- go_bp$link;
@@ -126,8 +127,9 @@ LoadGOLib<-function(onto){
 #' @export
 LoadTissueLib <- function(){
   tissue.rda <- paste(lib.path, "tissue.rda", sep="");
-  download.file(tissue.rda,"tissue.rda");
-  load(tissue.rda);
+  destfile <- paste("tissue.rda", sep="");
+  download.file(tissue.rda, destfile);
+  load(destfile);
   print(paste("adding library: ", tissue.rda));
   current.mset <- tissue;
   set.ids <- names(current.mset);
@@ -154,8 +156,9 @@ LoadTissueLib <- function(){
 #' @export
 LoadFuncLib <- function(){
   func.rda <- paste(lib.path, dataSet$org, "/tam_func.rda", sep="");
-  download.file(func.rda,"tam_func.rda");
-  load(func.rda);
+  destfile <- paste("tam_func.rda", sep="");
+  download.file(func.rda, destfile);
+  load(destfile);
   print(paste("adding library: ", func.rda));
   current.mset <- tam_func$sets;
   set.ids <- names(current.mset);
@@ -182,8 +185,9 @@ LoadFuncLib <- function(){
 #' @export
 LoadHMDDLib <- function(){
   hmdd.rda <- paste(lib.path, dataSet$org, "/tam_hmdd.rda", sep="");
-  download.file(hmdd.rda,"tam_hmdd.rda");
-  load(hmdd.rda);
+  destfile <- paste("tam_hmdd.rda", sep="");
+  download.file(hmdd.rda, destfile);
+  load(destfile);
   print(paste("adding library: ", hmdd.rda));
   current.mset <- tam_hmdd$sets;
   set.ids <- names(current.mset);
@@ -210,8 +214,9 @@ LoadHMDDLib <- function(){
 #' @export
 LoadClusterLib <- function(){
   cluster.rda <- paste(lib.path, dataSet$org, "/tam_cluster.rda", sep="");
-  download.file(cluster.rda,"tam_cluster.rda");
-  load(cluster.rda);
+  destfile <- paste("tam_cluster.rda", sep="");
+  download.file(cluster.rda, destfile);
+  load(destfile);
   print(paste("adding library: ", cluster.rda));
   current.mset <- tam_cluster$sets;
   set.ids <- names(current.mset);
@@ -238,8 +243,9 @@ LoadClusterLib <- function(){
 #' @export
 LoadTFLib <- function(){
   tf.rda <- paste(lib.path, dataSet$org, "/tam_tf.rda", sep="");
-  download.file(tf.rda,"tam_tf.rda");
-  load(tf.rda);
+  destfile <- paste("tam_tf.rda", sep="");
+  download.file(tf.rda, destfile);
+  load(destfile);
   print(paste("adding library: ", tf.rda));
   current.mset <- tam_tf$sets;
   set.ids <- names(current.mset);
@@ -266,8 +272,9 @@ LoadTFLib <- function(){
 #' @export
 LoadDiseaseLib <- function(){
   disease.path <- paste(lib.path, "hsa/disease.rds", sep="");
-  download.file(disease.path,"disease.rds");
-  diss = readRDS(disease.path);
+  destfile <- paste("disease.rds", sep="");
+  download.file(disease.path, destfile);
+  diss = readRDS(destfile);
   print(paste("adding library: ", disease.path));
   current.mset <- diss$sets;
   set.ids <- names(current.mset);
@@ -294,8 +301,9 @@ LoadDiseaseLib <- function(){
 #' @export
 LoadmiRFamLib <- function(){
   mirfamily.rda <- paste(lib.path, "mirfamily.rda", sep="");
-  download.file(mirfamily.rda,"mirfamily.rda");
-  load(mirfamily.rda);
+  destfile <- paste("mirfamily.rda", sep="");
+  download.file(mirfamily.rda, destfile);
+  load(destfile);
   print(paste("adding library: ", mirfamily.rda));
 
   if(dataSet$org == "hsa"){

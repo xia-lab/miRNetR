@@ -436,7 +436,7 @@ doProbeMapping <- function(probe.vec, platform){
     platform.path <- paste(lib.path,  data.org, "/", platform, ".csv", sep="");
     destfile <- paste(platform, ".csv", sep="");
     download.file(platform.path, destfile);
-    probe.map <- read.csv(platform.path, header=T, as.is=T);
+    probe.map <- read.csv(destfile, header=T, as.is=T);
     if(is.null(probe.vec)){
         entrez <- probe.map[, "entrez"];
     }else{
