@@ -9,14 +9,14 @@
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname PerformMirGeneMapping
-#' @export 
+#' @export
 PerformMirGeneMapping <- function(){
     mir.mat <- dataSet$mir.orig;
     idVec <- rownames(mir.mat);
@@ -73,14 +73,14 @@ PerformMirGeneMapping <- function(){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname PerformSNPMirGeneMapping
-#' @export 
+#' @export
 PerformSNPMirGeneMapping <- function(){
   snp.mat <- dataSet$mir.orig;
   snpidVec <- rownames(snp.mat);
@@ -140,14 +140,14 @@ PerformSNPMirGeneMapping <- function(){
       colnames(mir.res2) <- c("ID", "Accession", "Gene", "Entrez", "Experiment", "Literature", "Tissue");
 
       # rbind snp2mir2gene and snp2gene2mir for network
-  
+
 
       # update the data
       gd.inx <- rownames(snp.mat) %in% unique(c(snp.edge[, "Name2"], snp.edge2[, "Name2"]));
       dataSet$mir.mapped <- snp.mat[gd.inx,,drop=F];
 
       dataSet$seeds <- c(snp.edge[, "Name2"], snp.edge2[, "Name2"]);
-      
+
       dataSet$mirtarget <- c("gene");
       dataSet$mirtable <- c("snp2mir", "mir2gene", "snp2gene", "gene2mir");
 
@@ -245,14 +245,14 @@ if(nrow(tf.res)>0){
 #' @param matchMin PARAM_DESCRIPTION, Default: 0.5
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname PerformDataAnnot
-#' @export 
+#' @export
 PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
     data.org <<- dataSet$org <- org;
     dataSet$id.orig <- dataSet$id.current <- idType;
@@ -316,14 +316,14 @@ PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
 #' @param idType PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname doMirGeneAnnotation
-#' @export 
+#' @export
 doMirGeneAnnotation <- function(id.vec, idType){
      feature.vec <- id.vec;
      if(idType %in% c("entrez", "symbol", "refseq", "genbank", "emblgene", "embltranscript", "orfid","mir_id","mir_acc")){
@@ -343,14 +343,14 @@ doMirGeneAnnotation <- function(id.vec, idType){
 #' @param idType PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname doAnnotation
-#' @export 
+#' @export
 doAnnotation <- function(id.vec, idType){
      feature.vec <- id.vec;
      if(idType %in% c("entrez", "symbol", "refseq", "genbank", "emblgene", "embltranscript", "orfid","mir_id","mir_acc")){
@@ -367,14 +367,14 @@ doAnnotation <- function(id.vec, idType){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname PerformGeneAnnotation
-#' @export 
+#' @export
 PerformGeneAnnotation <- function(){
     if(!exists("entrez.vec")){
         print("Could not find Entrez ID list!");
@@ -397,14 +397,14 @@ PerformGeneAnnotation <- function(){
 #' @param platform PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname PerformProbeAnnotation
-#' @export 
+#' @export
 PerformProbeAnnotation <- function(platform){
     if(!exists("probe.vec")){
         print("Could not find the Probe ID list!");
@@ -424,16 +424,17 @@ PerformProbeAnnotation <- function(platform){
 #' @param platform PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname doProbeMapping
-#' @export 
+#' @export
 doProbeMapping <- function(probe.vec, platform){
     platform.path <- paste(lib.path,  data.org, "/", platform, ".csv", sep="");
+    download.file(platform.path);
     probe.map <- read.csv(platform.path, header=T, as.is=T);
     if(is.null(probe.vec)){
         entrez <- probe.map[, "entrez"];
@@ -453,14 +454,14 @@ doProbeMapping <- function(probe.vec, platform){
 #' @param type PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname doGeneIDMapping
-#' @export 
+#' @export
 doGeneIDMapping <- function(q.vec, type){
     require('RSQLite');
     mir.db <- dbConnect(SQLite(), paste(sqlite.geneid.path, data.org, "_genes.sqlite", sep=""));
@@ -519,14 +520,14 @@ doGeneIDMapping <- function(q.vec, type){
 #' @param entrez.vec PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname doEntrez2SymbolMapping
-#' @export 
+#' @export
 doEntrez2SymbolMapping <- function(entrez.vec){
     gene.map <-  queryGeneDB("entrez", data.org);
     gene.map[] <- lapply(gene.map, as.character)
@@ -545,14 +546,14 @@ doEntrez2SymbolMapping <- function(entrez.vec){
 #' @param entrez.vec PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname doSymbol2EntrezMapping
-#' @export 
+#' @export
 doSymbol2EntrezMapping <- function(entrez.vec){
     gene.map <-  queryGeneDB("entrez", data.org);
     gene.map[] <- lapply(gene.map, as.character)
@@ -574,14 +575,14 @@ doSymbol2EntrezMapping <- function(entrez.vec){
 #' @param quiet PARAM_DESCRIPTION, Default: T
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname RemoveDuplicates
-#' @export 
+#' @export
 RemoveDuplicates <- function(data, lvlOpt, quiet=T){
 
     all.nms <- rownames(data);
@@ -634,14 +635,14 @@ RemoveDuplicates <- function(data, lvlOpt, quiet=T){
 #' @param data.org PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname queryGeneDB
-#' @export 
+#' @export
 queryGeneDB <- function(table.nm, data.org){
     require('RSQLite')
 
