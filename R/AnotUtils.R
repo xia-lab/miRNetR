@@ -64,7 +64,7 @@ PerformMirGeneMapping <- function(){
         net.info <<-net.info
         dataSet$mirtarget <- "gene";
         dataSet <<- dataSet;
-        return(1);
+        return(current.msg);
     }
 }
 
