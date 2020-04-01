@@ -20,36 +20,61 @@
 #' @rdname Init.Data
 #' @export 
 Init.Data<-function(dataType, analType){
-    dataSet <<- list(data=list());
-    data.type <<- dataType; # mir or xeno.mir
-    anal.type <<- analType;
-    current.msg <<- "";
-    msg.vec <<- vector(mode="character");
-    module.count <<- 0;
-    lib.path <<- "../../data/libs/";
-
-    if(file.exists("/home/glassfish/sqlite/")){ #public server
-        sqlite.path <<- "/home/glassfish/sqlite/mirnet/";
-        sqlite.geneid.path <<- "/home/glassfish/sqlite/";
-        library(BiocParallel);
-        register(SerialParam());
-    }else if(file.exists("/Users/xia/Dropbox/sqlite/")){# xia local
-        sqlite.path <<- "/Users/xia/Dropbox/sqlite/mirnet/";
-        sqlite.geneid.path <<- "/Users/xia/Dropbox/sqlite/";
-    }else if(file.exists("/home/le/sqlite/gene-id-mapping/")){# le local
-        sqlite.path <<- "/home/le/sqlite/mirnet/";
-        sqlite.geneid.path <<- "/home/le/sqlite/gene-id-mapping/";
-    }else if(file.exists("//Users/soufanom/Documents/Postdoc/Projects/gene-id-mapping")){# Othman local
-        sqlite.path <<- "/Users/soufanom/Documents/Postdoc/Projects/mirNet/";
-        sqlite.geneid.path <<- "/Users/soufanom/Documents/Postdoc/Projects/gene-id-mapping";
-    }
-
-    # preload some general package
-    library("RSQLite");
-    library('Cairo');
-    CairoFonts("Arial:style=Regular","Arial:style=Bold","Arial:style=Italic","Helvetica","Symbol")
-    print("miRNet init done!");
+  mir.nmsu <- vector();
+  mir.nmsu <<- mir.nmsu;
+  dataSet <- list(data=list());
+  dataSet$ppiOpts<-list()
+  dataSet$ppiOpts$db.name<-"string"
+  dataSet$ppiOpts$require.exp<-T
+  dataSet$ppiOpts$min.score<-"900"
+  dataSet <<- dataSet
+  net.info<- list();
+  net.info <<- net.info
+  data.type <<- dataType; # mir or xeno.mir
+  anal.type <<- analType;
+  current.msg <<- "";
+  msg.vec <<- vector(mode="character");
+  module.count <<- 0;
+  lib.path <<- "../../data/libs/";
+  
+  if(file.exists("/home/glassfish/sqlite/")){ #public server
+    sqlite.path <<- "/home/glassfish/sqlite/mirnet/";
+    sqlite.tfgene.path <<- "/home/glassfish/sqlite/networkanalyst/";  #public server
+    sqlite.geneid.path <<- "/home/glassfish/sqlite/";
+    sqlite.ppi.path <<- "/home/glassfish/sqlite/omicsnet/";
+    library(BiocParallel);
+    register(SerialParam());
+  }else if(file.exists("/Users/xia/Dropbox/sqlite/")){# xia local
+    sqlite.path <<- "/Users/xia/Dropbox/sqlite/mirnet/";
+    sqlite.tfgene.path <<- "/Users/xia/Dropbox/sqlite/networkanalyst/"; #xia local 
+    sqlite.geneid.path <<- "/Users/xia/Dropbox/sqlite/";
+    sqlite.ppi.path <<- "/Users/xia/Dropbox/sqlite/omicsnet/";
+  }else if(file.exists("/home/le/sqlite/gene-id-mapping/")){# le local
+    sqlite.path <<- "/home/le/sqlite/mirnet/";
+    sqlite.tfgene.path <<- "/home/le/sqlite/networkanalystdatabase/";
+    sqlite.geneid.path <<- "/home/le/sqlite/gene-id-mapping/";
+    sqlite.ppi.path <<- "/home/le/sqlite/mirnet/";
+  }else if(file.exists("/home/soufanom/Database/")){# Othman local
+    sqlite.path <<- "/home/soufanom/Database/sqlite/";
+    sqlite.geneid.path <<- "/home/soufanom/Database/gene-id-mapping/";
+    sqlite.tfgene.path <<- "~/Documents/Projects/sqlite/networkanalyst/";
+    sqlite.ppi.path <<- "/home/soufanom/database/";
+  }else if(file.exists("/home/zzggyy")){# zgy local
+    sqlite.path <<- "/home/zzggyy/Downloads/netsqlite/";
+    sqlite.geneid.path <<-"/home/zzggyy/Downloads/GeneID_25Species_JE/GeneID_25Species_JE/";
+    sqlite.tfgene.path <<-"/home/zzggyy/Downloads/netsqlite/";
+    sqlite.ppi.path <<- "/home/zzggyy/Downloads/netsqlite/";
+  }else{
+    sqlite.path <<- paste0(dirname(system.file("database", "sqlite/mirnet/", package="miRNetR")), "/")
+  }
+  
+  # preload some general package
+  library("RSQLite");
+  library('Cairo');
+  CairoFonts("Arial:style=Regular","Arial:style=Bold","Arial:style=Italic","Helvetica","Symbol")
+  print("miRNetR init done!");
 }
+
 
 # read tab delimited file
 # stored in dataSet list object
