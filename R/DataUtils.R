@@ -219,7 +219,8 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
   dataSet$mir.orig <- mir.mat;
   
   dataSet<<- dataSet;
-  return ("A total of ", nrow(mir.mat), "unique items were entered.");
+  msg <- paste("A total of ", nrow(mir.mat), "unique items were entered.");
+  return (msg);
 }
 
 #' @title FUNCTION_TITLE
