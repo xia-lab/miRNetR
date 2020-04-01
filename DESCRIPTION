@@ -16,7 +16,12 @@ Imports:
     fastmatch,
     igraph,
     RJSONIO,
-    RColorBrewer,
-    rTRM
+    foreach,
+    doParallel,
+    preprocessCore,
+    limma,
+    edgeR,
+    HTqPCR,
+    genefilter
 Suggests: 
 VignetteBuilder: knitr
