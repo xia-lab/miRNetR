@@ -434,7 +434,6 @@ PerformProbeAnnotation <- function(platform){
 #' @export
 doProbeMapping <- function(probe.vec, platform){
     platform.path <- paste(lib.path,  data.org, "/", platform, ".csv", sep="");
-    download.file(platform.path);
     probe.map <- read.csv(platform.path, header=T, as.is=T);
     if(is.null(probe.vec)){
         entrez <- probe.map[, "entrez"];
