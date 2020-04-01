@@ -667,7 +667,6 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
       mir.dic[, "tissue"] <- "Unspecified";
     }else{
       path <- paste(lib.path, "hsa/mir_tissue.csv", sep="");
-      download.file(path);
       mir_tissue <- read.csv(file=path);
       if (tissue == "Others"){
         ts_df <- mir_tissue[!(mir_tissue$tissue %in% ts_count$tissue), ];
