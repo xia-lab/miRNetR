@@ -11,14 +11,14 @@
 #' @param analType PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname Init.Data
-#' @export 
+#' @export
 Init.Data<-function(dataType, analType){
   mir.nmsu <- vector();
   mir.nmsu <<- mir.nmsu;
@@ -85,26 +85,26 @@ Init.Data<-function(dataType, analType){
 #' @param dataName PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname ReadTabExpressData
-#' @export 
+#' @export
 ReadTabExpressData <- function(dataName) {
-  
+
   dataSet <- ReadTabData(dataName);
-  
+
   # rename data to data.orig
   int.mat <- dataSet$data;
   dataSet$cls <- dataSet$meta.info[,1];
   dataSet$data <- NULL;
   dataSet$listData <- FALSE;
-  
+
   msg <- paste("a total of ", ncol(int.mat), " samples and ", nrow(int.mat), " features were found. ");
-  
+
   # remove NA, null
   row.nas <- apply(is.na(int.mat)|is.null(int.mat), 1, sum);
   good.inx<- row.nas/ncol(int.mat) < 0.5;
@@ -119,17 +119,17 @@ ReadTabExpressData <- function(dataName) {
     int.mat <- int.mat[good.inx2,];
     msg <- c(msg, paste("removed ", sum(!good.inx2), " features with constant values"));
   }
-  
+
   if(nrow(int.mat) > 2000){
     filter.val <- filter.val[good.inx2];
     rk <- rank(-filter.val, ties.method='random');
-    
+
     var.num <- nrow(int.mat);
     kept.num <- 0.95*var.num;
     int.mat <- int.mat[rk < kept.num, ];
     # msg <- c(msg, paste("removed 5% features with near-constant values"));
   }
-  
+
   minVal <- min(int.mat, na.rm=T);
   na.inx <- is.na(int.mat);
   if(sum(na.inx) > 0){
@@ -148,14 +148,14 @@ ReadTabExpressData <- function(dataName) {
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetClassInfo
-#' @export 
+#' @export
 GetClassInfo <- function(){
   return(levels(dataSet$cls));
 }
@@ -165,14 +165,14 @@ GetClassInfo <- function(){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetAnotNames
-#' @export 
+#' @export
 GetAnotNames<-function(){
   return(rownames(dataSet$data.anot));
 }
@@ -186,26 +186,26 @@ GetAnotNames<-function(){
 #' @param targetOpt PARAM_DESCRIPTION, Default: NULL
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetupMirListData
-#' @export 
+#' @export
 SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
-  
+
   dataSet$listData <- TRUE;
   data.org <<- dataSet$org <- orgType;
   dataSet$idType <- dataSet$mirnaType <- idType;
   dataSet$targetOpt <- targetOpt;
   dataSet$tissue <- tissue;
   current.msg <<- NULL;
-  
+
   mir.mat <- .parseListData(mirs);
   mir.vec <- mir.mat[,1];
-  
+
   if(data.type=="xeno.mir" && idType == "mir_id"){
     mir.vec <- gsub("mir", "miR", mir.vec);;
   }
@@ -214,10 +214,10 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
   }else{
     rownames(mir.mat) <-  mir.vec;
   }
-  
+
   mir.mat <- mir.mat[,-1, drop=F];
   dataSet$mir.orig <- mir.mat;
-  
+
   dataSet<<- dataSet;
   msg <- paste("A total of ", nrow(mir.mat), "unique items were entered.");
   return (msg);
@@ -233,29 +233,29 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
 #' @param target PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetupIndListData
-#' @export 
+#' @export
 SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, target){
   data.org <<- dataSet$org <- orgType;
   dataSet$tissue <- tissue;
   current.msg <<- NULL;
   dataSet$listData <- TRUE;
-  
+
   in.mat <- .parseListData(listInput);
   in.vec <- in.mat[,1];
   rownames(in.mat) <-  in.vec;
   in.mat <- in.mat[,-1, drop=F];
-  
+
   if(is.null(dataSet$data)){
     dataSet$data <- dataSet$id.types <- list();
   }
-  
+
   dataSet$data[[inputType]] <- in.mat;
   dataSet$id.types[[inputType]] <- idType;
   dataSet$target.types[[inputType]] <- target;
@@ -270,14 +270,14 @@ SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, targ
 #' @param idType PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetupItemFromPickList
-#' @export 
+#' @export
 SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
   if(!exists("picklist.vec")){
     print("Could not find user entered disease list!");
@@ -286,7 +286,7 @@ SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
   dataSet$org <- orgType;
   dataSet$tissue <- tissue;
   mir.mat <- .parsePickListItems(picklist.vec);
-  
+
   if(anal.type == "multilist" || anal.type == "dis2mir" ){
     dataSet$data[[idType]] <- mir.mat;
   }else{
@@ -304,14 +304,14 @@ SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetupMirExpressData
-#' @export 
+#' @export
 SetupMirExpressData <- function(){
   idType <- dataSet$id.current;
   mydata <- data.matrix(dataSet$sig.mat[,"max.logFC",drop=FALSE]);
@@ -334,14 +334,14 @@ SetupMirExpressData <- function(){
 #' @param colInx PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetMirResCol
-#' @export 
+#' @export
 GetMirResCol <- function(netType, colInx){
   if (anal.type == "multilist"  || anal.type == "snp2mir" || anal.type == "tf2genemir" || anal.type == "gene2tfmir") {
     res <- dataSet[netType][[1]][, colInx];
@@ -358,14 +358,14 @@ GetMirResCol <- function(netType, colInx){
 #' @param netType PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetMirResRowNames
-#' @export 
+#' @export
 GetMirResRowNames <- function(netType){
   if (anal.type == "multilist"  || anal.type == "snp2mir" || anal.type == "tf2genemir" || anal.type == "gene2tfmir") {
     resTable <- dataSet[netType][[1]]
@@ -385,14 +385,14 @@ GetMirResRowNames <- function(netType){
 #' @param mir.id PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname RemoveMirEntry
-#' @export 
+#' @export
 RemoveMirEntry <- function(tblnm, mir.id) {
   id <<- mir.id
   inx <- which(rownames(dataSet[tblnm][[1]]) == mir.id);
@@ -412,16 +412,16 @@ RemoveMirEntry <- function(tblnm, mir.id) {
 #' @param action PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname UpdateMirEntries
-#' @export 
+#' @export
 UpdateMirEntries <- function(col.id, method, value, action) {
-  
+
   if(col.id == "evidence"){
     col <- dataSet$mir.res$Experiment;
   }else if(col.id == "mir"){
@@ -435,7 +435,7 @@ UpdateMirEntries <- function(col.id, method, value, action) {
   } else {
     print(paste("unknown column:", col.id));
   }
-  
+
   if(method == "contain"){
     hits <- grepl(value, col, ignore.case = TRUE);
   }else if(method == "match"){
@@ -452,11 +452,11 @@ UpdateMirEntries <- function(col.id, method, value, action) {
       return("NA");
     }
   }
-  
+
   if(action == "keep"){
     hits = !hits;
   }
-  
+
   if(sum(hits) > 0){
     row.ids <- rownames(dataSet$mir.res)[hits];
     dataSet$mir.res <<- dataSet$mir.res[!hits,];
@@ -472,16 +472,16 @@ UpdateMirEntries <- function(col.id, method, value, action) {
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetUniqueDiseaseNames
-#' @export 
+#' @export
 GetUniqueDiseaseNames <- function(){
-  db.path <- paste(sqlite.path, "mir2disease", sep="");
+  db.path <- paste(sqlite.path, "mir2disease.sqlite", sep="");
   statement <- "SELECT disease FROM disease";
   return(GetUniqueEntries(db.path, statement));
 }
@@ -491,16 +491,16 @@ GetUniqueDiseaseNames <- function(){
 #' @param orgType PARAM_DESCRIPTION, Default: 'hsa'
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetUniqueMoleculeNames
-#' @export 
+#' @export
 GetUniqueMoleculeNames <- function(orgType="hsa"){
-  db.path <- paste(sqlite.path, "mir2molecule", sep="");
+  db.path <- paste(sqlite.path, "mir2molecule.sqlite", sep="");
   statement <- paste("SELECT molecule FROM ",orgType, sep="");
   return(GetUniqueEntries(db.path, statement));
 }
@@ -510,16 +510,16 @@ GetUniqueMoleculeNames <- function(orgType="hsa"){
 #' @param orgType PARAM_DESCRIPTION, Default: 'hsa'
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetUniqueEpigeneNames
-#' @export 
+#' @export
 GetUniqueEpigeneNames <- function(orgType="hsa"){
-  db.path <- paste(sqlite.path, "mir2epi", sep="");
+  db.path <- paste(sqlite.path, "mir2epi.sqlite", sep="");
   statement <- paste("SELECT epi_regulator FROM ",orgType, sep="");
   return(GetUniqueEntries(db.path, statement));
 }
@@ -529,14 +529,14 @@ GetUniqueEpigeneNames <- function(orgType="hsa"){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetCurrentDataMulti
-#' @export 
+#' @export
 SetCurrentDataMulti <- function(){
   dataSet$type <- nms.vec;
   dataSet <<- dataSet;

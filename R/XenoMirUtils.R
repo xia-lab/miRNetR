@@ -6,14 +6,14 @@
 #' @param idType PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetupXenoMirListData
-#' @export 
+#' @export
 SetupXenoMirListData <- function(mirs, orgType, idType){
 
     dataSet$listData <- TRUE;
@@ -51,14 +51,14 @@ SetupXenoMirListData <- function(mirs, orgType, idType){
 #' @param rowid PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetSeqnm
-#' @export 
+#' @export
 GetSeqnm <- function(rowid){
   inx <- which(rownames(dataSet$mir.res) == rowid);
   mirid <- dataSet$mir.res[inx, "miRNA"];
@@ -70,14 +70,14 @@ GetSeqnm <- function(rowid){
 #' @param mir.id PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetSeq
-#' @export 
+#' @export
 GetSeq <- function(mir.id){
   inx <- which(rownames(dataSet$mir.res) == mir.id);
   seq <- dataSet$mir.res[inx, "Accession"];
@@ -93,14 +93,14 @@ GetSeq <- function(mir.id){
 #' @param action PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname UpdateXenoMirEntries
-#' @export 
+#' @export
 UpdateXenoMirEntries <- function(col.id, method, value, action) {
 
     if (col.id == "source"){
@@ -146,14 +146,14 @@ UpdateXenoMirEntries <- function(col.id, method, value, action) {
 #' @param orgType PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetUniqueSourceNames
-#' @export 
+#' @export
 GetUniqueSourceNames <- function(orgType){
     db.path <- paste("../../data/libs/xenomir.hosts.json");
     library("RJSONIO");
@@ -169,14 +169,14 @@ GetUniqueSourceNames <- function(orgType){
 #' @param source PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetUniqueClassNames
-#' @export 
+#' @export
 GetUniqueClassNames <- function(orgType, source){
     res <- sort(names(browse[[orgType]][[source]]));
     return(res);
@@ -187,14 +187,14 @@ GetUniqueClassNames <- function(orgType, source){
 #' @param orgType PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetUniqueSpeciesNames
-#' @export 
+#' @export
 GetUniqueSpeciesNames <- function(orgType){
     res <- unique(unlist(browse[[orgType]][[1]]));
     return(res);
@@ -206,14 +206,14 @@ GetUniqueSpeciesNames <- function(orgType){
 #' @param source PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetUpdateClassNames
-#' @export 
+#' @export
 GetUpdateClassNames <- function(orgType, source){
     res <- sort(names(browse[[orgType]][[source]]));
     return(res);
@@ -225,14 +225,14 @@ GetUpdateClassNames <- function(orgType, source){
 #' @param source PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetUpdateSpeNames
-#' @export 
+#' @export
 GetUpdateSpeNames <- function(orgType, source){
     res <- unlist(browse[[orgType]][[source]]);
     res <- sort(res);
@@ -245,14 +245,14 @@ GetUpdateSpeNames <- function(orgType, source){
 #' @param species PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetupItemFromList
-#' @export 
+#' @export
 SetupItemFromList <- function(orgType, species){
     mir.mat <- cbind(species, rep("*", length(species)));
     rownames(mir.mat) <- mir.mat[,1];
@@ -270,14 +270,14 @@ SetupItemFromList <- function(orgType, species){
 #' @param source PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetupSourceFromList
-#' @export 
+#' @export
 SetupSourceFromList <- function(source){
     if(source == ""){
         print("Please at least choose one source!");
@@ -294,14 +294,14 @@ SetupSourceFromList <- function(source){
 #' @param status PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname PerformSpeciesMapping
-#' @export 
+#' @export
 PerformSpeciesMapping <- function(status){
     orgType <- dataSet$org;
     source <- dataSet$source;
@@ -371,14 +371,14 @@ PerformSpeciesMapping <- function(status){
 #' @param status PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname PerformXenoMirGeneMapping
-#' @export 
+#' @export
 PerformXenoMirGeneMapping <- function(status){
 
     orgType <- dataSet$org;
@@ -468,14 +468,14 @@ PerformXenoMirGeneMapping <- function(status){
 #' @param version PARAM_DESCRIPTION, Default: NULL
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname miRNA_PrecursorToMature
-#' @export 
+#' @export
 miRNA_PrecursorToMature<-function(miRNANames,version=NULL){
   if(is.null(version)){
     c_version <- checkMiRNAVersion(miRNANames,verbose = FALSE)
@@ -516,14 +516,14 @@ miRNA_PrecursorToMature<-function(miRNANames,version=NULL){
 #' @param verbose PARAM_DESCRIPTION, Default: TRUE
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname checkMiRNAVersion
-#' @export 
+#' @export
 checkMiRNAVersion <- function(miRNANames,verbose=TRUE){
   miRNANames <- as.character(miRNANames)
   miRNANames <- gsub(" ","",miRNANames)##Remove the possible space
@@ -562,15 +562,16 @@ checkMiRNAVersion <- function(miRNANames,verbose=TRUE){
 #' @param source PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname QueryXenoMirSQLite
-#' @export 
+#' @export
 QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
+    db.path <- paste0(db.path, ".sqlite");
     mir.db <- dbConnect(SQLite(), db.path);
     query <- paste(shQuote(q.vec), collapse=",");
     if(source == "immune_organ"){
