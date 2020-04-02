@@ -65,7 +65,7 @@ Init.Data<-function(dataType, analType){
     sqlite.tfgene.path <<-"/home/zzggyy/Downloads/netsqlite/";
     sqlite.ppi.path <<- "/home/zzggyy/Downloads/netsqlite/";
   }else{
-    sqlite.path <<- paste0(dirname(system.file("database", "sqlite/mirnet/", package="miRNetR")), "/")
+    sqlite.path <<- paste0(dirname(system.file("database", "sqlite", "mirnet", package="miRNetR")), "/mirnet","/");
   }
 
   # preload some general package
