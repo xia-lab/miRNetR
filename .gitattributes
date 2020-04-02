@@ -1,1 +1,1 @@
-inst/database/sqlite/mirnet/* filter=lfs diff=lfs merge=lfs -text
+inst/database/sqlite/mirnet/mir2gene.sqlite filter=lfs diff=lfs merge=lfs -text
