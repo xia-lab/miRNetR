@@ -11,14 +11,14 @@
 #' @param analType PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname Init.Data
-#' @export
+#' @export 
 Init.Data<-function(dataType, analType){
   mir.nmsu <- vector();
   mir.nmsu <<- mir.nmsu;
@@ -86,14 +86,14 @@ Init.Data<-function(dataType, analType){
 #' @param dataName PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname ReadTabExpressData
-#' @export
+#' @export 
 ReadTabExpressData <- function(dataName) {
 
   dataSet <- ReadTabData(dataName);
@@ -144,36 +144,38 @@ ReadTabExpressData <- function(dataName) {
   return (1);
 }
 
+
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetClassInfo
-#' @export
+#' @export 
 GetClassInfo <- function(){
   return(levels(dataSet$cls));
 }
+
 
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetAnotNames
-#' @export
+#' @export 
 GetAnotNames<-function(){
   return(rownames(dataSet$data.anot));
 }
@@ -187,14 +189,14 @@ GetAnotNames<-function(){
 #' @param targetOpt PARAM_DESCRIPTION, Default: NULL
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetupMirListData
-#' @export
+#' @export 
 SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
 
   dataSet$listData <- TRUE;
@@ -234,14 +236,14 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
 #' @param target PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetupIndListData
-#' @export
+#' @export 
 SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, target){
   data.org <<- dataSet$org <- orgType;
   dataSet$tissue <- tissue;
@@ -271,14 +273,14 @@ SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, targ
 #' @param idType PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetupItemFromPickList
-#' @export
+#' @export 
 SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
   if(!exists("picklist.vec")){
     print("Could not find user entered disease list!");
@@ -300,19 +302,20 @@ SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
   return(nrow(mir.mat));
 }
 
+
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetupMirExpressData
-#' @export
+#' @export 
 SetupMirExpressData <- function(){
   idType <- dataSet$id.current;
   mydata <- data.matrix(dataSet$sig.mat[,"max.logFC",drop=FALSE]);
@@ -335,14 +338,14 @@ SetupMirExpressData <- function(){
 #' @param colInx PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetMirResCol
-#' @export
+#' @export 
 GetMirResCol <- function(netType, colInx){
   if (anal.type == "multilist"  || anal.type == "snp2mir" || anal.type == "tf2genemir" || anal.type == "gene2tfmir") {
     res <- dataSet[netType][[1]][, colInx];
@@ -359,14 +362,14 @@ GetMirResCol <- function(netType, colInx){
 #' @param netType PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetMirResRowNames
-#' @export
+#' @export 
 GetMirResRowNames <- function(netType){
   if (anal.type == "multilist"  || anal.type == "snp2mir" || anal.type == "tf2genemir" || anal.type == "gene2tfmir") {
     resTable <- dataSet[netType][[1]]
@@ -386,14 +389,14 @@ GetMirResRowNames <- function(netType){
 #' @param mir.id PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname RemoveMirEntry
-#' @export
+#' @export 
 RemoveMirEntry <- function(tblnm, mir.id) {
   id <<- mir.id
   inx <- which(rownames(dataSet[tblnm][[1]]) == mir.id);
@@ -413,14 +416,14 @@ RemoveMirEntry <- function(tblnm, mir.id) {
 #' @param action PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname UpdateMirEntries
-#' @export
+#' @export 
 UpdateMirEntries <- function(col.id, method, value, action) {
 
   if(col.id == "evidence"){
@@ -468,19 +471,20 @@ UpdateMirEntries <- function(col.id, method, value, action) {
   }
 }
 
+
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname SetCurrentDataMulti
-#' @export
+#' @export 
 SetCurrentDataMulti <- function(){
   dataSet$type <- nms.vec;
   dataSet <<- dataSet;
