@@ -56,7 +56,58 @@ library(miRNetR)
 
 4) Each main function in miRNetR is documented. Use the *?Function* format to open its documentation. For instance, use `?miRNetR::PerformMirGeneMapping` to find out more about this function.
 
-# Quick start
+# The mapping between miRNAs and targets
+
+## miRNAs to targets
+
+```{r, eval=FALSE}
+library(miRNetR)
+
+#### Step 1. Initiate the dataSet object
+Init.Data("mir", "mirlist")
+
+#### Step 2. Set up the user input data
+SetupMirListData(mirs = "hsa-mir-101-3p
+hsa-mir-133b
+hsa-mir-147a
+hsa-mir-3140-3p
+hsa-mir-361-5p
+hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
+
+#### Step 3. Perform miRNAs to target genes mapping, results are downloaded in your working directory
+PerformMirGeneMapping()
+
+```
+
+## Targets to miRNAs 
+
+```{r, eval=FALSE}
+library(miRNetR)
+
+#### Step 1. Initiate the dataSet object
+Init.Data("mir", "gene")
+
+#### Step 2. Set up the user input data
+SetupIndListData("ACAT1
+DDX3X
+MEGF9
+FMR1
+HAPLN1
+IL12A
+OLR1
+RNF6
+SOD3
+ELOVL4
+MRAP2", orgType = "hsa", inputType = "gene", idType = "symbol", tissue = "na", target = "na")
+
+#### Step 3. Perform target genes to miRNAs mapping, results are downloaded in your working directory
+PerformMirGeneMapping()
+
+```
+
+# Network generation
+
+## From miRNAs to networks
 
 ```{r, eval=FALSE}
 library(miRNetR)
@@ -82,7 +133,61 @@ CreateMirNets(net.type = "mir2gene")
 #### Step5. Prepare network files, results are downloaded in your working directory
 PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
 
-#### Step 6. Perform miRNA family enrichment analysis, results are downloaded in your working directory
+```
+
+## From miRNAs targets to networks
+
+```{r, eval=FALSE}
+library(miRNetR)
+
+#### Step 1. Initiate the dataSet object
+Init.Data("mir", "gene")
+
+#### Step 2. Set up the user input data
+SetupIndListData("ACAT1
+DDX3X
+MEGF9
+FMR1
+HAPLN1
+IL12A
+OLR1
+RNF6
+SOD3
+ELOVL4
+MRAP2", orgType = "hsa", inputType = "gene", idType = "symbol", tissue = "na", target = "na")
+
+#### Step 3. Perform target genes to miRNAs mapping, results are downloaded in your working directory
+PerformMirGeneMapping()
+
+#### Step 4. Generate miRNA-gene network files
+CreateMirNets(net.type = "gene2mir")
+# return(c(mir.query, mir.count, tgt.count, ecount(mir.graph), length(mir.nets), substats));
+
+#### Step5. Prepare network files, results are downloaded in your working directory
+PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
+
+```
+
+# Functional enrichment analysis
+
+```{r, eval=FALSE}
+library(miRNetR)
+
+#### Step 1. Initiate the dataSet object
+Init.Data("mir", "mirlist")
+
+#### Step 2. Set up the user input data
+SetupMirListData(mirs = "hsa-mir-101-3p
+hsa-mir-133b
+hsa-mir-147a
+hsa-mir-3140-3p
+hsa-mir-361-5p
+hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
+
+#### Step 3. Perform miRNAs to target genes mapping, results are downloaded in your working directory
+PerformMirGeneMapping()
+
+#### Step 4. Perform miRNA family enrichment analysis, results are downloaded in your working directory
 PerformMirTargetEnrichAnalysis(
   adjust.type = "NA",
   fun.type = "mirfamily",
@@ -92,4 +197,3 @@ PerformMirTargetEnrichAnalysis(
 )
 
 ```
-
