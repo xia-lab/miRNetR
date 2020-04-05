@@ -26,5 +26,6 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
-    devtools
+    devtools,
+    rtracklayer
 VignetteBuilder: knitr

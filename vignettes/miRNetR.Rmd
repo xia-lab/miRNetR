@@ -2,63 +2,94 @@
 title: "miRNetR: A companion R package for the miRNet web server"
 author: "Le Chang and Jianguo Xia"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 2
 vignette: >
   %\VignetteIndexEntry{miRNetR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{rtracklayer}
 ---
+<style>
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+</style>
 
-## 1.0 Overview of miRNetR
+```{r global_options, echo = FALSE, include = FALSE}
+options(width  = 999)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
+                      cache = FALSE, tidy = FALSE, size = "small")
+```
 
-miRNetR is an R package, synchronized with the popular miRNet web server, designed for microRNA (miRNA) centric network analytics and systems-level interpretation. This R package contains the numerous R functions and libraries underlying the web server necessary to perform miRNA data processing and analysis. This package provides support to map from miRNAs to targets (forward mapping), targets to the associated miRNAs (reverse mapping), as well as to generate network files and perform functional enrichment analysis.  
+```{r setup, echo = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
 
-Following installation and loading of miRNetR, users will be able to reproduce web server results from their local computers using the corresponding R command history downloaded from miRNet, thereby achieving maximum flexibility and reproducibility.
+# Overview 
 
-## 1.1 Loading the package
+***miRNetR*** is an R package, synchronized with the popular [miRNet](www.mirnet.ca) web server, designed for microRNA (miRNA) centric network analytics and systems-level interpretation. This R package contains the numerous R functions and libraries underlying the web server necessary to perform miRNA data processing and analysis. This package provides support to map from miRNAs to targets (forward mapping), targets to the associated miRNAs (reverse mapping), as well as to generate network files and perform functional enrichment analysis.  
 
-After following the installation instructions on the miRNetR Github, you will be ready to use the package. Use the library() function to load the package into R. 
+Following installation and loading of *miRNetR*, users will be able to reproduce web server results from their local computers using the corresponding R command history downloaded from miRNet, thereby achieving maximum flexibility and reproducibility.
 
-```{r, eval=FALSE}
-# Load miRNetR
+# Loading the package
+
+After following the installation instructions on the [miRNetR](https://github.com/xia-lab/miRNetR) Github, you will be ready to use the package. Use the `library()` function to load the package into R. 
+
+```{r message = FALSE,warning = FALSE}
 library(miRNetR)
 ```
 
-## 1.2 Tips for using the miRNetR package
+# Tips for using the miRNetR package
 
-1) The first function that you will use in every module is the *Init.Data* function, which constructs the *dataSet* object that stores user's data for further processing and analysis. 
+1) The first function that you will use in every module is the `Init.Data` function, which constructs the *dataSet* object that stores user's data for further processing and analysis. 
 
 2) The miRNetR package directly creates data files/tables/analysis/networks outputs in your current working directory. 
 
 3) Every command must be run in sequence, please do not skip any commands as this will result in errors downstream. 
 
-4) Each main function in miRNetR is documented. Use the ?Function format to open its documentation. For instance, use ?miRNetR::PerformMirGeneMapping to find out more about this function.
+4) Each main function in miRNetR is documented. Use the *?Function* format to open its documentation. For instance, use `?miRNetR::PerformMirGeneMapping` to find out more about this function.
 
-## 2.0 Quick start
+# Quick start
 
 ```{r, eval=FALSE}
-# Initiate the dataSet object
-Init.Data("mir", "mirlist");
+library(miRNetR)
 
-# Set up the user input data
-SetupMirListData(mirs="hsa-mir-101-3p
+#### Step 1. Initiate the dataSet object
+Init.Data("mir", "mirlist")
+
+#### Step 2. Set up the user input data
+SetupMirListData(mirs = "hsa-mir-101-3p
 hsa-mir-133b
 hsa-mir-147a
 hsa-mir-3140-3p
 hsa-mir-361-5p
-hsa-mir-510-5p", orgType="hsa", idType="mir_id", tissue="Kidney");
+hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
 
-# Perform miRNAs to target genes mapping, results are downloaded in your working directory
-PerformMirGeneMapping();
+#### Step 3. Perform miRNAs to target genes mapping, results are downloaded in your working directory
+PerformMirGeneMapping()
 
-# Generate miRNA-gene network files
-CreateMirNets(net.type="mir2gene");
+#### Step 4. Generate miRNA-gene network files
+CreateMirNets(net.type = "mir2gene")
 # return(c(mir.query, mir.count, tgt.count, ecount(mir.graph), length(mir.nets), substats));
 
-# Prepare network files, results are downloaded in your working directory
-PrepareMirNet(mir.nm="mirnet1", file.nm="mirnet_0.json")
+#### Step5. Prepare network files, results are downloaded in your working directory
+PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
 
-# Perform miRNA family enrichment analysis, results are downloaded in your working directory
-PerformMirTargetEnrichAnalysis(adjust.type="NA",fun.type="mirfamily", file.nm="network_enrichment_mirfamily_1", IDs="hsa-mir-101-3p; hsa-mir-147a; hsa-mir-361-5p; hsa-mir-133b; hsa-mir-510-5p; hsa-mir-3140-3p", algo="hyp");
+#### Step 6. Perform miRNA family enrichment analysis, results are downloaded in your working directory
+PerformMirTargetEnrichAnalysis(
+  adjust.type = "NA",
+  fun.type = "mirfamily",
+  file.nm = "network_enrichment_mirfamily_1",
+  IDs = "hsa-mir-101-3p; hsa-mir-147a; hsa-mir-361-5p; hsa-mir-133b; hsa-mir-510-5p; hsa-mir-3140-3p",
+  algo = "hyp"
+)
+
 ```
 
