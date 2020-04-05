@@ -21,7 +21,7 @@ PerformMirGeneMapping <- function(){
     mir.mat <- dataSet$mir.orig;
     idVec <- rownames(mir.mat);
 
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), idVec, dataSet$org, dataSet$idType);
+    mir.dic <- Query.miRNetDB("mir2gene", idVec, dataSet$org, dataSet$idType);
 
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
@@ -87,11 +87,11 @@ PerformSNPMirGeneMapping <- function(){
   idType <- dataSet$idType;
 
   # first try to match snp2mir, if still have unmatched, do snp2gene
-  snp.dic <- Query.miRNetDB(paste(sqlite.path, "snp2mir", sep=""), snpidVec, dataSet$org, dataSet$idType);
+  snp.dic <- Query.miRNetDB("snp2mir", snpidVec, dataSet$org, dataSet$idType);
   hit.inx <- match(snpidVec, snp.dic$rsid);
   if(NA %in% hit.inx){
     unmatched.snp <- snpidVec[is.na(hit.inx)];
-    snp.dic2 <- Query.miRNetDB(paste(sqlite.path, "snp2gene", sep=""), unmatched.snp, dataSet$org, dataSet$idType);
+    snp.dic2 <- Query.miRNetDB("snp2gene", unmatched.snp, dataSet$org, dataSet$idType);
     snp.num <- rbind(snp.dic[,1:2], snp.dic2[,1:2])
   }
   snp.num <- snp.dic;
@@ -106,7 +106,7 @@ PerformSNPMirGeneMapping <- function(){
       snp <- na.omit(data.frame(name1 = snp.dic[, idType], id1 = snp.dic[, "rsid"], name2 = snp.dic[, "Mature_Name"], id2 =  snp.dic[, "Mature_Acc"], stringsAsFactors = FALSE));
       hit.num <- nrow(snp);
       idVec <- as.vector(unique(snp.dic[, c("MIRNA_Name")]));
-      mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), idVec, dataSet$org, "mir_id");
+      mir.dic <- Query.miRNetDB("mir2gene", idVec, dataSet$org, "mir_id");
 
       # for network
       snp.edge <- na.omit(data.frame(Name1=snp.dic[,"Mature_Name"],ID1=snp.dic[,"Mature_Acc"],Name2=snp.dic[,"rsid"],ID2=snp.dic[,"rsid"],stringsAsFactors = FALSE));
@@ -125,7 +125,7 @@ PerformSNPMirGeneMapping <- function(){
       current.msg <<- paste("A total of", hit.num, "SNPs were mapped to miRNAs &", hit.num2, "SNPs were mapped to miRNA-binding sites!");
 
       idVec2 <- as.vector(unique(snp.dic2[, c("entrez")]));
-      mir.dic2 <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), idVec2, dataSet$org, "entrez");
+      mir.dic2 <- Query.miRNetDB("mir2gene", idVec2, dataSet$org, "entrez");
 
       # for network
       snp.edge2 <- na.omit(data.frame(Name1=snp.dic2[,"symbol"],ID1=snp.dic2[,"entrez"],Name2=snp.dic2[,"rsid"],ID2=snp.dic2[,"rsid"],stringsAsFactors = FALSE));
@@ -151,7 +151,7 @@ PerformSNPMirGeneMapping <- function(){
       dataSet$mirtarget <- c("gene");
       dataSet$mirtable <- c("snp2mir", "mir2gene", "snp2gene", "gene2mir");
 
-      tf.dic <- Query.miRNetDB(paste(sqlite.path, "snp2tf", sep=""), snpidVec, dataSet$org, dataSet$idType);
+      tf.dic <- Query.miRNetDB("snp2tf", snpidVec, dataSet$org, dataSet$idType);
       res <- na.omit(tf.dic[ , c("chr_pos", "rsid", "entrez", "symbol", "name")]);
       res$Literature <- rep("NA", nrow(res));
       res$Database <- rep("NA", nrow(res));
@@ -159,7 +159,7 @@ PerformSNPMirGeneMapping <- function(){
       tf.vec = res[,"Entrez"]
       tf.res = res
 
-      tf.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), tf.vec, dataSet$org, "entrez");
+      tf.dic <- Query.miRNetDB("mir2gene", tf.vec, dataSet$org, "entrez");
       res <- tf.dic[ , c("mir_id", "mir_acc", "symbol", "entrez", "experiment", "pmid", "tissue")];
       res$Literature <- rep("NA", nrow(res));
       res$Database <- rep("NA", nrow(res));
@@ -199,7 +199,7 @@ if(nrow(tf.res)>0){
       current.msg <<- paste("A total of", hit.num, "SNPs were mapped to miRNAs!");
 
       idVec <- as.vector(unique(snp.dic[, c("MIRNA_Name")]));
-      mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), idVec, dataSet$org, "mir_id");
+      mir.dic <- Query.miRNetDB("mir2gene", idVec, dataSet$org, "mir_id");
 
       # for network
       snp.edge <- na.omit(data.frame(Name1=snp.dic[,"Mature_Name"],ID1=snp.dic[,"Mature_Acc"],Name2=snp.dic[,"rsid"],ID2=snp.dic[,"rsid"],stringsAsFactors = FALSE));

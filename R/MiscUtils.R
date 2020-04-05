@@ -546,6 +546,10 @@ ReadTabData <- function(dataName) {
 #' @export
 Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
   db.path <- paste0(db.path, ".sqlite");
+  db.url <- paste(sqlite.path, db.path, sep="");
+  msg <- paste("Downloading", db.path, "from", db.url);
+  print(msg);
+  download.file(db.url, db.path);
   mir.db <- dbConnect(SQLite(), db.path);
   query <- paste (shQuote(q.vec),collapse=",");
   statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query, ")", sep="");

@@ -252,7 +252,7 @@ QueryMultiListMir <- function(){
       }
     }
 
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), idVec, dataSet$org, idType);
+    mir.dic <- Query.miRNetDB("mir2gene", idVec, dataSet$org, idType);
 
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
@@ -334,7 +334,7 @@ QueryMultiListMir <- function(){
       mir.vec <- rownames(mir.mat);
     }
 
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2molecule", sep=""), mir.vec, orgType, idType);
+    mir.dic <- Query.miRNetDB("mir2molecule", mir.vec, orgType, idType);
 
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
@@ -408,7 +408,7 @@ orgType <- dataSet$org;
       mir.vec <- rownames(mir.mat);
     }
 
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2lncRNA", sep=""), mir.vec, orgType, idType);
+    mir.dic <- Query.miRNetDB("mir2lncRNA", mir.vec, orgType, idType);
 
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
@@ -487,7 +487,7 @@ orgType <- dataSet$org;
       mir.vec <- rownames(mir.mat);
     }
 
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2circRNA", sep=""), mir.vec, orgType, idType);
+    mir.dic <- Query.miRNetDB("mir2circRNA", mir.vec, orgType, idType);
 
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
@@ -565,7 +565,7 @@ orgType <- dataSet$org;
       mir.vec <- rownames(mir.mat);
     }
 
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2pseudogene", sep=""), mir.vec, orgType, idType);
+    mir.dic <- Query.miRNetDB("mir2pseudogene", mir.vec, orgType, idType);
 
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
@@ -642,7 +642,7 @@ orgType <- dataSet$org;
       mir.vec <- rownames(mir.mat);
     }
 
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2sncRNA", sep=""), mir.vec, orgType, idType);
+    mir.dic <- Query.miRNetDB("mir2sncRNA", mir.vec, orgType, idType);
 
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
@@ -723,7 +723,7 @@ orgType <- dataSet$org;
       mir.vec <- rownames(mir.mat);
     }
     if(!input.type %in% c("tf2gene", "gene2tf")){
-      mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2tf", sep=""), mir.vec, orgType, idType);
+      mir.dic <- Query.miRNetDB("mir2tf", mir.vec, orgType, idType);
     }else{
       if(input.type == "gene2tf"){
         targetType <- dataSet$target.types[["gene"]];
@@ -860,7 +860,7 @@ orgType <- dataSet$org;
       mir.vec <- rownames(mir.mat);
     }
 
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2epi", sep=""), mir.vec, orgType, idType);
+    mir.dic <- Query.miRNetDB("mir2epi", mir.vec, orgType, idType);
 
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
@@ -933,7 +933,7 @@ orgType <- dataSet$org;
       mir.vec <- rownames(mir.mat);
     }
 
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2disease", sep=""), mir.vec, "disease", idType);
+    mir.dic <- Query.miRNetDB("mir2disease", mir.vec, "disease", idType);
 
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
