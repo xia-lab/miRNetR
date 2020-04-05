@@ -719,7 +719,12 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
 #' @export
 QueryTFSQLite<- function(table.nm, q.vec, col.nm){
   require('RSQLite');
-  tf.db <- dbConnect(SQLite(), paste(sqlite.tfgene.path, "tfac.sqlite", sep=""));
+  db.path <- paste0("tf2gene.sqlite");
+  db.url <- paste(sqlite.path, db.path, sep="");
+  msg <- paste("Downloading", db.path, "from", db.url);
+  print(msg);
+  download.file(db.url, db.path);
+  tf.db <- dbConnect(SQLite(), db.path);
   query <- paste (shQuote(q.vec),collapse=",");
   statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (",query,")", sep="");
   return(.query.sqlite(tf.db, statement));
@@ -739,28 +744,6 @@ QueryTFSQLite<- function(table.nm, q.vec, col.nm){
 #' @rdname cleanMem
 #' @export
 cleanMem <- function(n=10) { for (i in 1:n) gc() }
-
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param db.path PARAM_DESCRIPTION
-#' @param statement PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUniqueEntries
-#' @export
-GetUniqueEntries <- function(db.path, statement){
-    mir.db <- dbConnect(SQLite(), db.path);
-    res <- .query.sqlite(mir.db, statement);
-    res <- sort(unique(as.character(res[,1])));
-    return (res);
-}
-
 
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
@@ -982,8 +965,13 @@ CleanMemory <- function(){
 #' @rdname QueryPpiSQLiteZero
 #' @export
 QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
-    require('RSQLite')
-    ppi.db <- dbConnect(SQLite(), paste(sqlite.ppi.path, "omics.net.sqlite", sep=""));
+    require('RSQLite');
+    db.path <- paste0("ppi.sqlite");
+    db.url <- paste(sqlite.path, db.path, sep="");
+    msg <- paste("Downloading", db.path, "from", db.url);
+    print(msg);
+    download.file(db.url, db.path);
+    ppi.db <- dbConnect(SQLite(), db.path);
     query <- paste(shQuote(q.vec),collapse=",");
 
     if(grepl("string$", table.nm)){

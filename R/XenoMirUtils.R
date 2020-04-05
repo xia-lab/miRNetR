@@ -309,12 +309,12 @@ PerformSpeciesMapping <- function(status){
     idType <- "exo_species";
     det.vec <- dataSet$det;
     pre.vec <- dataSet$pre;
-    det.dic <- QueryXenoMirSQLite(paste(sqlite.path, "xenomirnet", sep=""), det.vec, orgType, idType, source);
+    det.dic <- QueryXenoMirSQLite("xenomirnet", det.vec, orgType, idType, source);
     det.res <- det.dic[, c("source", "exo_species", "exo_mirna", "mir_acc", "symbol", "entrez", "data", "exp","miranda", "tarpmir")];
 
     if (status == "true"){
         source.pre <- "predicted";
-        pre.dic <- QueryXenoMirSQLite(paste(sqlite.path, "xenomirnet", sep=""), pre.vec, paste(orgType, "_pre", sep=""), idType, source.pre);
+        pre.dic <- QueryXenoMirSQLite("xenomirnet", pre.vec, paste(orgType, "_pre", sep=""), idType, source.pre);
         pre.res <- pre.dic[, c("source", "exo_species", "exo_mirna", "mir_acc", "symbol", "entrez", "data", "exp", "miranda", "tarpmir")];
         res <- rbind(det.res, pre.res);
     } else {
@@ -389,11 +389,11 @@ PerformXenoMirGeneMapping <- function(status){
 
     source.vec <- "";
 
-    det.dic <- QueryXenoMirSQLite(paste(sqlite.path, "xenomirnet", sep=""), idVec, orgType, idType, source.vec);
+    det.dic <- QueryXenoMirSQLite("xenomirnet", idVec, orgType, idType, source.vec);
     det.res <- det.dic[, c("source", "exo_species", "exo_mirna", "mir_acc", "symbol", "entrez", "data", "exp", "miranda", "tarpmir")];
 
     if(status == "true"){
-        pre.dic <- QueryXenoMirSQLite(paste(sqlite.path, "xenomirnet", sep=""), idVec, paste(orgType, "_pre", sep=""), idType, source.vec);
+        pre.dic <- QueryXenoMirSQLite("xenomirnet", idVec, paste(orgType, "_pre", sep=""), idType, source.vec);
         pre.res <- pre.dic[, c("source", "exo_species", "exo_mirna", "mir_acc", "symbol", "entrez", "data", "exp", "miranda", "tarpmir")];
         res <- rbind(det.res, pre.res);
     } else {
@@ -572,6 +572,10 @@ checkMiRNAVersion <- function(miRNANames,verbose=TRUE){
 #' @export
 QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
     db.path <- paste0(db.path, ".sqlite");
+    db.url <- paste(sqlite.path, db.path, sep="");
+    msg <- paste("Downloading", db.path, "from", db.url);
+    print(msg);
+    download.file(db.url, db.path);
     mir.db <- dbConnect(SQLite(), db.path);
     query <- paste(shQuote(q.vec), collapse=",");
     if(source == "immune_organ"){

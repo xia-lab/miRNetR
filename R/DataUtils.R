@@ -67,8 +67,6 @@ Init.Data<-function(dataType, analType){
   }else{
     sqlite.path <<- "https://www.xialab.ca/resources/mirnet/";
     sqlite.geneid.path <<- paste0(dirname(system.file("database", "sqlite", "gene_id", package="miRNetR")), "/gene_id","/");
-    sqlite.tfgene.path <<-"https://www.xialab.ca/resources/mirnet/";
-    sqlite.ppi.path <<- "https://www.xialab.ca/resources/mirnet/";
   }
 
   # preload some general package
@@ -468,63 +466,6 @@ UpdateMirEntries <- function(col.id, method, value, action) {
   }else{
     return("NA");
   }
-}
-
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUniqueDiseaseNames
-#' @export
-GetUniqueDiseaseNames <- function(){
-  db.path <- paste(sqlite.path, "mir2disease.sqlite", sep="");
-  statement <- "SELECT disease FROM disease";
-  return(GetUniqueEntries(db.path, statement));
-}
-
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION, Default: 'hsa'
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUniqueMoleculeNames
-#' @export
-GetUniqueMoleculeNames <- function(orgType="hsa"){
-  db.path <- paste(sqlite.path, "mir2molecule.sqlite", sep="");
-  statement <- paste("SELECT molecule FROM ",orgType, sep="");
-  return(GetUniqueEntries(db.path, statement));
-}
-
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION, Default: 'hsa'
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUniqueEpigeneNames
-#' @export
-GetUniqueEpigeneNames <- function(orgType="hsa"){
-  db.path <- paste(sqlite.path, "mir2epi.sqlite", sep="");
-  statement <- paste("SELECT epi_regulator FROM ",orgType, sep="");
-  return(GetUniqueEntries(db.path, statement));
 }
 
 #' @title FUNCTION_TITLE
