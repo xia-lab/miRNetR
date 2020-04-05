@@ -66,6 +66,9 @@ Init.Data<-function(dataType, analType){
     sqlite.ppi.path <<- "/home/zzggyy/Downloads/netsqlite/";
   }else{
     sqlite.path <<- "https://www.xialab.ca/resources/mirnet/";
+    sqlite.geneid.path <<- paste0(dirname(system.file("database", "sqlite", "gene_id", package="miRNetR")), "/gene_id","/");
+    sqlite.tfgene.path <<-"https://www.xialab.ca/resources/mirnet/";
+    sqlite.ppi.path <<- "https://www.xialab.ca/resources/mirnet/";
   }
 
   # preload some general package
