@@ -58,8 +58,6 @@ library(miRNetR)
 
 # The mapping between miRNAs and targets
 
-## miRNAs to targets
-
 ```{r, eval=FALSE}
 library(miRNetR)
 
@@ -74,41 +72,13 @@ hsa-mir-3140-3p
 hsa-mir-361-5p
 hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
 
-#### Step 3. Perform miRNAs to target genes mapping, results are downloaded in your working directory
+#### Step 3. Perform miRNAs to target genes mapping
 PerformMirGeneMapping()
-
-```
-
-## Targets to miRNAs 
-
-```{r, eval=FALSE}
-library(miRNetR)
-
-#### Step 1. Initiate the dataSet object
-Init.Data("mir", "gene")
-
-#### Step 2. Set up the user input data
-SetupIndListData("ACAT1
-DDX3X
-MEGF9
-FMR1
-HAPLN1
-IL12A
-OLR1
-RNF6
-SOD3
-ELOVL4
-MRAP2", orgType = "hsa", inputType = "gene", idType = "symbol", tissue = "na", target = "na")
-
-#### Step 3. Perform target genes to miRNAs mapping, results are downloaded in your working directory
-PerformMirGeneMapping()
-
+## "mir_tissue.csv" and "mirnet_mir_target.csv" are downloaded in your working directory 
 ```
 
 # Network generation
 
-## From miRNAs to networks
-
 ```{r, eval=FALSE}
 library(miRNetR)
 
@@ -125,46 +95,15 @@ hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
 
 #### Step 3. Perform miRNAs to target genes mapping, results are downloaded in your working directory
 PerformMirGeneMapping()
+## "mir_tissue.csv" and "mirnet_mir_target.csv" are downloaded in your working directory 
 
 #### Step 4. Generate miRNA-gene network files
 CreateMirNets(net.type = "mir2gene")
-# return(c(mir.query, mir.count, tgt.count, ecount(mir.graph), length(mir.nets), substats));
+## mir.query = 6, mir.count = 6, tgt.count = 999, ecount(mir.graph) = 1059, length(mir.nets) = 1, substats = 1005;
 
 #### Step5. Prepare network files, results are downloaded in your working directory
 PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
-
-```
-
-## From miRNAs targets to networks
-
-```{r, eval=FALSE}
-library(miRNetR)
-
-#### Step 1. Initiate the dataSet object
-Init.Data("mir", "gene")
-
-#### Step 2. Set up the user input data
-SetupIndListData("ACAT1
-DDX3X
-MEGF9
-FMR1
-HAPLN1
-IL12A
-OLR1
-RNF6
-SOD3
-ELOVL4
-MRAP2", orgType = "hsa", inputType = "gene", idType = "symbol", tissue = "na", target = "na")
-
-#### Step 3. Perform target genes to miRNAs mapping, results are downloaded in your working directory
-PerformMirGeneMapping()
-
-#### Step 4. Generate miRNA-gene network files
-CreateMirNets(net.type = "gene2mir")
-# return(c(mir.query, mir.count, tgt.count, ecount(mir.graph), length(mir.nets), substats));
-
-#### Step5. Prepare network files, results are downloaded in your working directory
-PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
+## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
 
 ```
 
@@ -187,7 +126,15 @@ hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
 #### Step 3. Perform miRNAs to target genes mapping, results are downloaded in your working directory
 PerformMirGeneMapping()
 
-#### Step 4. Perform miRNA family enrichment analysis, results are downloaded in your working directory
+#### Step 4. Generate miRNA-gene network files
+CreateMirNets(net.type = "mir2gene")
+## mir.query = 6, mir.count = 6, tgt.count = 999, ecount(mir.graph) = 1059, length(mir.nets) = 1, substats = 1005;
+
+#### Step5. Prepare network files, results are downloaded in your working directory
+PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
+## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
+
+#### Step 6. Perform miRNA family enrichment analysis, results are downloaded in your working directory
 PerformMirTargetEnrichAnalysis(
   adjust.type = "NA",
   fun.type = "mirfamily",
@@ -195,5 +142,5 @@ PerformMirTargetEnrichAnalysis(
   IDs = "hsa-mir-101-3p; hsa-mir-147a; hsa-mir-361-5p; hsa-mir-133b; hsa-mir-510-5p; hsa-mir-3140-3p",
   algo = "hyp"
 )
-
+## "network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv" are downloaded in your working directory
 ```

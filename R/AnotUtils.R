@@ -469,8 +469,12 @@ doGeneIDMapping <- function(q.vec, type){
     db.url <- paste(sqlite.geneid.path, db.path, sep="");
     msg <- paste("Downloading", db.path, "from", db.url);
     print(msg);
-    download.file(db.url, db.path);
-    mir.db <- dbConnect(SQLite(), db.path);
+    if(file.exists(db.path)){
+      mir.db <- dbConnect(SQLite(), db.path);
+    }else{
+      download.file(db.url, db.path);
+      mir.db <- dbConnect(SQLite(), db.path);
+    }
     query <- paste (shQuote(q.vec),collapse=",");
     if(is.null(q.vec)){
         type.query <- paste("entrez");
@@ -655,8 +659,12 @@ queryGeneDB <- function(table.nm, data.org){
     db.url <- paste(sqlite.geneid.path, db.path, sep="");
     msg <- paste("Downloading", db.path, "from", db.url);
     print(msg);
-    download.file(db.url, db.path);
-    conv.db <- dbConnect(SQLite(), db.path);
+    if(file.exists(db.path)){
+      conv.db <- dbConnect(SQLite(), db.path);
+    }else{
+      download.file(db.url, db.path);
+      conv.db <- dbConnect(SQLite(), db.path);
+    }
     db.map <- dbReadTable(conv.db, table.nm)
     dbDisconnect(conv.db); cleanMem();
 
