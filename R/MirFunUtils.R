@@ -729,8 +729,13 @@ PerformMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, IDs, 
 #' @rdname GetRandomMirTargetGenes
 #' @export
 GetRandomMirTargetGenes <- function(qSize, perm.num){
-
-    mir.db <- dbConnect(SQLite(), paste(sqlite.path, "mir2gene", sep=""));
+    require('RSQLite');
+    db.path <- paste0("mir2gene.sqlite");
+    db.url <- paste(sqlite.path, db.path, sep="");
+    msg <- paste("Downloading", db.path, "from", db.url);
+    print(msg);
+    download.file(db.url, db.path);
+    mir.db <- dbConnect(SQLite(), db.path);
     statement <- paste("SELECT mir_id,entrez FROM ",dataSet$org, sep="");
     mir.dic <- .query.sqlite(mir.db, statement);
 
@@ -767,7 +772,13 @@ GetRandomMirTargetGenes <- function(qSize, perm.num){
 #' @rdname GetRandomXenoMirTargetGenes
 #' @export
 GetRandomXenoMirTargetGenes <- function(qSize, perm.num){
-    mir.db <- dbConnect(SQLite(), paste(sqlite.path, "xenomirnet", sep=""));
+    require('RSQLite');
+    db.path <- paste0("xenomirnet.sqlite");
+    db.url <- paste(sqlite.path, db.path, sep="");
+    msg <- paste("Downloading", db.path, "from", db.url);
+    print(msg);
+    download.file(db.url, db.path);
+    mir.db <- dbConnect(SQLite(), db.path);
     statement <- paste("SELECT exo_mirna,entrez FROM ",dataSet$org, sep="");
     mir.dic <- .query.sqlite(mir.db, statement);
 

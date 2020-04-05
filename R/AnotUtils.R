@@ -465,7 +465,12 @@ doProbeMapping <- function(probe.vec, platform){
 #' @export
 doGeneIDMapping <- function(q.vec, type){
     require('RSQLite');
-    mir.db <- dbConnect(SQLite(), paste(sqlite.geneid.path, data.org, "_genes.sqlite", sep=""));
+    db.path <- paste0(data.org, "_genes.sqlite");
+    db.url <- paste(sqlite.geneid.path, db.path, sep="");
+    msg <- paste("Downloading", db.path, "from", db.url);
+    print(msg);
+    download.file(db.url, db.path);
+    mir.db <- dbConnect(SQLite(), db.path);
     query <- paste (shQuote(q.vec),collapse=",");
     if(is.null(q.vec)){
         type.query <- paste("entrez");
@@ -645,9 +650,13 @@ RemoveDuplicates <- function(data, lvlOpt, quiet=T){
 #' @rdname queryGeneDB
 #' @export
 queryGeneDB <- function(table.nm, data.org){
-    require('RSQLite')
-
-    conv.db <- dbConnect(SQLite(), paste(sqlite.geneid.path, data.org, "_genes.sqlite", sep=""));
+    require('RSQLite');
+    db.path <- paste0(data.org, "_genes.sqlite");
+    db.url <- paste(sqlite.geneid.path, db.path, sep="");
+    msg <- paste("Downloading", db.path, "from", db.url);
+    print(msg);
+    download.file(db.url, db.path);
+    conv.db <- dbConnect(SQLite(), db.path);
     db.map <- dbReadTable(conv.db, table.nm)
     dbDisconnect(conv.db); cleanMem();
 
