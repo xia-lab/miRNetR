@@ -34,11 +34,13 @@ knitr::opts_chunk$set(collapse = TRUE)
 
 # Overview 
 
+## Introduction
+
 ***miRNetR*** is an R package, synchronized with the popular [miRNet](www.mirnet.ca) web server, designed for microRNA (miRNA) centric network analytics and systems-level interpretation. This R package contains the numerous R functions and libraries underlying the web server necessary to perform miRNA data processing and analysis. This package provides support to map from miRNAs to targets (forward mapping), targets to the associated miRNAs (reverse mapping), as well as to generate network files and perform functional enrichment analysis.  
 
 Following installation and loading of *miRNetR*, users will be able to reproduce web server results from their local computers using the corresponding R command history downloaded from miRNet, thereby achieving maximum flexibility and reproducibility.
 
-# Loading the package
+## Installation
 
 After following the installation instructions on the [miRNetR](https://github.com/xia-lab/miRNetR) Github, you will be ready to use the package. Use the `library()` function to load the package into R. 
 
@@ -58,6 +60,8 @@ library(miRNetR)
 
 # The mapping between miRNAs and targets
 
+## From miRNAs to their targets (forward mapping)
+
 ```{r, eval=FALSE}
 library(miRNetR)
 
@@ -76,6 +80,9 @@ hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
 PerformMirGeneMapping()
 ## "mir_tissue.csv" and "mirnet_mir_target.csv" are downloaded in your working directory 
 ```
+
+## From targets to miRNAs (reverse mapping)
+
 
 # Network generation
 
@@ -106,6 +113,10 @@ PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
 ## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
 
 ```
+
+# Network motif analysis
+
+# mRNA-miRNA co-expression network analysis
 
 # Functional enrichment analysis
 
@@ -144,3 +155,5 @@ PerformMirTargetEnrichAnalysis(
 )
 ## "network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv" are downloaded in your working directory
 ```
+
+
