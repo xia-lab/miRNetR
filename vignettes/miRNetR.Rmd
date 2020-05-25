@@ -58,35 +58,28 @@ library(miRNetR)
 
 4) Each main function in miRNetR is documented. Use the *?Function* format to open its documentation. For instance, use `?miRNetR::PerformMirGeneMapping` to find out more about this function.
 
-# The mapping between miRNAs and targets
 
-## From miRNAs to their targets (forward mapping)
+# Starting from a list of miRNAs or targets
+
+## Starting from a list of miRNAs
+
+### Mapping to single target
 
 ```{r, eval=FALSE}
 library(miRNetR)
 
-#### Step 1. Initiate the dataSet object
-Init.Data("mir", "mirlist")
+#### Step 1. Mapping
 
-#### Step 2. Set up the user input data
-SetupMirListData(mirs = "hsa-mir-101-3p
-hsa-mir-133b
-hsa-mir-147a
-hsa-mir-3140-3p
-hsa-mir-361-5p
-hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
+#### Step 2. Network generation
 
-#### Step 3. Perform miRNAs to target genes mapping
-PerformMirGeneMapping()
-## "mir_tissue.csv" and "mirnet_mir_target.csv" are downloaded in your working directory 
-```
+#### Step 3. Enrichment analysis (hypergeometric tests)
 
-## From targets to miRNAs (reverse mapping)
+#### Step 3. Enrichment analysis (empirical sampling)
 
+#### Step 3. Enrichment analysis (miRNA set enrichment)
 
-# Network generation
+###############################
 
-```{r, eval=FALSE}
 library(miRNetR)
 
 #### Step 1. Initiate the dataSet object
@@ -112,15 +105,8 @@ CreateMirNets(net.type = "mir2gene")
 PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
 ## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
 
-```
+###############################
 
-# Network motif analysis
-
-# mRNA-miRNA co-expression network analysis
-
-# Functional enrichment analysis
-
-```{r, eval=FALSE}
 library(miRNetR)
 
 #### Step 1. Initiate the dataSet object
@@ -154,6 +140,101 @@ PerformMirTargetEnrichAnalysis(
   algo = "hyp"
 )
 ## "network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv" are downloaded in your working directory
+
+
 ```
+
+
+### Mapping to multiple targets
+
+```{r message = FALSE,warning = FALSE}
+library(miRNetR)
+
+#### Step 1. Mapping
+
+#### Step 2. Network generation
+
+#### Step 3. Enrichment analysis (hypergeometric tests)
+
+#### Step 3. Enrichment analysis (empirical sampling)
+
+#### Step 3. Enrichment analysis (miRNA set enrichment)
+```
+
+## Starting from a list of targets
+
+### Mapping from single target
+
+```{r message = FALSE,warning = FALSE}
+library(miRNetR)
+
+#### Step 1. Mapping
+
+#### Step 2. Network generation
+
+#### Step 3. Enrichment analysis (hypergeometric tests)
+
+#### Step 3. Enrichment analysis (empirical sampling)
+
+#### Step 3. Enrichment analysis (miRNA set enrichment)
+```
+
+### Mapping from multiple targets
+
+```{r message = FALSE,warning = FALSE}
+library(miRNetR)
+
+#### Step 1. Mapping
+
+#### Step 2. Network generation
+
+#### Step 3. Enrichment analysis (hypergeometric tests)
+
+#### Step 3. Enrichment analysis (empirical sampling)
+
+#### Step 3. Enrichment analysis (miRNA set enrichment)
+```
+
+# Starting from an expression table 
+
+## RT-qPCR
+
+```{r message = FALSE,warning = FALSE}
+library(miRNetR)
+
+#### Step 1. Mapping
+
+#### Step 2. Network generation
+
+#### Step 3. Enrichment analysis (hypergeometric tests)
+
+#### Step 3. Enrichment analysis (empirical sampling)
+
+#### Step 3. Enrichment analysis (miRNA set enrichment)
+```
+
+
+## Microarray
+
+```{r message = FALSE,warning = FALSE}
+library(miRNetR)
+
+#### Step 1. Mapping
+
+#### Step 2. Network generation
+
+#### Step 3. Enrichment analysis (hypergeometric tests)
+
+#### Step 3. Enrichment analysis (empirical sampling)
+
+#### Step 3. Enrichment analysis (miRNA set enrichment)
+```
+
+## RNAseq
+
+
+# mRNA-miRNA co-expression network analysis (To-Do)
+
+# Network motif analysis (To-Do)
 
 
