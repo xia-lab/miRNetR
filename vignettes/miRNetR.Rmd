@@ -3,14 +3,17 @@ title: "miRNetR: A companion R package for the miRNet web server"
 author: "Le Chang and Jianguo Xia"
 date: "`r Sys.Date()`"
 output:
-  BiocStyle::html_document:
+  prettydoc::html_pretty:
+    theme: 'cayman'
+    highlight: github
     toc: true
-    toc_depth: 2
+    toc_depth: 3
+    number_sections: true
 vignette: >
   %\VignetteIndexEntry{miRNetR}
   %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
   %\VignetteEncoding{UTF-8}
-  %\VignetteDepends{rtracklayer}
 ---
 <style>
 pre {
@@ -42,10 +45,38 @@ Following installation and loading of *miRNetR*, users will be able to reproduce
 
 ## Installation
 
-After following the installation instructions on the [miRNetR](https://github.com/xia-lab/miRNetR) Github, you will be ready to use the package. Use the `library()` function to load the package into R. 
+**Step 1. Install package dependencies** 
 
-```{r message = FALSE,warning = FALSE}
-library(miRNetR)
+To use miRNetR , first install all package dependencies. Ensure that you are able to download packages from bioconductor. To install package dependencies, use the pacman R package (for those with >R 3.5.1). Note that some of these packages may require additional library dependencies that need to be installed prior to their own successful installation. 
+
+```{r, eval=FALSE}
+install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(RSQLite, Cairo, fastmatch, igraph, RJSONIO, foreach, doParallel, preprocessCore, limma, edgeR, HTqPCR, genefilter)
+
+```
+
+**Step 2. Install the package**
+
+miRNetR is freely available from GitHub. The package documentation, including the vignettes for each module and user manual is available within the downloaded R package file. If all package dependencies were installed, you will be able to install the miRNetR. Due to issues with Latex, some users may find that they are only able to install miRNetR without any documentation (i.e. vignettes). 
+
+Install the package directly from github using the *devtools* package. Open R and enter:
+
+```{r, eval=FALSE}
+
+# Step 1: Install devtools
+install.packages("devtools")
+library(devtools)
+
+# Step 2: Install miRNetR WITHOUT documentation
+devtools::install_github("xia-lab/miRNetR", build = TRUE, build_opts = c("--no-resave-data", "--no-manual", "--no-build-vignettes"))
+
+# Step 2: Install miRNetR WITH documentation
+devtools::install_github("xia-lab/miRNetR", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"), build_vignettes = TRUE)
+
+
 ```
 
 # Tips for using the miRNetR package
@@ -66,22 +97,6 @@ library(miRNetR)
 ### Mapping to single target
 
 ```{r, eval=FALSE}
-library(miRNetR)
-
-#### Step 1. Mapping
-
-#### Step 2. Network generation
-
-#### Step 3. Enrichment analysis (hypergeometric tests)
-
-#### Step 3. Enrichment analysis (empirical sampling)
-
-#### Step 3. Enrichment analysis (miRNA set enrichment)
-
-###############################
-
-library(miRNetR)
-
 #### Step 1. Initiate the dataSet object
 Init.Data("mir", "mirlist")
 
@@ -95,43 +110,20 @@ hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
 
 #### Step 3. Perform miRNAs to target genes mapping, results are downloaded in your working directory
 PerformMirGeneMapping()
-## "mir_tissue.csv" and "mirnet_mir_target.csv" are downloaded in your working directory 
+```
 
+```{r, eval=FALSE}
 #### Step 4. Generate miRNA-gene network files
 CreateMirNets(net.type = "mir2gene")
 ## mir.query = 6, mir.count = 6, tgt.count = 999, ecount(mir.graph) = 1059, length(mir.nets) = 1, substats = 1005;
 
-#### Step5. Prepare network files, results are downloaded in your working directory
+#### Step 5. Prepare network files, results are downloaded in your working directory
 PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
 ## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
+```
 
-###############################
-
-library(miRNetR)
-
-#### Step 1. Initiate the dataSet object
-Init.Data("mir", "mirlist")
-
-#### Step 2. Set up the user input data
-SetupMirListData(mirs = "hsa-mir-101-3p
-hsa-mir-133b
-hsa-mir-147a
-hsa-mir-3140-3p
-hsa-mir-361-5p
-hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
-
-#### Step 3. Perform miRNAs to target genes mapping, results are downloaded in your working directory
-PerformMirGeneMapping()
-
-#### Step 4. Generate miRNA-gene network files
-CreateMirNets(net.type = "mir2gene")
-## mir.query = 6, mir.count = 6, tgt.count = 999, ecount(mir.graph) = 1059, length(mir.nets) = 1, substats = 1005;
-
-#### Step5. Prepare network files, results are downloaded in your working directory
-PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
-## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
-
-#### Step 6. Perform miRNA family enrichment analysis, results are downloaded in your working directory
+```{r, eval=FALSE}
+#### Step 6. Perform miRNA family enrichment analysis, results are downloaded in your working directory ("network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv")
 PerformMirTargetEnrichAnalysis(
   adjust.type = "NA",
   fun.type = "mirfamily",
@@ -139,26 +131,50 @@ PerformMirTargetEnrichAnalysis(
   IDs = "hsa-mir-101-3p; hsa-mir-147a; hsa-mir-361-5p; hsa-mir-133b; hsa-mir-510-5p; hsa-mir-3140-3p",
   algo = "hyp"
 )
-## "network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv" are downloaded in your working directory
-
-
 ```
-
 
 ### Mapping to multiple targets
 
-```{r message = FALSE,warning = FALSE}
-library(miRNetR)
+```{r, eval=FALSE}
+#### Step 1. Initiate the dataSet object
+Init.Data("mir", "mirlist")
 
-#### Step 1. Mapping
+#### Step 2. Set up the user input data
+SetupMirListData(mirs = "hsa-mir-16-5p
+hsa-mir-424-5p
+hsa-mir-29c-3p
+hsa-mir-29b-3p
+hsa-mir-29a-3p
+hsa-mir-148b-3p
+hsa-mir-152-3p
+hsa-mir-148a-3p
+hsa-mir-335-5p", orgType = "hsa", idType = "mir_id", tissue = "na")
 
-#### Step 2. Network generation
+#### Step 3. Set up targets
+SetCurrentDataMulti(nms.vec = c("gene", "lncrna"))
 
-#### Step 3. Enrichment analysis (hypergeometric tests)
+#### Step 4. Perform miRNAs to multiple targets mapping, results are downloaded in your working directory
+QueryMultiListMir()
+```
 
-#### Step 3. Enrichment analysis (empirical sampling)
+```{r, eval=FALSE}
+#### Step 5. Generate network files
+CreateMirNets(net.type = "multilist")
 
-#### Step 3. Enrichment analysis (miRNA set enrichment)
+#### Step 6. Prepare network files, results are downloaded in your working directory
+PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
+## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
+```
+
+```{r, eval=FALSE}
+#### Step 7. Perform miRNA function enrichment analysis, results are downloaded in your working directory ("network_enrichment_func_1.json" and "mirnet_enrichment.csv")
+PerformMirTargetEnrichAnalysis(
+  adjust.type = "NA",
+  fun.type = "func",
+  file.nm = "network_enrichment_func_1",
+  IDs = "hsa-mir-16-5p, hsa-mir-424-5p, hsa-mir-29c-3p, hsa-mir-29b-3p, hsa-mir-29a-3p, hsa-mir-148b-3p, hsa-mir-152-3p, hsa-mir-148a-3p, hsa-mir-335-5p",
+  algo = "hyp"
+)
 ```
 
 ## Starting from a list of targets
@@ -199,18 +215,104 @@ library(miRNetR)
 
 ## RT-qPCR
 
-```{r message = FALSE,warning = FALSE}
+```{r, eval=FALSE}
 library(miRNetR)
 
-#### Step 1. Mapping
+#### Step 1. Initiate the dataSet object
+Init.Data("mir", "qpcr")
 
-#### Step 2. Network generation
+#### Step 2. Read user input 
+ReadTabExpressData("qpcr_data.txt")
 
-#### Step 3. Enrichment analysis (hypergeometric tests)
+#### Step 3. Annotation
+PerformDataAnnot("mmu", "mir_id",  "na", "mean")
+```
+miRNetR supports five types of normalization method, including quantile normalization, rank-invariant normalization, acale-invariant normalization, geometric average and delta Ct normalization.
 
-#### Step 3. Enrichment analysis (empirical sampling)
+`Quantile normalization` will make the distribution of control values more or less identical across samples.
 
-#### Step 3. Enrichment analysis (miRNA set enrichment)
+`Rank-invariant normalization` computes all rank-invariant sets of features between pairwise comparisons of each sample against a reference, such as a pseudo-mean. The rank-invariant features are used as a reference for generating a smoothing curve, which is then applied to the entire sample.
+
+`Geometric average` calculates the average control value for each sample, and scales all control values according to the ratio of these mean Ct values across samples. 
+
+`deltaCt normalization` calculates the standard deltaCt values, i.e. subtracts the mean of the chosen controls from all other values in the feature set. *You must specify endogenous controls!*
+
+
+```{r, eval=FALSE}
+#### Step 4. Normalization
+
+######## Option 1. Quantile normalization
+PerformQpcrDataNormalization("quantile")
+
+######## Option 2. Rank-invariant normalization
+PerformQpcrDataNormalization("norm.rank")
+
+######## Option 3. Scale-invariant normalization
+PerformQpcrDataNormalization("scale.rank")
+
+######## Option 4. Geometric average
+PerformQpcrDataNormalization("geometric.mean")
+
+######## Option 5. Delta Ct normalization
+PerformQpcrDataNormalization("deltaCt")
+
+######## Option 6. No normalization
+PerformQpcrDataNormalization("none")
+```
+miRNetR supports three types of statistical method, including limma, standard t-test and Mann-Whitney test.
+```{r, eval=FALSE}
+#### Step 5. Specify comparison of interest and statistical method
+
+######## Option 1. Limma
+PerformHTqPCR("Ctrl vs. GrpA", "limma")
+
+######## Option 2. Standard t-test
+PerformHTqPCR("Ctrl vs. GrpA", "ttest")
+
+######## Option 3. Mann-Whitney test
+PerformHTqPCR("Ctrl vs. GrpA", "mannwhitney")
+```
+Set adjusted p-value (p.lvl), fold change (fc.lvl) and direction
+```{r, eval=FALSE}
+#### Step 6. Feature selection
+
+######## Option 1. Both direction
+GetSigGenes(p.lvl = 0.2, fc.lvl = 0.0, direction = "both")
+
+######## Option 2. Up-regulated only
+GetSigGenes(p.lvl = 0.2, fc.lvl = 0.0, direction = "up")
+
+######## Option 3. Down-regulated only
+GetSigGenes(p.lvl = 0.2, fc.lvl = 0.0, direction = "down")
+```
+
+```{r, eval=FALSE}
+#### Step 7. Set up the user input data in the dataSet object
+SetupMirExpressData();
+
+#### Step 8. Perform miRNAs to target genes mapping, results are downloaded in your working directory
+PerformMirGeneMapping();
+```
+
+```{r, eval=FALSE}
+#### Step 9. Generate miRNA-gene network files
+CreateMirNets("mir2gene");
+
+#### Step 10. Prepare network files, results are downloaded in your working directory
+PrepareMirNet("mirnet1", "mirnet_0.json")
+## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
+
+```
+
+```{r, eval=FALSE}
+#### Step 11. Perform miRNA family enrichment analysis, results are downloaded in your working directory ("network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv")
+PerformMirTargetEnrichAnalysis(
+  adjust.type = "NA",
+  fun.type = "mirfamily",
+  file.nm = "network_enrichment_mirfamily_1",
+  IDs = "mmu-mir-329-3p; mmu-mir-539-3p; mmu-mir-3087-3p; mmu-mir-466i-5p; mmu-mir-129-2-3p; mmu-mir-466c-3p; mmu-mir-669m-3p; mmu-mir-466e-3p; mmu-mir-325-3p; mmu-mir-3099-3p; mmu-mir-1952; mmu-mir-505-3p; mmu-mir-451a",
+  algo = "hyp"
+)
 ```
 
 
