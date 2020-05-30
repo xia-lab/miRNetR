@@ -489,7 +489,90 @@ PerformMirTargetEnrichAnalysis(
 )
 ```
 
+# Starting from a list of xeno-miRNAs or target genes
 
+miRNet will automatically search 453 xeno-miRNAs detected in six host organisms based on 15 studies. In addition, there are 1,249 predicted xeno-miRNAs with high potential to be transferred to human circulation according to a study by [Shu et al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4631372/)
+
+You can enter xeno-miRNAs to see if they target any host genes; Or enter host genes to see if they are targeted by any xeno-miRNAs.
+
+## Starting from a list of xeno-miRNAs
+
+```{r, eval=FALSE}
+#### Step 1. Initiate the dataSet object
+Init.Data("xeno.mir", "xenomir-search")
+
+#### Step 2. Set up the user input data
+SetupMirListData(mirs = "sja-miR-125b
+sja-miR-2162-3p
+sja-miR-2b-5p
+sja-miR-61
+sja-miR-10-5p", orgType = "hsa", idType = "exo_mirna", tissue = "")
+
+#### Step 3. Perform xeno-miRNAs to target genes mapping, results are downloaded in your working directory
+## You can choose to include ("true") or exclude ("false") predicted xeno-miRNAs in PerformXenoMirGeneMapping()
+PerformXenoMirGeneMapping(isIncludePre = "false")
+```
+
+
+
+```{r, eval=FALSE}
+#### Step 4. Generate xeno-miRNA gene network files
+CreateMirNets(net.type = "mir2gene")
+
+#### Step 5. Prepare network files, results are downloaded in your working directory
+PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
+## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
+```
+
+```{r, eval=FALSE}
+#### Step 6. Perform enrichment analysis, results are downloaded in your working directory ("network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv")
+## TO-DO
+PerformMirTargetEnrichAnalysis(
+  adjust.type = "NA",
+  fun.type = "mirfamily",
+  file.nm = "network_enrichment_mirfamily_1",
+  IDs = "hsa-mir-101-3p; hsa-mir-147a; hsa-mir-361-5p; hsa-mir-133b; hsa-mir-510-5p; hsa-mir-3140-3p",
+  algo = "hyp"
+)
+```
+
+## Starting from a list of host genes
+
+```{r, eval=FALSE}
+#### Step 1. Initiate the dataSet object
+Init.Data("xeno.mir", "xenomir-search")
+
+#### Step 2. Set up the user input data
+SetupMirListData(mirs = "B4galt2
+Acox3
+Emp2
+Gtpbp2
+Duox1", orgType = "mmu", idType = "symbol", tissue = "")
+
+#### Step 3. Perform xeno-miRNAs to target genes mapping, results are downloaded in your working directory
+## You can choose to include ("true") or exclude ("false") predicted xeno-miRNAs in PerformXenoMirGeneMapping()
+PerformXenoMirGeneMapping(isIncludePre = "false")
+```
+
+```{r, eval=FALSE}
+#### Step 4. Generate xeno-miRNA gene network files
+CreateMirNets(net.type = "mir2gene")
+
+#### Step 5. Prepare network files, results are downloaded in your working directory
+PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
+## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
+```
+
+```{r, eval=FALSE}
+#### Step 6. Perform enrichment analysis, results are downloaded in your working directory ("network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv")
+PerformMirTargetEnrichAnalysis(
+  adjust.type = "NA",
+  fun.type = "kegg",
+  file.nm = "network_enrichment_kegg_1",
+  IDs = "bta-miR-6120-3p; cel-miR-229-5p; cel-miR-237-5p; cel-miR-35-3p; cel-miR-40-3p; cel-miR-47-5p; cel-miR-53-5p; cel-miR-55-3p; cel-miR-64-5p; cel-miR-66-5p; cel-miR-81-5p; cpa-miR166d; cpa-miR167d; cqu-miR-278; cqu-miR-281-5p; dme-miR-996-3p; dya-miR-286; dya-miR-2b; dya-miR-2c; dya-miR-316; dya-miR-3; lgi-miR-96a; lus-miR166j; mdo-miR-24-5p; mse-miR-263a; mse-miR-275; nvi-miR-279; nvi-miR-2a; pab-miR950-5p; sof-miR168b; ssc-miR-432-5p; ssp-miR168a; Emp2; Gtpbp2; B4galt2; Acox3",
+  algo = "hyp"
+)
+```
 
 # mRNA-miRNA co-expression network analysis (To-Do)
 
