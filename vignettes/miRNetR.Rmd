@@ -315,24 +315,180 @@ PerformMirTargetEnrichAnalysis(
 )
 ```
 
+## RNAseq
+
+```{r, eval=FALSE}
+library(miRNetR)
+
+#### Step 1. Initiate the dataSet object
+Init.Data("mir", "rnaseq")
+
+#### Step 2. Read user input 
+ReadTabExpressData("bmdm_data.txt")
+
+#### Step 3. Annotation
+PerformDataAnnot("mmu", "emblgene",  "na", "sum")
+```
+miRNetR supports four types of normalization method, including trimmed mean of M-values (TMM), log2 transformation only, quantile normalization only, log2 followed by quantile normalization. In addition, you can choose either tagwise or common dispersion. The expression values should be compared at log2 scales.
+```{r, eval=FALSE}
+#### Step 4. Normalization
+
+######## Option 1. Trimmed mean of M-values (TMM) and tagwise dispersion
+PerformCountDataNormalization("tmm", "tagwise")
+
+######## Option 2. Log2 transformation and common dispersion
+PerformCountDataNormalization("log", "common")
+
+######## Option 3. Quantile normalization and common dispersion
+PerformCountDataNormalization("quant", "common")
+
+######## Option 4. Log2 followed by quantile normalization and common dispersion
+PerformCountDataNormalization("combine", "common")
+
+######## Option 5. No normalization and no dispersion
+PerformCountDataNormalization("none", "none")
+```
+EdgeR uses negative binomial model is to estimate the dispersion parameter for each tag, a measure of the degree of inter-library variation for that tag. 
+Estimating the common dispersion gives an idea of overall variability across the genome for this dataset.
+Estimating the tagwise dispersions estimates a distinct, individual dispersion for each gene.
+
+```{r, eval=FALSE}
+#### Step 5. Specify statistical method and comparison of interest
+
+######## edgeR (RNAseq)
+PerformEdgeR("Control vs. Infected")
+
+```
+Set adjusted p-value (p.lvl), fold change (fc.lvl) and direction
+```{r, eval=FALSE}
+#### Step 6. Feature selection
+
+######## Option 1. Both direction
+GetSigGenes(p.lvl = 0.01, fc.lvl = 2.5, direction = "both")
+
+######## Option 2. Up-regulated only
+GetSigGenes(p.lvl = 0.01, fc.lvl = 2.5, direction = "up")
+
+######## Option 3. Down-regulated only
+GetSigGenes(p.lvl = 0.01, fc.lvl = 2.5, direction = "down")
+```
+
+```{r, eval=FALSE}
+#### Step 7. Set up the user input data in the dataSet object
+SetupMirExpressData();
+
+#### Step 8. Perform target genes to miRNAs mapping, results are downloaded in your working directory
+PerformMirGeneMapping();
+```
+
+```{r, eval=FALSE}
+#### Step 9. Generate miRNA-gene network files
+CreateMirNets("gene2mir");
+
+#### Step 10. Prepare network files, results are downloaded in your working directory
+PrepareMirNet("mirnet1", "mirnet_0.json")
+## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
+
+```
+
+```{r, eval=FALSE}
+#### Step 11. Perform miRNA family enrichment analysis, results are downloaded in your working directory ("network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv")
+PerformMirTargetEnrichAnalysis(
+  adjust.type = "NA",
+  fun.type = "mirfamily",
+  file.nm = "network_enrichment_mirfamily_1",
+  IDs = "mmu-mir-329-3p; mmu-mir-539-3p; mmu-mir-3087-3p; mmu-mir-466i-5p; mmu-mir-129-2-3p; mmu-mir-466c-3p; mmu-mir-669m-3p; mmu-mir-466e-3p; mmu-mir-325-3p; mmu-mir-3099-3p; mmu-mir-1952; mmu-mir-505-3p; mmu-mir-451a",
+  algo = "hyp"
+)
+```
 
 ## Microarray
 
-```{r message = FALSE,warning = FALSE}
+```{r, eval=FALSE}
 library(miRNetR)
 
-#### Step 1. Mapping
+#### Step 1. Initiate the dataSet object
+Init.Data("mir", "array")
 
-#### Step 2. Network generation
+#### Step 2. Read user input 
+ReadTabExpressData("estrogen_data.txt");
 
-#### Step 3. Enrichment analysis (hypergeometric tests)
+#### Step 3. Annotation
+PerformDataAnnot("hsa", "hgu95av2",  "na", "mean");
+```
+miRNetR supports four types of normalization method, including trimmed mean of M-values (TMM), log2 transformation only, quantile normalization only, log2 followed by quantile normalization. In addition, you can choose either tagwise or common dispersion.
+The expression values should be compared at log2 scales. Quantile normalization is optional and is recommended for microarray data. 
 
-#### Step 3. Enrichment analysis (empirical sampling)
+```{r, eval=FALSE}
+#### Step 4. Normalization
 
-#### Step 3. Enrichment analysis (miRNA set enrichment)
+######## Option 1. Trimmed mean of M-values (TMM) 
+PerformArrayDataNormalization("tmm")
+
+######## Option 2. Log2 transformation 
+PerformArrayDataNormalization("log")
+
+######## Option 3. Quantile normalization 
+PerformArrayDataNormalization("quant")
+
+######## Option 4. Log2 followed by quantile normalization 
+PerformArrayDataNormalization("combine")
+
+######## Option 5. No normalization 
+PerformArrayDataNormalization("none")
+
 ```
 
-## RNAseq
+```{r, eval=FALSE}
+#### Step 5. Specify statistical method and comparison of interest
+
+######## Limma (microarray)
+PerformLimma("absent vs. present");
+
+```
+Set adjusted p-value (p.lvl), fold change (fc.lvl) and direction
+```{r, eval=FALSE}
+#### Step 6. Feature selection
+
+######## Option 1. Both direction
+GetSigGenes(p.lvl = 0.01, fc.lvl = 1.0, direction = "both")
+
+######## Option 2. Up-regulated only
+GetSigGenes(p.lvl = 0.01, fc.lvl = 1.0, direction = "up")
+
+######## Option 3. Down-regulated only
+GetSigGenes(p.lvl = 0.01, fc.lvl = 1.0, direction = "down")
+```
+
+```{r, eval=FALSE}
+#### Step 7. Set up the user input data in the dataSet object
+SetupMirExpressData();
+
+#### Step 8. #### Step 8. Perform target genes to miRNAs mapping, results are downloaded in your working directory
+PerformMirGeneMapping();
+```
+
+```{r, eval=FALSE}
+#### Step 9. Generate miRNA-gene network files
+CreateMirNets("gene2mir");
+
+#### Step 10. Prepare network files, results are downloaded in your working directory
+PrepareMirNet("mirnet1", "mirnet_0.json")
+## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
+
+```
+
+```{r, eval=FALSE}
+#### Step 11. Perform miRNA family enrichment analysis, results are downloaded in your working directory ("network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv")
+PerformMirTargetEnrichAnalysis(
+  adjust.type = "NA",
+  fun.type = "mirfamily",
+  file.nm = "network_enrichment_mirfamily_1",
+  IDs = "mmu-mir-329-3p; mmu-mir-539-3p; mmu-mir-3087-3p; mmu-mir-466i-5p; mmu-mir-129-2-3p; mmu-mir-466c-3p; mmu-mir-669m-3p; mmu-mir-466e-3p; mmu-mir-325-3p; mmu-mir-3099-3p; mmu-mir-1952; mmu-mir-505-3p; mmu-mir-451a",
+  algo = "hyp"
+)
+```
+
 
 
 # mRNA-miRNA co-expression network analysis (To-Do)
