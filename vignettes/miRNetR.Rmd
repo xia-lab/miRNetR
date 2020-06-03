@@ -97,8 +97,11 @@ devtools::install_github("xia-lab/miRNetR", build = TRUE, build_opts = c("--no-r
 ### Mapping to single target
 
 ```{r, eval=FALSE}
+library(miRNetR)
+
 #### Step 1. Initiate the dataSet object
 Init.Data("mir", "mirlist")
+#> "miRNetR init done!"
 
 #### Step 2. Set up the user input data
 SetupMirListData(mirs = "hsa-mir-101-3p
@@ -107,23 +110,38 @@ hsa-mir-147a
 hsa-mir-3140-3p
 hsa-mir-361-5p
 hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
+#> "A total of  6 unique items were entered."
 
-#### Step 3. Perform miRNAs to target genes mapping, results are downloaded in your working directory
+#### Step 3. Perform miRNAs to target genes mapping, 
+#### results are downloaded in your working directory ("mirnet_mir_target.csv" and "mir_tissue.csv")
 PerformMirGeneMapping()
+#> "Downloading mir2gene.sqlite from https://www.xialab.ca/resources/mirnet/mir2gene.sqlite"
+#> "A total of unqiue 1059 pairs of miRNA-gene targets were identified!"
+
+head(dataSet$mir.res, n = 3L)
+#>                             ID    Accession   Gene Entrez           Experiment        Literature Tissue
+#> mirnet-hsa-21491 hsa-mir-101-3p MIMAT0000099 ACVR2B     93           Sequencing          20371350 Kidney
+#> mirnet-hsa-21492 hsa-mir-101-3p MIMAT0000099  AP1G1    164 PAR-CLIP//Sequencing 20371350|23592263 Kidney
+#> mirnet-hsa-21493 hsa-mir-101-3p MIMAT0000099   AMD1    262            HITS-CLIP          23313552 Kidney
+
 ```
+
 
 ```{r, eval=FALSE}
 #### Step 4. Generate miRNA-gene network files
 CreateMirNets(net.type = "mir2gene")
+#> 6    6  999 1059    1 1005
 ## mir.query = 6, mir.count = 6, tgt.count = 999, ecount(mir.graph) = 1059, length(mir.nets) = 1, substats = 1005;
 
-#### Step 5. Prepare network files, results are downloaded in your working directory
+#### Step 5. Prepare network files, 
+#### results are downloaded in your working directory ("node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml")
 PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
-## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
+
 ```
 
 ```{r, eval=FALSE}
-#### Step 6. Perform miRNA family enrichment analysis, results are downloaded in your working directory ("network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv")
+#### Step 6. Perform miRNA family enrichment analysis, 
+#### results are downloaded in your working directory ("network_enrichment_mirfamily_1.json" and "mirnet_enrichment.csv")
 PerformMirTargetEnrichAnalysis(
   adjust.type = "NA",
   fun.type = "mirfamily",
@@ -131,11 +149,20 @@ PerformMirTargetEnrichAnalysis(
   IDs = "hsa-mir-101-3p; hsa-mir-147a; hsa-mir-361-5p; hsa-mir-133b; hsa-mir-510-5p; hsa-mir-3140-3p",
   algo = "hyp"
 )
+
+resTable <- read.csv("mirnet_enrichment.csv", header=T, as.is=T)
+head(resTable, n = 3L)
+#>    Pathway Total Expected Hits    Pval stringsAsFactor
+#>  1 mir-3140     3  0.00753    1 0.00751           FALSE
+#>  2  mir-361     3  0.00753    1 0.00751           FALSE
+#>  3  mir-147     4  0.01000    1 0.01000           FALSE
 ```
 
 ### Mapping to multiple targets
 
 ```{r, eval=FALSE}
+library(miRNetR)
+
 #### Step 1. Initiate the dataSet object
 Init.Data("mir", "mirlist")
 
@@ -151,30 +178,49 @@ hsa-mir-148a-3p
 hsa-mir-335-5p", orgType = "hsa", idType = "mir_id", tissue = "na")
 
 #### Step 3. Set up targets
-SetCurrentDataMulti(nms.vec = c("gene", "lncrna"))
+nms.vec = c("gene", "lncrna") 
+SetCurrentDataMulti()
 
 #### Step 4. Perform miRNAs to multiple targets mapping, results are downloaded in your working directory
 QueryMultiListMir()
+head(dataSet$mir2gene, n = 2L)
+#>              ID    Accession Target TargetID Experiment Literature      Tissue
+#> 1 hsa-mir-16-5p MIMAT0000069  ABCB7       22      CLASH   23622248 Unspecified
+#> 2 hsa-mir-16-5p MIMAT0000069  ABCF1       23 Proteomics   18668040 Unspecified
+head(dataSet$mir2lnc, n = 2L)
+#>                ID    Accession     Target TargetID Experiment Literature      Tissue
+#> 1 hsa-mir-148a-3p MIMAT0000243      SNHG3     8420   CLIP-Seq   24297251 Unspecified
+#> 2 hsa-mir-148a-3p MIMAT0000243 CYP1B1-AS1   285154   CLIP-Seq   24297251 Unspecified
 ```
 
 ```{r, eval=FALSE}
 #### Step 5. Generate network files
 CreateMirNets(net.type = "multilist")
+#> 18    9 4848 6752    1 4857
+## mir.query = 18, mir.count = 9, tgt.count = 4848, ecount(mir.graph) = 6752, length(mir.nets) = 1, substats = 4857;
 
-#### Step 6. Prepare network files, results are downloaded in your working directory
+#### Step 6. Prepare network files, 
+#### results are downloaded in your working directory ("node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml")
 PrepareMirNet(mir.nm = "mirnet1", file.nm = "mirnet_0.json")
-## "node_table_mirnet_0.csv", "mirnet_0.json" and "mirnet.graphml" are downloaded in your working directory 
 ```
 
 ```{r, eval=FALSE}
-#### Step 7. Perform miRNA function enrichment analysis, results are downloaded in your working directory ("network_enrichment_func_1.json" and "mirnet_enrichment.csv")
+#### Step 7. Perform miRNA function enrichment analysis, 
+#### results are downloaded in your working directory ("network_enrichment_func_1.json" and "mirnet_enrichment.csv")
 PerformMirTargetEnrichAnalysis(
   adjust.type = "NA",
   fun.type = "func",
   file.nm = "network_enrichment_func_1",
-  IDs = "hsa-mir-16-5p, hsa-mir-424-5p, hsa-mir-29c-3p, hsa-mir-29b-3p, hsa-mir-29a-3p, hsa-mir-148b-3p, hsa-mir-152-3p, hsa-mir-148a-3p, hsa-mir-335-5p",
+  IDs = "hsa-mir-16-5p; hsa-mir-424-5p; hsa-mir-29c-3p; hsa-mir-29b-3p; hsa-mir-29a-3p; hsa-mir-148b-3p; hsa-mir-152-3p; hsa-mir-148a-3p; hsa-mir-335-5p",
   algo = "hyp"
 )
+
+resTable <- read.csv("mirnet_enrichment.csv", header=T, as.is=T)
+head(resTable, n = 3L)
+#>            Pathway Total Expected Hits    Pval stringsAsFactor
+#> 1    Cell Adhesion    24    0.228    3 0.00109           FALSE
+#> 2 Neuron Apoptosis    45    0.428    3 0.00692           FALSE
+#> 3   Nephrotoxicity    51    0.485    3 0.00986           FALSE
 ```
 
 ## Starting from a list of targets
@@ -184,15 +230,36 @@ PerformMirTargetEnrichAnalysis(
 ```{r message = FALSE,warning = FALSE}
 library(miRNetR)
 
-#### Step 1. Mapping
+#### Step 1. Initiate the dataSet object
+Init.Data("mir", "gene")
+#> "miRNetR init done!"
 
-#### Step 2. Network generation
+#### Step 2. Set up the user input data
+SetupIndListData("ACAT1
+DDX3X
+MEGF9
+FMR1
+HAPLN1
+IL12A
+OLR1
+RNF6
+SOD3
+ELOVL4
+MRAP2", "hsa", "gene", "symbol", "na", "trrust");
+#> "A total of  11 unique items were entered."
 
-#### Step 3. Enrichment analysis (hypergeometric tests)
+#### Step 3. Perform target gene to miRNA mapping, 
+#### results are downloaded in your working directory ("mirnet_mir_target.csv")
+QueryMultiList()
+#> "Downloading mir2gene.sqlite from https://www.xialab.ca/resources/mirnet/mir2gene.sqlite"
+#> "A total of unqiue 1059 pairs of miRNA-gene targets were identified!"
 
-#### Step 3. Enrichment analysis (empirical sampling)
+head(dataSet$mir.res, n = 3L)
+#>                             ID    Accession   Gene Entrez           Experiment        Literature Tissue
+#> mirnet-hsa-21491 hsa-mir-101-3p MIMAT0000099 ACVR2B     93           Sequencing          20371350 Kidney
+#> mirnet-hsa-21492 hsa-mir-101-3p MIMAT0000099  AP1G1    164 PAR-CLIP//Sequencing 20371350|23592263 Kidney
+#> mirnet-hsa-21493 hsa-mir-101-3p MIMAT0000099   AMD1    262            HITS-CLIP          23313552 Kidney
 
-#### Step 3. Enrichment analysis (miRNA set enrichment)
 ```
 
 ### Mapping from multiple targets

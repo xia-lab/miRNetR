@@ -684,7 +684,6 @@ PerformMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, IDs, 
     fun.ids <- as.vector(resTable$Pathway)
     fun.anot <- hits.query[fun.ids];
     if(length(fun.ids) ==1) { fun.ids <- matrix(fun.ids) };
-    print(fun.ids);
     pval <- resTable[,5]; if(length(pval) ==1) { pval <- matrix(pval) };
     if(algo == "emp"){
         hit.inx <- pval == 0;
