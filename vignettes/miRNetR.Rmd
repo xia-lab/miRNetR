@@ -308,7 +308,7 @@ head(resTable, n = 3L)
 
 ### Mapping from multiple targets
 
-```{r message = FALSE,warning = FALSE}
+```{r, eval=FALSE}
 library(miRNetR)
 
 #### Step 1. Initiate the dataSet object
