@@ -9,22 +9,24 @@
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname LoadKEGGLib
-#' @export
+#' @export 
 LoadKEGGLib<-function(){
-    kegg.rda <- paste(lib.path, dataSet$org, "/kegg_", dataSet$org, ".rda", sep="");
+  kegg.rda <- paste(lib.path, dataSet$org, "/kegg_", dataSet$org, ".rda", sep="");
+  print(paste("adding library:", kegg.rda));
+  if(.on.public.web){
+    load(kegg.rda);
+  }else{
     destfile <- paste("kegg_", dataSet$org, ".rda", sep="");
     download.file(kegg.rda, destfile);
-
-    print(paste("adding library:", kegg.rda));
     load(destfile);
-
+  }
     current.setlink <- kegg$link;
     current.mset <- kegg$sets;
     set.ids<- names(current.mset);
@@ -41,22 +43,24 @@ LoadKEGGLib<-function(){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname LoadREACTOMELib
-#' @export
+#' @export 
 LoadREACTOMELib<-function(){
-
     reactome.rda <- paste(lib.path, dataSet$org, "/reactome_", dataSet$org, ".rda", sep="");
-    destfile <- paste("reactome_", dataSet$org, ".rda", sep="");
-    download.file(reactome.rda, destfile);
     print(paste("adding library:", reactome.rda));
-    load(destfile);
-
+    if(.on.public.web){
+      load(reactome.rda);
+    }else{
+      destfile <- paste("reactome_", dataSet$org, ".rda", sep="");
+      download.file(reactome.rda, destfile);
+      load(destfile);
+    }
     current.mset <- reactome$sets;
     set.ids<- names(current.mset);
     names(set.ids) <- names(current.mset) <- reactome$term;
@@ -71,22 +75,24 @@ LoadREACTOMELib<-function(){
 #' @param onto PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname LoadGOLib
-#' @export
+#' @export 
 LoadGOLib<-function(onto){
-
     go.rda <- paste(lib.path, dataSet$org, "/go_", tolower(onto), ".rda", sep="");
-    destfile <- paste("go_", tolower(onto), ".rda", sep="");
-    download.file(go.rda, destfile);
-
     print(paste("adding library:", go.rda));
-    load(destfile);
+    if(.on.public.web){
+      load(go.rda);
+    }else{
+      destfile <- paste("go_", tolower(onto), ".rda", sep="");
+      download.file(go.rda, destfile);
+      load(destfile);
+      }
 
     if(tolower(onto) == "bp"){
         current.link <- go_bp$link;
@@ -117,19 +123,23 @@ LoadGOLib<-function(onto){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname LoadTissueLib
-#' @export
+#' @export 
 LoadTissueLib <- function(){
   tissue.rda <- paste(lib.path, "tissue.rda", sep="");
-  destfile <- paste("tissue.rda", sep="");
-  download.file(tissue.rda, destfile);
-  load(destfile);
+  if(.on.public.web){
+  load(tissue.rda);
+  }else{
+    destfile <- paste("tissue.rda", sep="");
+    download.file(tissue.rda, destfile);
+    load(destfile);
+  }
   print(paste("adding library: ", tissue.rda));
   current.mset <- tissue;
   set.ids <- names(current.mset);
@@ -146,19 +156,23 @@ LoadTissueLib <- function(){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname LoadFuncLib
-#' @export
+#' @export 
 LoadFuncLib <- function(){
   func.rda <- paste(lib.path, dataSet$org, "/tam_func.rda", sep="");
-  destfile <- paste("tam_func.rda", sep="");
-  download.file(func.rda, destfile);
-  load(destfile);
+  if(.on.public.web){
+  load(func.rda);
+  }else{
+    destfile <- paste("tam_func.rda", sep="");
+    download.file(func.rda, destfile);
+    load(destfile);
+  }
   print(paste("adding library: ", func.rda));
   current.mset <- tam_func$sets;
   set.ids <- names(current.mset);
@@ -175,19 +189,23 @@ LoadFuncLib <- function(){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname LoadHMDDLib
-#' @export
+#' @export 
 LoadHMDDLib <- function(){
   hmdd.rda <- paste(lib.path, dataSet$org, "/tam_hmdd.rda", sep="");
-  destfile <- paste("tam_hmdd.rda", sep="");
-  download.file(hmdd.rda, destfile);
-  load(destfile);
+  if(.on.public.web){
+    load(hmdd.rda);
+  }else{
+    destfile <- paste("tam_hmdd.rda", sep="");
+    download.file(hmdd.rda, destfile);
+    load(destfile);
+  }
   print(paste("adding library: ", hmdd.rda));
   current.mset <- tam_hmdd$sets;
   set.ids <- names(current.mset);
@@ -204,19 +222,23 @@ LoadHMDDLib <- function(){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname LoadClusterLib
-#' @export
+#' @export 
 LoadClusterLib <- function(){
   cluster.rda <- paste(lib.path, dataSet$org, "/tam_cluster.rda", sep="");
-  destfile <- paste("tam_cluster.rda", sep="");
-  download.file(cluster.rda, destfile);
-  load(destfile);
+  if(.on.public.web){
+    load(cluster.rda);    
+  }else{
+    destfile <- paste("tam_cluster.rda", sep="");
+    download.file(cluster.rda, destfile);
+    load(destfile);
+  }
   print(paste("adding library: ", cluster.rda));
   current.mset <- tam_cluster$sets;
   set.ids <- names(current.mset);
@@ -233,19 +255,23 @@ LoadClusterLib <- function(){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname LoadTFLib
-#' @export
+#' @export 
 LoadTFLib <- function(){
   tf.rda <- paste(lib.path, dataSet$org, "/tam_tf.rda", sep="");
-  destfile <- paste("tam_tf.rda", sep="");
-  download.file(tf.rda, destfile);
-  load(destfile);
+  if(.on.public.web){
+    load(tf.rda);
+  }else{
+    destfile <- paste("tam_tf.rda", sep="");
+    download.file(tf.rda, destfile);
+    load(destfile);
+    }
   print(paste("adding library: ", tf.rda));
   current.mset <- tam_tf$sets;
   set.ids <- names(current.mset);
@@ -262,19 +288,23 @@ LoadTFLib <- function(){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname LoadDiseaseLib
-#' @export
+#' @export 
 LoadDiseaseLib <- function(){
   disease.path <- paste(lib.path, "hsa/disease.rds", sep="");
-  destfile <- paste("disease.rds", sep="");
-  download.file(disease.path, destfile);
-  diss = readRDS(destfile);
+  if(.on.public.web){
+    diss = readRDS(disease.path);  
+  }else{
+    destfile <- paste("disease.rds", sep="");
+    download.file(disease.path, destfile);
+    diss = readRDS(destfile);
+  }
   print(paste("adding library: ", disease.path));
   current.mset <- diss$sets;
   set.ids <- names(current.mset);
@@ -291,94 +321,31 @@ LoadDiseaseLib <- function(){
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname LoadmiRFamLib
-#' @export
+#' @export 
 LoadmiRFamLib <- function(){
   mirfamily.rda <- paste(lib.path, "mirfamily.rda", sep="");
-  destfile <- paste("mirfamily.rda", sep="");
-  download.file(mirfamily.rda, destfile);
-  load(destfile);
+  if(.on.public.web){
+    load(mirfamily.rda);    
+  }else{
+    destfile <- paste("mirfamily.rda", sep="");
+    download.file(mirfamily.rda, destfile);
+    load(destfile);
+  }
   print(paste("adding library: ", mirfamily.rda));
-
-  if(dataSet$org == "hsa"){
-    current.mset <- mirfam$hsa;
-    set.ids <- names(current.mset);
-    names(set.ids) <- names(current.mset);
-    current.setlink <<- "http://www.mirbase.org";
-    current.setids <<- set.ids;
-    current.geneset <<- current.mset;
-    current.universe <<- unique(unlist(current.geneset));
-
-    } else if(dataSet$org == "mmu"){
-    current.mset <- mirfam$mmu;
-    set.ids <- names(current.mset);
-    names(set.ids) <- names(current.mset);
-    current.setlink <<- "http://www.mirbase.org";
-    current.setids <<- set.ids;
-    current.geneset <<- current.mset;
-    current.universe <<- unique(unlist(current.geneset));
-
-    }else if(dataSet$org == "rno"){
-    current.mset <- mirfam$rno;
-    set.ids <- names(current.mset);
-    names(set.ids) <- names(current.mset);
-    current.setlink <<- "http://www.mirbase.org";
-    current.setids <<- set.ids;
-    current.geneset <<- current.mset;
-    current.universe <<- unique(unlist(current.geneset));
-
-    }else if(dataSet$org == "gga"){
-    current.mset <- mirfam$gga;
-    set.ids <- names(current.mset);
-    names(set.ids) <- names(current.mset);
-    current.setlink <<- "http://www.mirbase.org";
-    current.setids <<- set.ids;
-    current.geneset <<- current.mset;
-    current.universe <<- unique(unlist(current.geneset));
-
-    }else if(dataSet$org == "bta"){
-    current.mset <- mirfam$bta;
-    set.ids <- names(current.mset);
-    names(set.ids) <- names(current.mset);
-    current.setlink <<- "http://www.mirbase.org";
-    current.setids <<- set.ids;
-    current.geneset <<- current.mset;
-    current.universe <<- unique(unlist(current.geneset));
-
-    }else if(dataSet$org == "dre"){
-    current.mset <- mirfam$dre;
-    set.ids <- names(current.mset);
-    names(set.ids) <- names(current.mset);
-    current.setlink <<- "http://www.mirbase.org";
-    current.setids <<- set.ids;
-    current.geneset <<- current.mset;
-    current.universe <<- unique(unlist(current.geneset));
-
-    }else if(dataSet$org == "dme"){
-    current.mset <- mirfam$dme;
-    set.ids <- names(current.mset);
-    names(set.ids) <- names(current.mset);
-    current.setlink <<- "http://www.mirbase.org";
-    current.setids <<- set.ids;
-    current.geneset <<- current.mset;
-    current.universe <<- unique(unlist(current.geneset));
-
-    }else {
-    current.mset <- mirfam$cel;
-    set.ids <- names(current.mset);
-    names(set.ids) <- names(current.mset);
-    current.setlink <<- "http://www.mirbase.org";
-    current.setids <<- set.ids;
-    current.geneset <<- current.mset;
-    current.universe <<- unique(unlist(current.geneset));
-
-    }
+  current.mset <- mirfam[[dataSet$org]];
+  set.ids <- names(current.mset);
+  names(set.ids) <- names(current.mset);
+  current.setlink <<- "http://www.mirbase.org";
+  current.setids <<- set.ids;
+  current.geneset <<- current.mset;
+  current.universe <<- unique(unlist(current.geneset));
 }
 
 # note: hit.query, resTable must synchronize
@@ -397,14 +364,14 @@ LoadmiRFamLib <- function(){
 #' @param mode PARAM_DESCRIPTION, Default: 'serial'
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname PerformMirTargetEnrichAnalysis
-#' @export
+#' @export 
 PerformMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, IDs, algo, mode="serial"){
     require(igraph); # keep this here as it is needed for remote calls
     require('RSQLite');
@@ -708,7 +675,11 @@ PerformMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, IDs, 
     # write csv
     # csv.nm <- paste(file.nm, ".csv", sep="");
     write.csv(resTable, file="mirnet_enrichment.csv", row.names=F);
-    return(1);
+     if(.on.public.web){
+       return(1);   
+     }else{
+       return(paste("Enrichment files are downloaded!"))
+     }
 }
 
 # return a list of gene targets from the same size but randomly selected mirs
@@ -719,22 +690,17 @@ PerformMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, IDs, 
 #' @param perm.num PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetRandomMirTargetGenes
-#' @export
+#' @export 
 GetRandomMirTargetGenes <- function(qSize, perm.num){
-    require('RSQLite');
-    db.path <- paste0("mir2gene.sqlite");
-    db.url <- paste(sqlite.path, db.path, sep="");
-    msg <- paste("Downloading", db.path, "from", db.url);
-    print(msg);
-    download.file(db.url, db.path);
-    mir.db <- dbConnect(SQLite(), db.path);
+
+    mir.db <- dbConnect(SQLite(), paste(sqlite.path, "mir2gene", sep=""));
     statement <- paste("SELECT mir_id,entrez FROM ",dataSet$org, sep="");
     mir.dic <- .query.sqlite(mir.db, statement);
 
@@ -762,22 +728,16 @@ GetRandomMirTargetGenes <- function(qSize, perm.num){
 #' @param perm.num PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetRandomXenoMirTargetGenes
-#' @export
+#' @export 
 GetRandomXenoMirTargetGenes <- function(qSize, perm.num){
-    require('RSQLite');
-    db.path <- paste0("xenomirnet.sqlite");
-    db.url <- paste(sqlite.path, db.path, sep="");
-    msg <- paste("Downloading", db.path, "from", db.url);
-    print(msg);
-    download.file(db.url, db.path);
-    mir.db <- dbConnect(SQLite(), db.path);
+    mir.db <- dbConnect(SQLite(), paste(sqlite.path, "xenomirnet", sep=""));
     statement <- paste("SELECT exo_mirna,entrez FROM ",dataSet$org, sep="");
     mir.dic <- .query.sqlite(mir.db, statement);
 
@@ -803,14 +763,14 @@ GetRandomXenoMirTargetGenes <- function(qSize, perm.num){
 #' @param operation PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples
+#' @examples 
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname CalculateMirTargetSet
-#' @export
+#' @export 
 CalculateMirTargetSet <- function(nms, operation){
     nms <- strsplit(nms, ";")[[1]];
 

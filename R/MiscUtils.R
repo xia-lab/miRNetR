@@ -12,14 +12,14 @@
 #' @param b PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname rescale2NewRange
-#' @export 
+#' @export
 rescale2NewRange <- function(qvec, a, b){
     q.min <- min(qvec);
     q.max <- max(qvec);
@@ -48,14 +48,14 @@ rescale2NewRange <- function(qvec, a, b){
 #' @param x PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname AutoNorm
-#' @export 
+#' @export
 AutoNorm<-function(x){
     (x - mean(x))/sd(x, na.rm=T);
 }
@@ -66,14 +66,14 @@ AutoNorm<-function(x){
 #' @param min.val PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname LogNorm
-#' @export 
+#' @export
 LogNorm<-function(x, min.val){
     log2((x + sqrt(x^2 + min.val^2))/2)
 }
@@ -84,14 +84,14 @@ LogNorm<-function(x, min.val){
 #' @param cols PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname hex2rgba
-#' @export 
+#' @export
 hex2rgba <- function(cols){
   return(apply(sapply(cols, col2rgb), 2, function(x){paste("rgba(", x[1], ",", x[2], ",", x[3], ",0.8)", sep="")}));
 }
@@ -105,14 +105,14 @@ hex2rgba <- function(cols){
 #' @param tgt.vec PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname sync2vecs
-#' @export 
+#' @export
 sync2vecs <- function(src.vec, tgt.vec){
     if(length(unique(src.vec)) != length(unique(tgt.vec))){
         print("must be of the same unique length!");
@@ -132,14 +132,14 @@ sync2vecs <- function(src.vec, tgt.vec){
 #' @param col.vec PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname getExpColors
-#' @export 
+#' @export
 getExpColors <- function(nd.vec, col.vec){
     nvec <- rep("", length(nd.vec));
     m.inx <- is.null(nd.vec) | is.na(nd.vec);
@@ -155,14 +155,14 @@ getExpColors <- function(nd.vec, col.vec){
 #' @param my.grps PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetColorSchema
-#' @export 
+#' @export
 GetColorSchema <- function(my.grps){
     # test if total group number is over 9
      grp.num <- length(levels(my.grps));
@@ -191,14 +191,14 @@ GetColorSchema <- function(my.grps){
 #' @param extras PARAM_DESCRIPTION, Default: c(".", "NA")
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname all.numeric
-#' @export 
+#' @export
 all.numeric <- function (x, what = c("test", "vector"), extras = c(".", "NA")){
     what <- match.arg(what)
     old <- options(warn = -1)
@@ -223,14 +223,14 @@ all.numeric <- function (x, what = c("test", "vector"), extras = c(".", "NA")){
 #' @param query PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname ClearStrings
-#' @export 
+#' @export
 ClearStrings<-function(query){
     # remove leading and trailing space
     query<- sub("^[[:space:]]*(.*?)[[:space:]]*$", "\\1", query, perl=TRUE);
@@ -243,21 +243,19 @@ ClearStrings<-function(query){
 }
 
 # need to obtain the full path to convert (from imagemagik) for cropping images
-
-
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetBashFullPath
-#' @export 
+#' @export
 GetBashFullPath<-function(){
     path <- system("which bash", intern=TRUE);
     if((length(path) == 0) && (typeof(path) == "character")){
@@ -274,14 +272,14 @@ GetBashFullPath<-function(){
 #' @param ... PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname myave
-#' @export 
+#' @export
 myave <- function (x, ...) {
     n <- length(list(...))
     if (n) {
@@ -298,14 +296,14 @@ myave <- function (x, ...) {
 #' @param mat PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname CalculatePairwiseDiff
-#' @export 
+#' @export
 CalculatePairwiseDiff <- function(mat){
     f <- function(i, mat) {
        z <- mat[, i-1] - mat[, i:ncol(mat), drop = FALSE]
@@ -322,14 +320,14 @@ CalculatePairwiseDiff <- function(mat){
 #' @param unit PARAM_DESCRIPTION, Default: 10
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetExtendRange
-#' @export 
+#' @export
 GetExtendRange<-function(vec, unit=10){
     var.max <- max(vec);
     var.min <- min(vec);
@@ -343,14 +341,14 @@ GetExtendRange<-function(vec, unit=10){
 #' @param x PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname RowScale
-#' @export 
+#' @export
 RowScale <- function(x){
     x <- sweep(x, 1L, rowMeans(x, na.rm = T), check.margin = FALSE)
     sx <- apply(x, 1L, sd, na.rm = T)
@@ -367,14 +365,14 @@ RowScale <- function(x){
 #' @param query PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname ClearFactorStrings
-#' @export 
+#' @export
 ClearFactorStrings<-function(cls.nm, query){
     # remove leading and trailing space
     query<- sub("^[[:space:]]*(.*?)[[:space:]]*$", "\\1", query, perl=TRUE);
@@ -428,14 +426,14 @@ ClearFactorStrings<-function(cls.nm, query){
 #' @param dataName PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname ReadTabData
-#' @export 
+#' @export
 ReadTabData <- function(dataName) {
 
     msg <- NULL;
@@ -537,25 +535,17 @@ ReadTabData <- function(dataName) {
 #' @param col.nm PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname Query.miRNetDB
-#' @export 
+#' @export
 Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
-  db.path <- paste0(db.path, ".sqlite");
-  db.url <- paste(sqlite.path, db.path, sep="");
-  msg <- paste("Downloading", db.path, "from", db.url);
-  if(file.exists(db.path)){
-    mir.db <- dbConnect(SQLite(), db.path);
-  }else{
-    print(msg);
-    download.file(db.url, db.path);
-    mir.db <- dbConnect(SQLite(), db.path);
-  }
+    db.path <- paste0(db.path, ".sqlite")
+  mir.db <- dbConnect(SQLite(), db.path);
   query <- paste (shQuote(q.vec),collapse=",");
   statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query, ")", sep="");
   mir.dic <- .query.sqlite(mir.db, statement);
@@ -677,7 +667,6 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
       mir.dic[, "tissue"] <- "Unspecified";
     }else{
       path <- paste(lib.path, "hsa/mir_tissue.csv", sep="");
-      download.file(path,"mir_tissue.csv");
       mir_tissue <- read.csv(file=path);
       if (tissue == "Others"){
         ts_df <- mir_tissue[!(mir_tissue$tissue %in% ts_count$tissue), ];
@@ -714,22 +703,17 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
 #' @param col.nm PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname QueryTFSQLite
-#' @export 
-QueryTFSQLite<- function(table.nm, q.vec, col.nm){
+#' @export
+QueryTFSQLite <- function(table.nm, q.vec, col.nm){
   require('RSQLite');
-  db.path <- paste0("tf2gene.sqlite");
-  db.url <- paste(sqlite.path, db.path, sep="");
-  msg <- paste("Downloading", db.path, "from", db.url);
-  print(msg);
-  download.file(db.url, db.path);
-  tf.db <- dbConnect(SQLite(), db.path);
+  tf.db <- dbConnect(SQLite(), paste(sqlite.path, "tf2gene.sqlite", sep=""));
   query <- paste (shQuote(q.vec),collapse=",");
   statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (",query,")", sep="");
   return(.query.sqlite(tf.db, statement));
@@ -740,15 +724,37 @@ QueryTFSQLite<- function(table.nm, q.vec, col.nm){
 #' @param n PARAM_DESCRIPTION, Default: 10
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname cleanMem
-#' @export 
+#' @export
 cleanMem <- function(n=10) { for (i in 1:n) gc() }
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param db.path PARAM_DESCRIPTION
+#' @param statement PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetUniqueEntries
+#' @export
+GetUniqueEntries <- function(db.path, statement){
+    mir.db <- dbConnect(SQLite(), db.path);
+    res <- .query.sqlite(mir.db, statement);
+    res <- sort(unique(as.character(res[,1])));
+    return (res);
+}
+
 
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
@@ -757,14 +763,14 @@ cleanMem <- function(n=10) { for (i in 1:n) gc() }
 #' @param center PARAM_DESCRIPTION, Default: F
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname generate_breaks
-#' @export 
+#' @export
 generate_breaks = function(x, n, center = F){
     if(center){
         m = max(abs(c(min(x, na.rm = T), max(x, na.rm = T))))
@@ -782,14 +788,14 @@ generate_breaks = function(x, n, center = F){
 #' @param background PARAM_DESCRIPTION, Default: 'black'
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname ComputeColorGradient
-#' @export 
+#' @export
 ComputeColorGradient <- function(nd.vec, background="black"){
     library("RColorBrewer");
     if(sum(nd.vec<0, na.rm=TRUE) > 0){
@@ -808,14 +814,14 @@ ComputeColorGradient <- function(nd.vec, background="black"){
 #' @param center PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname GetColorGradient
-#' @export 
+#' @export
 GetColorGradient <- function(background, center){
     if(background == "black"){
         if(center){
@@ -839,14 +845,14 @@ GetColorGradient <- function(background, center){
 #' @param breaks PARAM_DESCRIPTION, Default: NA
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname scale_vec_colours
-#' @export 
+#' @export
 scale_vec_colours = function(x, col = rainbow(10), breaks = NA){
     return(col[as.numeric(cut(x, breaks = breaks, include.lowest = T))])
 }
@@ -858,14 +864,14 @@ scale_vec_colours = function(x, col = rainbow(10), breaks = NA){
 #' @param breaks PARAM_DESCRIPTION, Default: NA
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname scale_colours
-#' @export 
+#' @export
 scale_colours = function(mat, col = rainbow(10), breaks = NA){
     mat = as.matrix(mat)
     return(matrix(scale_vec_colours(as.vector(mat), col = col, breaks = breaks), nrow(mat), ncol(mat), dimnames = list(rownames(mat), colnames(mat))))
@@ -904,14 +910,14 @@ scale_colours = function(mat, col = rainbow(10), breaks = NA){
 #' @param n PARAM_DESCRIPTION, Default: 30
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname ShowMemoryUse
-#' @export 
+#' @export
 ShowMemoryUse <- function(..., n=30) {
     library(pryr);
     sink(); # make sure print to screen
@@ -921,21 +927,19 @@ ShowMemoryUse <- function(..., n=30) {
     print(warnings());
 }
 
-
-
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname CleanMemory
-#' @export 
+#' @export
 CleanMemory <- function(){
     for (i in 1:10){
         gc(reset = T);
@@ -962,22 +966,17 @@ CleanMemory <- function(){
 #' @param min.score PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname QueryPpiSQLiteZero
-#' @export 
+#' @export
 QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
-    require('RSQLite');
-    db.path <- paste0("ppi.sqlite");
-    db.url <- paste(sqlite.path, db.path, sep="");
-    msg <- paste("Downloading", db.path, "from", db.url);
-    print(msg);
-    download.file(db.url, db.path);
-    ppi.db <- dbConnect(SQLite(), db.path);
+    require('RSQLite')
+    ppi.db <- dbConnect(SQLite(), paste(sqlite.path, "ppi.sqlite", sep=""));
     query <- paste(shQuote(q.vec),collapse=",");
 
     if(grepl("string$", table.nm)){
@@ -1008,14 +1007,14 @@ QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
 #' @param x PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname simpleCap
-#' @export 
+#' @export
 simpleCap <- function(x) {
   s <- strsplit(x, " ")[[1]]
   paste(toupper(substring(s, 1,1)), substring(s, 2),
@@ -1028,14 +1027,14 @@ simpleCap <- function(x) {
 #' @param filenm PARAM_DESCRIPTION, Default: NULL
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  #EXAMPLE1
 #'  }
 #' }
 #' @rdname gg_color_hue
-#' @export 
+#' @export
 gg_color_hue <- function(grp.num, filenm=NULL) {
     grp.num <- as.numeric(grp.num)
     pal18 <- c( "#911eb4", "#3cb44b", "#4363d8",  "#f032e6", "#ffe119", "#e6194B", "#f58231", "#bfef45", "#fabebe", "#469990", "#e6beff", "#9A6324", "#800000", "#aaffc3", "#808000", "#ffd8b1", "#42d4f4","#000075");

@@ -1,8 +1,222 @@
 ##################################################
 ## R script for miRNet
-## Description: normalization and differential expression analysis 
+## Description: expression data I/O, normalization and differential expression analysis 
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
+
+# read tab delimited file
+# stored in dataSet list object
+# can have many classes, stored in meta.info
+# type: array, count, qpcr
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param dataName PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname ReadTabExpressData
+#' @export 
+ReadTabExpressData <- function(dataName) {
+
+    dataSet <- ReadTabData(dataName);
+
+    # rename data to data.orig
+    int.mat <- dataSet$data;
+    dataSet$cls <- dataSet$meta.info[,1];
+    dataSet$data <- NULL;
+    dataSet$listData <- FALSE;
+
+    msg <- paste("a total of ", ncol(int.mat), " samples and ", nrow(int.mat), " features were found. ");
+
+    # remove NA, null
+    row.nas <- apply(is.na(int.mat)|is.null(int.mat), 1, sum);
+    good.inx<- row.nas/ncol(int.mat) < 0.5;
+    if(sum(!good.inx) > 0){
+        int.mat <- int.mat[good.inx,];
+        msg <- c(msg, paste("removed ", sum(!good.inx), " features with over 50% missing values"));
+    }
+    # remove constant values
+    filter.val <- apply(int.mat, 1, IQR, na.rm=T);
+    good.inx2 <- filter.val > 0;
+    if(sum(!good.inx2) > 0){
+        int.mat <- int.mat[good.inx2,];
+        msg <- c(msg, paste("removed ", sum(!good.inx2), " features with constant values"));
+    }
+
+    if(nrow(int.mat) > 2000){
+        filter.val <- filter.val[good.inx2];
+        rk <- rank(-filter.val, ties.method='random');
+
+        var.num <- nrow(int.mat);
+        kept.num <- 0.95*var.num;
+        int.mat <- int.mat[rk < kept.num, ];
+        # msg <- c(msg, paste("removed 5% features with near-constant values"));
+    }
+
+    minVal <- min(int.mat, na.rm=T);
+    na.inx <- is.na(int.mat);
+    if(sum(na.inx) > 0){
+        int.mat[na.inx] <- minVal/2;
+        # msg <- c(msg, "the remaining", sum(na.inx), "missing variables were replaced with data min");
+    }
+    current.msg <<- paste(msg, collapse="; ");
+    saveRDS(int.mat, file="data.proc");
+    dataSet <<- dataSet;
+    if(.on.public.web){
+      return (1);  
+    }else{
+      return (current.msg);
+    }
+}
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname SetupMirExpressData
+#' @export 
+SetupMirExpressData <- function(){
+    idType <- dataSet$id.current;
+    mydata <- data.matrix(dataSet$sig.mat[,"max.logFC",drop=FALSE]);
+    if(idType == "mir_id"){ # note, in the mirnet database, all mir ids are lower case! miR=>mir
+        mir.vec <- rownames(mydata);
+        rownames(mydata) <- tolower(mir.vec);
+    }
+    dataSet$idType <- idType;
+    dataSet$mir.orig <- mydata;
+    dataSet$data[["gene"]] <- mydata;
+    dataSet$id.types[["gene"]] <- idType;
+    dataSet<<- dataSet;
+    if(.on.public.web){
+      return (nrow(mydata));
+    }else{
+      return("Setup complete!")
+    }
+}
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetClassInfo
+#' @export 
+GetClassInfo <- function(){
+    return(levels(dataSet$cls));
+}
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname GetAnotNames
+#' @export 
+GetAnotNames<-function(){
+    return(rownames(dataSet$data.anot));
+}
+
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param org PARAM_DESCRIPTION
+#' @param idType PARAM_DESCRIPTION
+#' @param tissue PARAM_DESCRIPTION
+#' @param lvlOpt PARAM_DESCRIPTION
+#' @param matchMin PARAM_DESCRIPTION, Default: 0.5
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname PerformDataAnnot
+#' @export 
+PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
+    data.org <<- dataSet$org <- org;
+    dataSet$id.orig <- dataSet$id.current <- idType;
+    dataSet$annotation <- NULL;
+    dataSet$annotated <- F;
+    dataSet$tissue <- tissue;
+
+    # should not contain duplicates, however sanity check
+    data.proc <- readRDS("data.proc");
+    dataSet$data.anot <- RemoveDuplicates(data.proc, "mean", quiet=T);
+    feature.vec <- rownames(data.proc);
+
+    if(idType == "mir_id" | idType=="mir_acc"){
+        #do nothing
+        matched.len <- length(feature.vec);
+    }else{ # genes
+        if(tolower(org) != 'na' & tolower(idType) != 'na'){
+            anot.id <- doMirGeneAnnotation(feature.vec, idType);
+            hit.inx <- !is.na(anot.id);
+            matched.len <- sum(hit.inx);
+            if(matched.len < length(feature.vec)*0.25){
+                perct <- round(matched.len/length(feature.vec),3)*100;
+                current.msg <<- paste('Only ', perct, '% ID were matched. Please choose the correct ID type or use default.', sep="");
+                return(0);
+            }else{
+                current.msg <<- paste("ID annotation: ", "Total [", length(anot.id),
+                    "] Matched [", matched.len, "] Unmatched [", sum(!hit.inx),"]", collapse="\n");
+
+                if(lvlOpt != 'NA' | idType == "entrez"){
+                    # do actual summarization to gene level
+                    matched.entrez <- anot.id[hit.inx];
+                    data.anot <- data.proc[hit.inx,];
+                    rownames(data.anot) <- matched.entrez;
+                    current.msg <<- paste(current.msg, "Data is now transformed to gene-level (Entrez) expression.");
+                    dataSet$data.anot <- RemoveDuplicates(data.anot, lvlOpt, quiet=F);
+                    #dataSet$id.current <- "entrez";
+                    dataSet$id.current <- "symbol";
+                    dataSet$annotated <- T;
+                }else{
+                    # record the annotation
+                    dataSet$annotation <- anot.id; # this need to be updated to gether with data from now on
+                    current.msg <<- paste(current.msg, "No gene level summarization was performed.");
+                }
+            }
+        }else{ # no conversion will be performed
+            matched.len <- 9; # dummies
+            minLvl <- 1;
+            current.msg <<- paste("No annotation was performed. Make sure organism and gene ID are specified correctly!");
+        }
+    }
+    dataSet$data.norm <- dataSet$data.anot; # before
+    write.csv(dataSet$data.anot, file="cleaned_annot.csv");
+    dataSet <<- dataSet;
+    if(.on.public.web){
+      return(matched.len);
+    }else{
+      return("Annotation was performed successfully!")
+    }
+}
 
 # update result based on new cutoff
 #' @title FUNCTION_TITLE
@@ -94,7 +308,11 @@ GetSigGenes<-function(p.lvl, fc.lvl, direction, update=T){
     dataSet <<- dataSet;
 
     # return DE num
-    return(de.Num);
+    if(.on.public.web){
+      return(de.Num);  
+    }else{
+      return(current.msg)
+    }
 }
 
 # note, here also update data type array/count
@@ -143,7 +361,11 @@ PerformArrayDataNormalization <- function(norm.opt){
 
     current.msg <<- msg;
     dataSet <<- dataSet;
-    return(1);
+    if(.on.public.web){
+      return(1);
+    }else{
+      return("Normalization was performed successfully!")
+    }
 }
 
 #' @title FUNCTION_TITLE
@@ -208,7 +430,11 @@ PerformLimma<-function(target.grp){
     dataSet$filename <- filename;
     dataSet <<- dataSet;
     saveRDS(topFeatures, file="resTable");
-    return(1);
+    if(.on.public.web){
+      return(1);
+    }else{
+      return("Differential Analysis was performed successfully!")
+    }
 }
 
 ###########################
@@ -254,7 +480,11 @@ PerformCountDataNormalization <- function(norm.opt, disp.opt){
     dataSet$design <- design;
     current.msg <<- msg;
     dataSet <<- dataSet;
-    return(1);
+    if(.on.public.web){
+      return(1);
+    }else{
+      return("Normalization was performed successfully!")
+    }
 }
 
 #' @title FUNCTION_TITLE
@@ -307,7 +537,11 @@ PerformEdgeR<-function(target.grp){
     dataSet$filename <- filename;
     dataSet <<- dataSet;
     saveRDS(topFeatures, file="resTable");
-    return(1);
+    if(.on.public.web){
+      return(1);
+    }else{
+      return("Differential Analysis was performed successfully!")
+    }
 }
 
 ###########################
@@ -349,7 +583,11 @@ PerformQpcrDataNormalization <- function(norm.opt = "quantile") {
     }
 
     dataSet$data.norm <<- exprs(norm.obj);
-    return(1);
+    if(.on.public.web){
+      return(1);
+    }else{
+      return("Normalization was performed successfully!")
+    }
 }
 
 #' @title FUNCTION_TITLE
@@ -398,7 +636,11 @@ PerformHTqPCR<-function(target.grp, method){
     dataSet$filename <- filename;
     dataSet <<- dataSet;
     saveRDS(topFeatures, file="resTable");
-    return(1);
+    if(.on.public.web){
+      return(1);
+    }else{
+      return("Differential Analysis was performed successfully!")
+    }
 }
 
 # utility method to get p values
@@ -538,4 +780,66 @@ PlotDataOverview<-function(imgNm){
         })
   print(box);
   dev.off();
+}
+
+# given a data with duplicates, dups is the one with duplicates
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param data PARAM_DESCRIPTION
+#' @param lvlOpt PARAM_DESCRIPTION
+#' @param quiet PARAM_DESCRIPTION, Default: T
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname RemoveDuplicates
+#' @export 
+RemoveDuplicates <- function(data, lvlOpt, quiet=T){
+
+    all.nms <- rownames(data);
+    colnms <- colnames(data);
+    dup.inx <- duplicated(all.nms);
+    dim.orig  <- dim(data);
+    data <- apply(data, 2, as.numeric); # force to be all numeric
+    dim(data) <- dim.orig; # keep dimension (will lost when only one item)
+    rownames(data) <- all.nms;
+    colnames(data) <- colnms;
+    if(sum(dup.inx) > 0){
+        uniq.nms <- all.nms[!dup.inx];
+        uniq.data <- data[!dup.inx,,drop=F];
+
+        dup.nms <- all.nms[dup.inx];
+        uniq.dupnms <- unique(dup.nms);
+        uniq.duplen <- length(uniq.dupnms);
+
+        for(i in 1:uniq.duplen){
+            nm <- uniq.dupnms[i];
+            hit.inx.all <- which(all.nms == nm);
+            hit.inx.uniq <- which(uniq.nms == nm);
+
+            # average the whole sub matrix
+            if(lvlOpt == "mean"){
+                uniq.data[hit.inx.uniq, ]<- apply(data[hit.inx.all,,drop=F], 2, mean, na.rm=T);
+            }else if(lvlOpt == "median"){
+                uniq.data[hit.inx.uniq, ]<- apply(data[hit.inx.all,,drop=F], 2, median, na.rm=T);
+            }else if(lvlOpt == "max"){
+                uniq.data[hit.inx.uniq, ]<- apply(data[hit.inx.all,,drop=F], 2, max, na.rm=T);
+            }else{ # sum
+                uniq.data[hit.inx.uniq, ]<- apply(data[hit.inx.all,,drop=F], 2, sum, na.rm=T);
+            }
+        }
+        if(!quiet){
+            current.msg <<- paste(current.msg, paste("A total of ", sum(dup.inx), " of duplicates were replaced by their ", lvlOpt, ".", sep=""), collapse="\n");
+        }
+        return(uniq.data);
+    }else{
+        if(!quiet){
+            current.msg <<- paste(current.msg, "All IDs are unique.", collapse="\n");
+        }
+        return(data);
+    }
 }

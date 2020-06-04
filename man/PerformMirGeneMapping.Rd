@@ -2,23 +2,13 @@
 % Please edit documentation in R/AnotUtils.R
 \name{PerformMirGeneMapping}
 \alias{PerformMirGeneMapping}
-\title{FUNCTION_TITLE}
+\title{PerformMirGeneMapping}
 \usage{
 PerformMirGeneMapping()
 }
 \value{
-OUTPUT_DESCRIPTION
+"mirnet_mir_target.csv" results table will be downloaded in your working directory
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Map miRNAs to target genes or from target genes to miRNAs
 }

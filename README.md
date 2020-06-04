@@ -64,3 +64,9 @@ Fan Y, Siklenka, K., Arora, SK., Ribeiro, P., Kimmins, S. and Xia, J. (2016) miR
 ## Bugs or feature requests
 
 To inform us of any bugs or requests, please open a new issue or send an email to #le.chang@mail.mcgill.ca.
+
+## To Do
+
+mRNA-miRNA co-expression network analysis 
+
+Network motif analysis 

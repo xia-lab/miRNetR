@@ -26,15 +26,22 @@ CreateMirNets <- function(net.type){
             dataSet$mir.res =  dataSet[dataSet$mirtable[i]][[1]];
         }else{
             dataSet$mir.res = rbind(dataSet$mir.res, dataSet[dataSet$mirtable[i]][[1]]);
-        }   
+        }
     }
     my.nodes <- dataSet$mir.res[, c(1, 3)];
+    my.nodes$direction = rep("unknown", nrow(my.nodes))
+    #if("trrust" %in% dataSet$tfTargetType){
+    my.nodes$direction[which(paste0(my.nodes[,1], my.nodes[,2]) %in% dataSet$directionInx)] = dataSet$regDirection
+    my.nodes = as.data.frame(my.nodes)
+
+    #}
     nd.nms <- c(dataSet$mir.res[, 1], dataSet$mir.res[, 3]);
     nd.ids <- c(dataSet$mir.res[, 2], dataSet$mir.res[, 4]);
     names(nd.ids) <- nd.nms;
     dups <- duplicated(nd.ids); #note using unique will lose the names attribute
     dataSet$node.anot <<- nd.ids[!dups];
-    mir.graph <- simplify(graph.data.frame(my.nodes, directed=FALSE));
+    colnames(my.nodes) = c("from", "to", "direction");
+    mir.graph <-simplify( graph_from_data_frame(my.nodes, directed=FALSE, vertices=NULL), edge.attr.comb="first");
   }else{
     if(data.type == "xeno.mir"){
       my.nodes <- dataSet$mir.res[, c("miRNA", "Gene")];
@@ -74,7 +81,11 @@ if(length(dataSet$nodeNumbers) == 0){
       mir.count <- length(unique(my.nodes[,1]));#matched mir
       tgt.count <- length(unique(my.nodes[,2]));#matched target
     }
-    return(c(mir.query, mir.count, tgt.count, ecount(mir.graph), length(mir.nets), substats));
+    if(.on.public.web){
+      return(c(mir.query, mir.count, tgt.count, ecount(mir.graph), length(mir.nets), substats));
+    }else{
+      return(paste("Network files are generated!"))
+    }
   }else{
     return(0);
   }
@@ -112,11 +123,10 @@ DecomposeMirGraph <- function(net.type, gObj, minNodeNum = 2){
     for(i in 1:length(comps)){
         g <- comps[[i]];
         if(vcount(g) > 0){
-            res=GetQueriesNumByType(g)
-            nodeNum = GetNodeNumByType(g)
-            dataSet$type.nums = c(dataSet$type.nums, nodeNum)
-            dataSet$query.nums = c(dataSet$query.nums, res)
-            net.stats[i,] <- c(
+           my.stat <- GetNetStatByType(g);
+           dataSet$type.nums = c(dataSet$type.nums, my.stat$node.num)
+           dataSet$query.nums = c(dataSet$query.nums, my.stat$query.num);
+           net.stats[i,] <- c(
                                vcount(g),
                                ecount(g),
                                sum(queries %in% V(g)$name)
@@ -303,7 +313,7 @@ FilterMirNetByList <- function(net.type, ids, id.type, remove){
     # need to first convert to correct id used in the graph
     hit.inx <- nms.vec %in% lines;
     nodes2rm = nms.vec[hit.inx]
-    
+
     if(remove== "true"){
     nodes2rm <- nodes2rm[nodes2rm %in% V(mir.graph)$name];    # make sure they are in the igraph object
     }else{
@@ -418,12 +428,12 @@ convertIgraph2JSON <- function(g, filenm){
     node.types <- rep("Gene", length(node.dgr));
     node.types[mir.inx] <- "miRNA";
     node.types[snp.inx] <- "SNP";
-    node.types[lnc.inx] <- "lncRNA"; 
+    node.types[lnc.inx] <- "lncRNA";
     node.types[snc.inx] <- "sncRNA";
     node.types[circ.inx] <- "circRNA";
-    node.types[dis.inx] <- "Disease"; 
+    node.types[dis.inx] <- "Disease";
     node.types[tf.inx] <- "TF";
-    node.types[mol.inx] <- "Compound"; 
+    node.types[mol.inx] <- "Compound";
     node.types[epi.inx] <- "Epigenetic";
     node.types[pseudo.inx] <- "Pseudogene";
 
@@ -526,6 +536,13 @@ convertIgraph2JSON <- function(g, filenm){
 
     # covert to json
     library(RJSONIO);
+    edge.color = rep("#d3d3d3",nrow(edge.mat));
+    up.inx <- E(g)$direction == "+";
+    down.inx <- E(g)$direction == "-";
+    edge.color[up.inx] = "#FF0000" #red
+    edge.color[down.inx] = "#11679A" #blue
+
+    edge.mat =cbind(edge.mat, color=edge.color)
     netData <- list(mirnet=dataSet$mirnet, mirtarget=dataSet$mirtarget, organism=dataSet$org, nodes=nodes, edges=edge.mat);
     sink(filenm);
     cat(toJSON(netData));
@@ -592,7 +609,11 @@ PrepareMirNet <- function(mir.nm, file.nm){
    my.mirnet <- mir.nets[[mir.nm]];
    current.mirnet <<- my.mirnet;
    convertIgraph2JSON(my.mirnet, file.nm);
-   return(1);
+   if(.on.public.web){
+     return(1);  
+   }else{
+     return(paste("Network files are downloaded!"))
+   }
 }
 
 #' @title FUNCTION_TITLE
@@ -668,7 +689,7 @@ library(ggforce)
         coords = layout_with_sparse_stress(g,pivots=100)
         pos.xy = coords
     }
-    
+
     }else if(algo == "mds"){
     library(graphlayouts)
     coords = layout_with_pmds(g,length(V(g)$name)/10)
@@ -795,6 +816,7 @@ GetSeedsColumn <- function(){
         nms= gsub("mol", "Compounds",nms)
         nms= gsub("lnc", "lncRNA",nms)
         nms= gsub("snc", "sncRNA",nms)
+        nms= gsub("circ", "circRNA",nms)
         nms= gsub("xeno", "xeno-miRNA",nms)
         if(nms[1] == "protein"){
          vec[i]=paste0(nms[1],":" ,length(unique(dataSet[tbls[i]][[1]][,1])) + length(unique(dataSet[tbls[i]][[1]][,3])) )
@@ -999,6 +1021,7 @@ GetTypeNum <-function(){
     return(dataSet$type.nums)
 }
 
+# return information based on node type
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 #' @param g PARAM_DESCRIPTION
@@ -1010,64 +1033,78 @@ GetTypeNum <-function(){
 #'  #EXAMPLE1
 #'  }
 #' }
-#' @rdname GetQueriesNumByType
+#' @rdname GetNetStatByType
 #' @export 
-GetQueriesNumByType <- function(g){
-g<<-g
-    inx <- unique(rownames(dataSet$mir.mapped)) %in% V(g)$name;
-    queries <- unique(rownames(dataSet$mir.mapped))[inx];
-if(length(dataSet$mirtable)>1){
-vec <- dataSet$mirtable
-vec <- vec[vec != "protein2protein"]
-    vec = strsplit(vec, "2");
-    vec = unlist(vec);
-    vec = unique(vec)
-    res = vector();
-for( i in 1:length(vec)){
-        if(vec[i] == "mir"){
-        nms = mir.nmsu
-        lbl = "miRNA"
-        }else if(vec[i] == "circ"){
-        nms = net.info$circ.nms
-        lbl = "circRNA";
-        }else if(vec[i] == "snc"){
-        nms = net.info$snc.nms
-        lbl = "sncRNA";
-        }else if(vec[i] == "lnc"){
-        nms = net.info$lnc.nms
-        lbl = "lncRNA";
-        }else if(vec[i] == "dis"){
-        nms = net.info$dis.nms
-        lbl = "Disease";
-        }else if(vec[i] == "mol"){
-        nms = net.info$mol.nms
-        lbl = "Compound";
-        }else if(vec[i] == "tf"){
-        nms = net.info$tf.nms
-        lbl = "TF";
-        }else if(vec[i] == "gene"){
-        nms = net.info$gene.nms
-        lbl = "Gene";
-        }else if(vec[i] == "epi"){
-        nms = net.info$epi.nms
-        lbl = "Epigenetic modif.";
-        }else if(vec[i] == "snp"){
-              nms = unique(c(dataSet$snp2mir$rsID, dataSet$snp2gene$rsID))
-        lbl = "SNP";
-        }else if(vec[i] == "xeno"){
-              nms = unique(c(dataSet$xeno2gene[,3]))
-        lbl = "Xeno-miRNA";
-        }
+GetNetStatByType <- function(g){
+    nd.queries <- V(g)$name;
+    uniq.ins <- unique(rownames(dataSet$mir.mapped));
+    sd.queries <- uniq.ins[uniq.ins %in% nd.queries];
 
-    nms = unique(nms)
-    if( sum(nms %in% queries)>0){
-        res = paste0(lbl,": ", sum(nms %in% queries), "; ", res) 
+    if(length(dataSet$mirtable)>1){
+        vec <- dataSet$mirtable
+        vec <- vec[vec != "protein2protein"]
+        vec <- strsplit(vec, "2");
+        vec <- unique(unlist(vec))
+        sd.res <- vector();
+        nd.res <- "";
+        for( i in 1:length(vec)){
+            if(vec[i] == "mir"){
+                nms = mir.nmsu
+                lbl = "miRNA"
+            }else if(vec[i] == "circ"){
+                nms = net.info$circ.nms
+                lbl = "circRNA";
+            }else if(vec[i] == "snc"){
+                nms = net.info$snc.nms
+                lbl = "sncRNA";
+            }else if(vec[i] == "pseudo"){
+              nms = net.info$pseudo.nms
+              lbl = "pseudogene";
+            }else if(vec[i] == "lnc"){
+                nms = net.info$lnc.nms
+                lbl = "lncRNA";
+            }else if(vec[i] == "dis"){
+                nms = net.info$dis.nms
+                lbl = "Disease";
+            }else if(vec[i] == "mol"){
+                nms = net.info$mol.nms
+                lbl = "Compound";
+            }else if(vec[i] == "tf"){
+                nms = net.info$tf.nms
+                lbl = "TF";
+            }else if(vec[i] == "gene"){
+                nms = net.info$gene.nms
+                lbl = "Gene";
+            }else if(vec[i] == "epi"){
+                nms = net.info$epi.nms
+                lbl = "Epigenetic modif.";
+            }else if(vec[i] == "snp"){
+                nms = unique(c(dataSet$snp2mir$rsID, dataSet$snp2mirbs$rsID))
+                lbl = "SNP";
+            }else if(vec[i] == "xeno"){
+                nms = unique(c(dataSet$xeno2gene[,3]))
+                lbl = "Xeno-miRNA";
+            }
+
+            nms <- unique(nms);
+            if(sum(nms %in% nd.queries)>0 && !grepl(lbl, nd.res)){
+                nd.res <- paste0(lbl,": ", sum(nms %in% nd.queries), "; ", nd.res)
+            }
+            if(sum(nms %in% sd.queries)>0){
+                sd.res <- paste0(lbl,": ", sum(nms %in% sd.queries), "; ", sd.res)
+            }
+        }
+        my.stat <- list(
+                node.num = nd.res,
+                query.num = sd.res
+        );
+    }else{
+        my.stat <- list(
+            query.num = sum(sd.queries %in% V(g)$name),
+            node.num = length(V(g)$name)
+        );
     }
-    }
-    return(res)
-}else{
-    sum(queries %in% V(g)$name)
-}
+    return(my.stat);
 }
 
 #' @title FUNCTION_TITLE
@@ -1084,19 +1121,19 @@ for( i in 1:length(vec)){
 #' @rdname GetUnmappedNum
 #' @export 
 GetUnmappedNum <- function(){
-    totalOrig=0
-    allData = vector()
+    totalOrig <- 0
+    allData <- vector()
     if(length(dataSet$data)>0){
         for(i in 1:length(names(dataSet$data))){
             nm=names(dataSet$data)[i]
             totalOrig = totalOrig + nrow(dataSet$data[[nm]])
             allData = c(allData, as.vector(rownames(dataSet$data[[nm]])));
         }
-    return(totalOrig-sum(unique(allData) %in% V(mir.graph)$name))
+        return(totalOrig-sum(unique(allData) %in% V(mir.graph)$name))
     }else{
-    queries <- unique(rownames(dataSet$mir.mapped));
-    return(length(queries)-sum(queries %in% V(mir.graph)$name))
-}
+        queries <- unique(rownames(dataSet$mir.mapped));
+        return(length(queries)-sum(queries %in% V(mir.graph)$name))
+    }
 }
 
 # from to should be valid nodeIDs
@@ -1124,9 +1161,7 @@ GetShortestPaths <- function(from, to){
     path.vec <- vector(mode="character", length=length(paths));
     for(i in 1:length(paths)){
         path.inx <- paths[[i]];
-        path.ids <- V(current.mirnet)$name[path.inx];
-        #path.sybls <- V(current.mirnet)$Label[path.inx];
-        path.sybls <- path.ids;
+        path.sybls <- path.ids <- V(current.mirnet)$name[path.inx];
         pids <- paste(path.ids, collapse="->");
         psbls <- paste(path.sybls, collapse="->");
         path.vec[i] <- paste(c(pids, psbls), collapse=";")
@@ -1299,7 +1334,6 @@ layout_in_circles <- function(g, group=1) {
 #' @rdname GetNetStatMatrix
 #' @export 
 GetNetStatMatrix <-function(){
-
   return(signif(as.matrix(res), 5));
 }
 
@@ -1506,73 +1540,4 @@ FindCommunities <- function(method="walktrap", use.weight=FALSE){
     colnames(gene.community) <- c("Id", "Label", "Module");
     write.csv(gene.community, file="module_table.csv", row.names=F);
     return(all.communities);
-}
-
-
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param g PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetNodeNumByType
-#' @export 
-GetNodeNumByType <- function(g){
-    queries <-V(g)$name;
-if(length(dataSet$mirtable)>1){
-vec <- dataSet$mirtable
-vec <- vec[vec != "protein2protein"]
-    vec = strsplit(vec, "2");
-    vec = unlist(vec);
-    vec = unique(vec)
-    res = "";
-for( i in 1:length(vec)){
-        if(vec[i] == "mir"){
-        nms = mir.nmsu
-        lbl = "miRNA"
-        }else if(vec[i] == "circ"){
-        nms = net.info$circ.nms
-        lbl = "circRNA";
-        }else if(vec[i] == "snc"){
-        nms = net.info$snc.nms
-        lbl = "sncRNA";
-        }else if(vec[i] == "lnc"){
-        nms = net.info$lnc.nms
-        lbl = "lncRNA";
-        }else if(vec[i] == "dis"){
-        nms = net.info$dis.nms
-        lbl = "Disease";
-        }else if(vec[i] == "mol"){
-        nms = net.info$mol.nms
-        lbl = "Compound";
-        }else if(vec[i] == "tf"){
-        nms = net.info$tf.nms
-        lbl = "TF";
-        }else if(vec[i] == "gene"){
-        nms = net.info$gene.nms
-        lbl = "Gene";
-        }else if(vec[i] == "epi"){
-        nms = net.info$epi.nms
-        lbl = "Epigenetic modif.";
-        }else if(vec[i] == "snp"){
-              nms = unique(c(dataSet$snp2mir$rsID, dataSet$snp2gene$rsID))
-        lbl = "SNP";
-        }else if(vec[i] == "xeno"){
-              nms = unique(c(dataSet$xeno2gene[,3]))
-        lbl = "Xeno-miRNA";
-        }
-        nms = unique(nms)
-    if( sum(nms %in% queries)>0 && !grepl(lbl, res)){
-        res = paste0(lbl,": ", sum(nms %in% queries), "; ", res) 
-    }
-    }
-    return(res)
-}else{
-    return(length(V(g)$name))
-}
 }
