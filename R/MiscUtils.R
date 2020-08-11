@@ -544,8 +544,19 @@ ReadTabData <- function(dataName) {
 #' @rdname Query.miRNetDB
 #' @export
 Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
-    db.path <- paste0(db.path, ".sqlite")
-  mir.db <- dbConnect(SQLite(), db.path);
+
+  db.path <- paste0(db.path, ".sqlite");
+  if(.on.public.web){
+    mir.db <- dbConnect(SQLite(), db.path);
+  }else{
+    msg <- paste("Downloading", db.path);
+    db.name <- gsub(sqlite.path, "", db.path);
+    if(!file.exists(db.name)){
+      print(msg);
+      download.file(db.path, db.name);
+    }
+    mir.db <- dbConnect(SQLite(), db.name);
+  }
   query <- paste (shQuote(q.vec),collapse=",");
   statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query, ")", sep="");
   mir.dic <- .query.sqlite(mir.db, statement);
@@ -641,7 +652,17 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
         mir.vec <- unique(unlist(strsplit(mir.vec, split="&")));
         query2 <- paste(shQuote(mir.vec), collapse=",");
         statement2 <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query2, ")", sep="");
-        mir.db <- dbConnect(SQLite(), db.path);
+        if(.on.public.web){
+          mir.db <- dbConnect(SQLite(), db.path);
+        }else{
+          msg <- paste("Downloading", db.path);
+          db.name <- gsub(sqlite.path, "", db.path);
+          if(!file.exists(db.name)){
+            print(msg);
+            download.file(db.path, db.name);
+          }
+          mir.db <- dbConnect(SQLite(), db.name);
+        }
         mir.dic2 <- .query.sqlite(mir.db, statement2);
 
         # now add back to the main data
@@ -713,7 +734,18 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
 #' @export
 QueryTFSQLite <- function(table.nm, q.vec, col.nm){
   require('RSQLite');
-  tf.db <- dbConnect(SQLite(), paste(sqlite.path, "tf2gene.sqlite", sep=""));
+  db.path <- paste(sqlite.path, "tf2gene.sqlite", sep="");
+  if(.on.public.web){
+    tf.db <- dbConnect(SQLite(), db.path);
+  }else{
+    msg <- paste("Downloading", db.path);
+    db.name <- gsub(sqlite.path, "", db.path);
+    if(!file.exists(db.name)){
+      print(msg);
+      download.file(db.path, db.name);
+    }
+    tf.db <- dbConnect(SQLite(), db.name);
+  }
   query <- paste (shQuote(q.vec),collapse=",");
   statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (",query,")", sep="");
   return(.query.sqlite(tf.db, statement));
@@ -749,7 +781,18 @@ cleanMem <- function(n=10) { for (i in 1:n) gc() }
 #' @rdname GetUniqueEntries
 #' @export
 GetUniqueEntries <- function(db.path, statement){
+  
+  if(.on.public.web){
     mir.db <- dbConnect(SQLite(), db.path);
+  }else{
+    msg <- paste("Downloading", db.path);
+    db.name <- gsub(sqlite.path, "", db.path);
+    if(!file.exists(db.name)){
+      print(msg);
+      download.file(db.path, db.name);
+    }
+    mir.db <- dbConnect(SQLite(), db.name);
+  }
     res <- .query.sqlite(mir.db, statement);
     res <- sort(unique(as.character(res[,1])));
     return (res);
@@ -975,8 +1018,19 @@ CleanMemory <- function(){
 #' @rdname QueryPpiSQLiteZero
 #' @export
 QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
-    require('RSQLite')
-    ppi.db <- dbConnect(SQLite(), paste(sqlite.path, "ppi.sqlite", sep=""));
+    require('RSQLite');
+  db.path <- paste(sqlite.path, "ppi.sqlite", sep="");
+  if(.on.public.web){
+    ppi.db <- dbConnect(SQLite(), db.path);
+  }else{
+    msg <- paste("Downloading", db.path);
+    db.name <- gsub(sqlite.path, "", db.path);
+    if(!file.exists(db.name)){
+      print(msg);
+      download.file(db.path, db.name);
+    }
+    ppi.db <- dbConnect(SQLite(), db.name);
+  }
     query <- paste(shQuote(q.vec),collapse=",");
 
     if(grepl("string$", table.nm)){
@@ -1052,3 +1106,4 @@ gg_color_hue <- function(grp.num, filenm=NULL) {
         return(filenm);
     }
 }
+

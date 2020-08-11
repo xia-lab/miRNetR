@@ -575,8 +575,19 @@ checkMiRNAVersion <- function(miRNANames,verbose=TRUE){
 #' @rdname QueryXenoMirSQLite
 #' @export 
 QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
-    db.path <- paste0(db.path, ".sqlite");
+  
+  db.path <- paste0(db.path, ".sqlite");
+  if(.on.public.web){
     mir.db <- dbConnect(SQLite(), db.path);
+  }else{
+    msg <- paste("Downloading", db.path);
+    db.name <- gsub(sqlite.path, "", db.path);
+    if(!file.exists(db.name)){
+      print(msg);
+      download.file(db.path, db.name);
+    }
+    mir.db <- dbConnect(SQLite(), db.name);
+  }
     query <- paste(shQuote(q.vec), collapse=",");
     if(source == "immune_organ"){
        source <- "immuneorgan";
@@ -642,7 +653,17 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
                 if (length(mir.vec) > 0){
                     query2 <- paste(shQuote(mir.vec), collapse=",");
                     statement2 <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query2, ")", sep="");
-                    mir.db <- dbConnect(SQLite(), db.path);
+                    if(.on.public.web){
+                      mir.db <- dbConnect(SQLite(), db.path);
+                    }else{
+                      msg <- paste("Downloading", db.path);
+                      db.name <- gsub(sqlite.path, "", db.path);
+                      if(!file.exists(db.name)){
+                        print(msg);
+                        download.file(db.path, db.name);
+                      }
+                      mir.db <- dbConnect(SQLite(), db.name);
+                    }
                     mir.dic2 <- .query.sqlite(mir.db, statement2);
                     mir.lib2 <- as.vector(unique(mir.dic2$exo_mirna));
                     notMatch2 <- setdiff(mir.vec, mir.lib2);
@@ -653,7 +674,17 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
                         mir.vec <- unique(c(res2$Mature1, res2$Mature2));
                         query3 <- paste(shQuote(mir.vec), collapse=",");
                         statement3 <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query3, ")", sep="");
-                        mir.db <- dbConnect(SQLite(), db.path);
+                        if(.on.public.web){
+                          mir.db <- dbConnect(SQLite(), db.path);
+                        }else{
+                          msg <- paste("Downloading", db.path);
+                          db.name <- gsub(sqlite.path, "", db.path);
+                          if(!file.exists(db.name)){
+                            print(msg);
+                            download.file(db.path, db.name);
+                          }
+                          mir.db <- dbConnect(SQLite(), db.name);
+                        }
                         mir.dic3 <- .query.sqlite(mir.db, statement3);
                         mir.dic2 <- rbind(mir.dic2, mir.dic3);
                     }
