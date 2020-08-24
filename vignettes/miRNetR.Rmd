@@ -103,7 +103,7 @@ library(miRNetR)
 Init.Data("mir", "mirlist")
 #> "miRNetR init done!"
 
-#### Step 2. Set up the user input data
+#### Step 2. Set up the user input data (one entry per line as in the web server)
 SetupMirListData(mirs = "hsa-mir-101-3p
 hsa-mir-133b
 hsa-mir-147a
@@ -111,7 +111,12 @@ hsa-mir-3140-3p
 hsa-mir-361-5p
 hsa-mir-510-5p", orgType = "hsa", idType = "mir_id", tissue = "Kidney")
 #> "A total of  6 unique items were entered."
+```
+You can also provide a list of vectors as input in `SetupMirListData()`:
+`mirs = c("hsa-mir-101-3p", "hsa-mir-133b", "hsa-mir-147a", "hsa-mir-3140-3p", "hsa-mir-361-5p", "hsa-mir-510-5p")`
+`SetupMirListData(mirs, orgType = "hsa", idType = "mir_id", tissue = "Kidney")`
 
+```{r, eval=FALSE}
 #### Step 3. Set up targets
 nms.vec = c("gene") 
 SetCurrentDataMulti()

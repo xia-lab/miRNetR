@@ -398,7 +398,11 @@ ClearFactorStrings<-function(cls.nm, query){
 
 # parse two-column list as a string input from text area in web page
 .parseListData <- function(my.input){
+  if(grepl("\n", my.input[1])) {
     lines <- strsplit(my.input, "\r|\n|\r\n")[[1]];
+  }else{
+    lines <- my.input;
+  }
     my.lists <- strsplit(lines, "\\s+");
     my.mat <- do.call(rbind, my.lists);
     if(dim(my.mat)[2] == 1){ # add *
