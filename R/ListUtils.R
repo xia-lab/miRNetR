@@ -21,7 +21,7 @@
 #' }
 #' @rdname SetupMirListData
 #' @export 
-SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
+SetupMirListData <- function(mirs, orgType, idType, tissue="na", targetOpt=NULL){
 
     dataSet$listData <- TRUE;
     data.org <<- dataSet$org <- orgType;

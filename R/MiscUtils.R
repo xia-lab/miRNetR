@@ -557,7 +557,7 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      download.file(db.path, db.name);
+      download.file(db.path, db.name, mode = "wb");
     }
     mir.db <- dbConnect(SQLite(), db.name);
   }
@@ -573,8 +573,14 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
     if (length(notMatch) > 0){ # Converting miRBase version and mature id.
       print("Converting ids for different miRBase versions ....");
       notMatch <- gsub("mir", "miR", notMatch);
-      load("../../data/libs/mbcdata.rda");
-
+      if(.on.public.web){
+        load("../../data/libs/mbcdata.rda");
+      }else{
+        mbcdata.rda <- paste(lib.path, "/mbcdata.rda", sep="");
+        destfile <- paste("mbcdata.rda");
+        download.file(mbcdata.rda, destfile, mode = "wb");
+        load(destfile);
+      }
       miRNANames <- gsub(" ","", as.character(notMatch));
       targetVersion <- "v22";
 
@@ -663,7 +669,7 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
           db.name <- gsub(sqlite.path, "", db.path);
           if(!file.exists(db.name)){
             print(msg);
-            download.file(db.path, db.name);
+            download.file(db.path, db.name, mode = "wb");
           }
           mir.db <- dbConnect(SQLite(), db.name);
         }
@@ -746,7 +752,7 @@ QueryTFSQLite <- function(table.nm, q.vec, col.nm){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      download.file(db.path, db.name);
+      download.file(db.path, db.name, mode = "wb");
     }
     tf.db <- dbConnect(SQLite(), db.name);
   }
@@ -793,7 +799,7 @@ GetUniqueEntries <- function(db.path, statement){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      download.file(db.path, db.name);
+      download.file(db.path, db.name, mode = "wb");
     }
     mir.db <- dbConnect(SQLite(), db.name);
   }
@@ -1031,7 +1037,7 @@ QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      download.file(db.path, db.name);
+      download.file(db.path, db.name, mode = "wb");
     }
     ppi.db <- dbConnect(SQLite(), db.name);
   }

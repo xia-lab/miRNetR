@@ -584,7 +584,7 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      download.file(db.path, db.name);
+      download.file(db.path, db.name, mode = "wb");
     }
     mir.db <- dbConnect(SQLite(), db.name);
   }
@@ -605,7 +605,14 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
         mir.lib <- as.vector(unique(mir.dic$exo_mirna));
         notMatch <- setdiff(q.vec, mir.lib);
         if (length(notMatch) > 0){ # Converting miRBase version and mature id.
-          load("../../data/libs/mbcdata.rda");
+          if(.on.public.web){
+            load("../../data/libs/mbcdata.rda");
+          }else{
+            mbcdata.rda <- paste(lib.path, "/mbcdata.rda", sep="");
+            destfile <- paste("mbcdata.rda");
+            download.file(mbcdata.rda, destfile, mode = "wb");
+            load(destfile);
+          }
           miRNANames <- gsub(" ","", as.character(notMatch));
           targetVersion <- "v21";
           ver_index <- match(tolower(targetVersion), VER)
@@ -660,7 +667,7 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
                       db.name <- gsub(sqlite.path, "", db.path);
                       if(!file.exists(db.name)){
                         print(msg);
-                        download.file(db.path, db.name);
+                        download.file(db.path, db.name, mode = "wb");
                       }
                       mir.db <- dbConnect(SQLite(), db.name);
                     }
@@ -681,7 +688,7 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
                           db.name <- gsub(sqlite.path, "", db.path);
                           if(!file.exists(db.name)){
                             print(msg);
-                            download.file(db.path, db.name);
+                            download.file(db.path, db.name, mode = "wb");
                           }
                           mir.db <- dbConnect(SQLite(), db.name);
                         }

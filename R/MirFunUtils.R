@@ -24,7 +24,7 @@ LoadKEGGLib<-function(){
     load(kegg.rda);
   }else{
     destfile <- paste("kegg_", dataSet$org, ".rda", sep="");
-    download.file(kegg.rda, destfile);
+    download.file(kegg.rda, destfile, mode = "wb"); #important for windows to specify mode="wb" to download binary file
     load(destfile);
   }
     current.setlink <- kegg$link;
@@ -58,7 +58,7 @@ LoadREACTOMELib<-function(){
       load(reactome.rda);
     }else{
       destfile <- paste("reactome_", dataSet$org, ".rda", sep="");
-      download.file(reactome.rda, destfile);
+      download.file(reactome.rda, destfile, mode = "wb");
       load(destfile);
     }
     current.mset <- reactome$sets;
@@ -90,7 +90,7 @@ LoadGOLib<-function(onto){
       load(go.rda);
     }else{
       destfile <- paste("go_", tolower(onto), ".rda", sep="");
-      download.file(go.rda, destfile);
+      download.file(go.rda, destfile, mode = "wb");
       load(destfile);
       }
 
@@ -137,7 +137,7 @@ LoadTissueLib <- function(){
   load(tissue.rda);
   }else{
     destfile <- paste("tissue.rda", sep="");
-    download.file(tissue.rda, destfile);
+    download.file(tissue.rda, destfile, mode = "wb");
     load(destfile);
   }
   print(paste("adding library: ", tissue.rda));
@@ -170,7 +170,7 @@ LoadFuncLib <- function(){
   load(func.rda);
   }else{
     destfile <- paste("tam_func.rda", sep="");
-    download.file(func.rda, destfile);
+    download.file(func.rda, destfile, mode = "wb");
     load(destfile);
   }
   print(paste("adding library: ", func.rda));
@@ -203,7 +203,7 @@ LoadHMDDLib <- function(){
     load(hmdd.rda);
   }else{
     destfile <- paste("tam_hmdd.rda", sep="");
-    download.file(hmdd.rda, destfile);
+    download.file(hmdd.rda, destfile, mode = "wb");
     load(destfile);
   }
   print(paste("adding library: ", hmdd.rda));
@@ -236,7 +236,7 @@ LoadClusterLib <- function(){
     load(cluster.rda);    
   }else{
     destfile <- paste("tam_cluster.rda", sep="");
-    download.file(cluster.rda, destfile);
+    download.file(cluster.rda, destfile, mode = "wb");
     load(destfile);
   }
   print(paste("adding library: ", cluster.rda));
@@ -269,7 +269,7 @@ LoadTFLib <- function(){
     load(tf.rda);
   }else{
     destfile <- paste("tam_tf.rda", sep="");
-    download.file(tf.rda, destfile);
+    download.file(tf.rda, destfile, mode = "wb");
     load(destfile);
     }
   print(paste("adding library: ", tf.rda));
@@ -302,7 +302,7 @@ LoadDiseaseLib <- function(){
     diss = readRDS(disease.path);  
   }else{
     destfile <- paste("disease.rds", sep="");
-    download.file(disease.path, destfile);
+    download.file(disease.path, destfile, mode = "wb");
     diss = readRDS(destfile);
   }
   print(paste("adding library: ", disease.path));
@@ -335,7 +335,7 @@ LoadmiRFamLib <- function(){
     load(mirfamily.rda);    
   }else{
     destfile <- paste("mirfamily.rda", sep="");
-    download.file(mirfamily.rda, destfile);
+    download.file(mirfamily.rda, destfile, mode = "wb");
     load(destfile);
   }
   print(paste("adding library: ", mirfamily.rda));
@@ -708,7 +708,7 @@ GetRandomMirTargetGenes <- function(qSize, perm.num){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      download.file(db.path, db.name);
+      download.file(db.path, db.name, mode = "wb");
     }
     mir.db <- dbConnect(SQLite(), db.name);
   }
@@ -757,7 +757,7 @@ GetRandomXenoMirTargetGenes <- function(qSize, perm.num){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      download.file(db.path, db.name);
+      download.file(db.path, db.name, mode = "wb");
     }
     mir.db <- dbConnect(SQLite(), db.name);
   }
