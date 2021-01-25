@@ -1,1 +1,5 @@
-*.sqlite filter=lfs diff=lfs merge=lfs -text
+xenomirnet.sqlite filter=lfs diff=lfs merge=lfs -text
+snp2tfbs.sqlite filter=lfs diff=lfs merge=lfs -text
+ppi.sqlite filter=lfs diff=lfs merge=lfs -text
+mir2gene.sqlite filter=lfs diff=lfs merge=lfs -text
+mir2circRNA.sqlite filter=lfs diff=lfs merge=lfs -text
