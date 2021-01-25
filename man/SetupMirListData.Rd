@@ -4,7 +4,7 @@
 \alias{SetupMirListData}
 \title{FUNCTION_TITLE}
 \usage{
-SetupMirListData(mirs, orgType, idType, tissue, targetOpt = NULL)
+SetupMirListData(mirs, orgType, idType, tissue = "na", targetOpt = NULL)
 }
 \arguments{
 \item{mirs}{PARAM_DESCRIPTION}
