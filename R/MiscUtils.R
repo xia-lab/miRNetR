@@ -547,8 +547,8 @@ ReadTabData <- function(dataName) {
 #' }
 #' @rdname Query.miRNetDB
 #' @export
-Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
-
+Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase"){
+  
   db.path <- paste0(db.path, ".sqlite");
   if(.on.public.web){
     mir.db <- dbConnect(SQLite(), db.path);
@@ -562,14 +562,18 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
     mir.db <- dbConnect(SQLite(), db.name);
   }
   query <- paste (shQuote(q.vec),collapse=",");
-  statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query, ")", sep="");
+  if(grepl("mir2gene", db.path) && col.nm %in% c("mir_id", "mir_acc") ){
+    statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query, ")"," AND ", db.nm," == 1 ", sep="");
+  }else{
+    statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query, ")", sep="");
+  }
   mir.dic <- .query.sqlite(mir.db, statement);
-
+  
   #Check the matched miRNA from upload list to database
   if (col.nm == "mir_id"){
     mir.lib <- as.vector(unique(mir.dic$mir_id));
     notMatch <- setdiff(q.vec, mir.lib);
-
+    
     if (length(notMatch) > 0){ # Converting miRBase version and mature id.
       print("Converting ids for different miRBase versions ....");
       notMatch <- gsub("mir", "miR", notMatch);
@@ -581,51 +585,52 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
         download.file(mbcdata.rda, destfile, mode = "wb");
         load(destfile);
       }
+      
       miRNANames <- gsub(" ","", as.character(notMatch));
       targetVersion <- "v22";
-
+      
       ver_index <- match(tolower(targetVersion), VER)
       if (!is.na(ver_index)) {
         MiRNAs <- as.matrix(miRNA_data[[ver_index]])
         MiRNAs <- rbind(MiRNAs[, c(1,2,4)], MiRNAs[, c(5,6,7)], MiRNAs[, c(8,9,10)])
         colnames(MiRNAs) <- c("ACC","SYM","SEQ")
-
+        
         ##check the rows with all NA
         ind <- apply(MiRNAs, 1, function(x) all(is.na(x)))
         VMAP <- as.data.frame(unique(MiRNAs[-ind,]))[, c("ACC", "SYM")];
-
+        
         uid <- unique(as.vector(miRNANames))
         SYM_ID <- match(uid, SYM)
         df <- data.frame(uid = uid, SYM = SYM_ID, stringsAsFactors=FALSE)
         df <- merge(df, ACC_SYM)[, c("uid", "ACC")]
         df <- unique( merge(df, VMAP, by="ACC") )
-
+        
         target <- data.frame(
           OriginalName = df$uid,
           TargetName = SYM[df$SYM],
           Accession = ACC[df$ACC],
           stringsAsFactors = FALSE
         );
-
+        
         idx <- (target$OriginalName == target$TargetName) | (!target$OriginalName %in% target$TargetName)
         target <- target[idx, , drop=FALSE]
-
+        
         ## collapse 1:many maps
         splitpaste <- function(x, f) {
           result <- vapply(split(x, f), paste, character(1), collapse="&")
           result[!nzchar(result)] <- NA
           result
         }
-
+        
         f <- factor(target$OriginalName, levels=uid)
         target <- data.frame(
           OriginalName = uid,
           TargetName = splitpaste(target$TargetName, f),
           Accession = splitpaste(target$Accession, f),
           row.names=NULL, stringsAsFactors = FALSE);
-
+        
         target <- target[match(miRNANames, target$OriginalName),];
-
+        
         # map to mature form
         VMAP <-miRNA_data[[ver_index]][,c(2,6,9)]
         # [1] "Precursor" "Mature1"   "Mature2"
@@ -636,7 +641,7 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
         miRNANames=as.character(miRNANames)
         miRNANames=gsub(" ","",miRNANames)##Remove the possible space
         uid = unique(as.vector(miRNANames))
-
+        
         uid=na.omit(uid)
         ind=apply(VMAP,2,function(x){match(uid,x)})
         if(length(miRNANames) == 1){
@@ -652,7 +657,7 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
           Mature2 = VMAP[ind[,1],3],
           row.names=NULL, stringsAsFactors = FALSE)
         target2=target2[match(miRNANames, target2$OriginalName),]
-
+        
         #merge
         mir.vec <- tolower(as.vector(target$TargetName));
         mir.vec2 <- c(tolower(as.vector(target2$Mature1)),tolower(as.vector(target2$Mature2)));
@@ -661,7 +666,11 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
         mir.vec <- na.omit(c(mir.vec, mir.vec2,mir.vec3,mir.vec4))
         mir.vec <- unique(unlist(strsplit(mir.vec, split="&")));
         query2 <- paste(shQuote(mir.vec), collapse=",");
-        statement2 <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query2, ")", sep="");
+        if(grepl("mir2gene", db.path) && col.nm %in% c("mir_id", "mir_acc")){
+          statement2 <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query2, ")", " AND ", db.nm," == 1 ", sep="");
+        }else{
+          statement2 <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query2, ")", sep="");
+        }
         if(.on.public.web){
           mir.db <- dbConnect(SQLite(), db.path);
         }else{
@@ -674,23 +683,23 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
           mir.db <- dbConnect(SQLite(), db.name);
         }
         mir.dic2 <- .query.sqlite(mir.db, statement2);
-
+        
         # now add back to the main data
         mir.dic <- rbind(mir.dic, mir.dic2);
-
+        
         # remove duplicates
         dup.inx <- duplicated(mir.dic$mirnet);
         mir.dic <- mir.dic[!dup.inx, ];
       }
     }
   }
-
+  
   if(col.nm == "mir_acc"){
     # when use Accession number, it can match both new and old version, use the new one (old one is ranked later)
     dup.inx <- duplicated(mir.dic[, c("mir_acc", "symbol")]);
     mir.dic <- mir.dic[!dup.inx, ];
   }
-
+  
   # Perform tissue annotation if specified
   if (nrow(mir.dic) > 0){
     tissue <- dataSet$tissue;
@@ -723,7 +732,7 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm){
       }
     }
   }
-
+  
   return(mir.dic);
 }
 

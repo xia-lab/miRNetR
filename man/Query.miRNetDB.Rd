@@ -4,7 +4,7 @@
 \alias{Query.miRNetDB}
 \title{FUNCTION_TITLE}
 \usage{
-Query.miRNetDB(db.path, q.vec, table.nm, col.nm)
+Query.miRNetDB(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase")
 }
 \arguments{
 \item{db.path}{PARAM_DESCRIPTION}
