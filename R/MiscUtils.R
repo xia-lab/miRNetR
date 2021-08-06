@@ -557,6 +557,7 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
+      options(timeout=200);
       download.file(db.path, db.name, mode = "wb");
     }
     mir.db <- dbConnect(SQLite(), db.name);
@@ -678,6 +679,7 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
           db.name <- gsub(sqlite.path, "", db.path);
           if(!file.exists(db.name)){
             print(msg);
+            options(timeout=200);
             download.file(db.path, db.name, mode = "wb");
           }
           mir.db <- dbConnect(SQLite(), db.name);
@@ -761,6 +763,7 @@ QueryTFSQLite <- function(table.nm, q.vec, col.nm){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
+      options(timeout=200);
       download.file(db.path, db.name, mode = "wb");
     }
     tf.db <- dbConnect(SQLite(), db.name);
@@ -808,6 +811,7 @@ GetUniqueEntries <- function(db.path, statement){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
+      options(timeout=200);
       download.file(db.path, db.name, mode = "wb");
     }
     mir.db <- dbConnect(SQLite(), db.name);
@@ -1046,6 +1050,7 @@ QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
+      options(timeout=200);
       download.file(db.path, db.name, mode = "wb");
     }
     ppi.db <- dbConnect(SQLite(), db.name);

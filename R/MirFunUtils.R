@@ -708,6 +708,7 @@ GetRandomMirTargetGenes <- function(qSize, perm.num){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
+      options(timeout=200);
       download.file(db.path, db.name, mode = "wb");
     }
     mir.db <- dbConnect(SQLite(), db.name);
@@ -757,6 +758,7 @@ GetRandomXenoMirTargetGenes <- function(qSize, perm.num){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
+      options(timeout=200);
       download.file(db.path, db.name, mode = "wb");
     }
     mir.db <- dbConnect(SQLite(), db.name);
