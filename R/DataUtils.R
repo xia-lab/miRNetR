@@ -53,7 +53,7 @@ Init.Data<-function(dataType, analType){
     }else if(file.exists("/home/zzggyy")){# zgy local
         sqlite.path <<- "/home/zzggyy/Downloads/netsqlite/";
     }else{
-      sqlite.path <<- "https://dev.mirnet.ca/miRNet/resources/sqlite/";
+      sqlite.path <<- "https://www.xialab.ca/resources/sqlite/";
     }
 
     # preload some general package
