@@ -344,7 +344,7 @@ pre code {
 <a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#### Step 4. Perform miRNAs to target genes mapping, </span></a>
 <a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#### results are downloaded in your working directory ("mirnet_mir_target.csv" and "mir_tissue.csv")</span></a>
 <a class="sourceLine" id="cb4-8" data-line-number="8"><span class="kw">QueryMultiListMir</span>()</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; "Downloading mir2gene.sqlite from https://dev.mirnet.ca/miRNet/resources/sqlite/mir2gene.sqlite"</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; "Downloading mir2gene.sqlite from https:///www.xialab.ca/resources/sqlite/mir2gene.sqlite"</span></a>
 <a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; "A total of unqiue 1059 pairs of miRNA-gene targets were identified!"</span></a>
 <a class="sourceLine" id="cb4-11" data-line-number="11"><span class="kw">head</span>(dataSet<span class="op">$</span>mir.res, <span class="dt">n =</span> 3L)</a>
 <a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt;               ID    Accession Target TargetID           Experiment        Literature Tissue</span></a>
@@ -472,7 +472,7 @@ pre code {
 <a class="sourceLine" id="cb10-26" data-line-number="26"><span class="co">#### Step 4. Perform target gene to miRNA mapping, </span></a>
 <a class="sourceLine" id="cb10-27" data-line-number="27"><span class="co">#### results are downloaded in your working directory ("mirnet_mir_target.csv")</span></a>
 <a class="sourceLine" id="cb10-28" data-line-number="28"><span class="kw">QueryMultiList</span>()</a>
-<a class="sourceLine" id="cb10-29" data-line-number="29"><span class="co">#&gt; "Downloading mir2gene.sqlite from https://dev.mirnet.ca/miRNet/resources/sqlite/mir2gene.sqlite"</span></a>
+<a class="sourceLine" id="cb10-29" data-line-number="29"><span class="co">#&gt; "Downloading mir2gene.sqlite from https:///www.xialab.ca/resources/sqlite/mir2gene.sqlite"</span></a>
 <a class="sourceLine" id="cb10-30" data-line-number="30"><span class="co">#&gt; "A total of unqiue 292 pairs of miRNA-gene targets were identified!"</span></a>
 <a class="sourceLine" id="cb10-31" data-line-number="31"></a>
 <a class="sourceLine" id="cb10-32" data-line-number="32"><span class="kw">head</span>(dataSet<span class="op">$</span>mir.res, <span class="dt">n =</span> 3L)</a>
