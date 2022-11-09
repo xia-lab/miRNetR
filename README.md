@@ -59,14 +59,11 @@ We encourage users to further develop the package to suit their needs. If you us
 
 Chang, L., Zhou, G., Soufan, O. and Xia, J. (2020) miRNet 2.0 - network-based visual analytics for miRNA functional analysis and systems biology. Nucl. Acids Res. (doi: 10.1093/nar/gkaa467)
 
+Chang, L., & Xia, J. (2023). MicroRNA Regulatory Network Analysis Using miRNet 2.0. Methods in molecular biology (Clifton, N.J.), 2594, 185–204. https://doi.org/10.1007/978-1-0716-2815-7_14
+
 Fan Y, Siklenka, K., Arora, SK., Ribeiro, P., Kimmins, S. and Xia, J. (2016) miRNet - dissecting miRNA-target interactions and functional associations through network-based visual analysis. Nucl. Acids Res. 44 W135–141
 
 ## Bugs or feature requests
 
 To inform us of any bugs or requests, please open a new issue or send an email to #le.chang@mail.mcgill.ca.
 
-## To Do
-
-mRNA-miRNA co-expression network analysis 
-
-Network motif analysis 
