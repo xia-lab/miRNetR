@@ -4,24 +4,7 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param mirs PARAM_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION
-#' @param idType PARAM_DESCRIPTION
-#' @param tissue PARAM_DESCRIPTION
-#' @param targetOpt PARAM_DESCRIPTION, Default: NULL
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname SetupMirListData
-#' @export 
-SetupMirListData <- function(mirs, orgType, idType, tissue="na", targetOpt=NULL){
+SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
 
     dataSet$listData <- TRUE;
     data.org <<- dataSet$org <- orgType;
@@ -47,30 +30,12 @@ SetupMirListData <- function(mirs, orgType, idType, tissue="na", targetOpt=NULL)
 
     dataSet<<- dataSet;
     if(.on.public.web){
-      return (nrow(mir.mat));  
+      return (nrow(mir.mat));
     }else{
       return (paste("A total of",  nrow(mir.mat), "unique items were entered."))
     }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param listInput PARAM_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION
-#' @param inputType PARAM_DESCRIPTION
-#' @param idType PARAM_DESCRIPTION
-#' @param tissue PARAM_DESCRIPTION
-#' @param target PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname SetupIndListData
-#' @export 
 SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, target){
   data.org <<- dataSet$org <- orgType;
   dataSet$tissue <- tissue;
@@ -91,27 +56,12 @@ SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, targ
   dataSet$target.types[[inputType]] <- target;
   dataSet <<- dataSet;
   if(.on.public.web){
-    return (nrow(in.mat));  
+    return (nrow(in.mat));
   }else{
     return (paste("A total of",  nrow(in.mat), "unique items were entered."))
   }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION, Default: 'hsa'
-#' @param tissue PARAM_DESCRIPTION
-#' @param idType PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname SetupItemFromPickList
-#' @export 
 SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
     if(!exists("picklist.vec")){
         print("Could not find user entered disease list!");
@@ -133,81 +83,29 @@ SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
     return(nrow(mir.mat));
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUniqueDiseaseNames
-#' @export 
 GetUniqueDiseaseNames <- function(){
     db.path <- paste(sqlite.path, "mir2disease.sqlite", sep="");
     statement <- "SELECT disease FROM disease";
     return(GetUniqueEntries(db.path, statement));
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION, Default: 'hsa'
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUniqueMoleculeNames
-#' @export 
 GetUniqueMoleculeNames <- function(orgType="hsa"){
     db.path <- paste(sqlite.path, "mir2molecule.sqlite", sep="");
     statement <- paste("SELECT molecule FROM ",orgType, sep="");
     return(GetUniqueEntries(db.path, statement));
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION, Default: 'hsa'
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUniqueEpigeneNames
-#' @export 
 GetUniqueEpigeneNames <- function(orgType="hsa"){
     db.path <- paste(sqlite.path, "mir2epi.sqlite", sep="");
     statement <- paste("SELECT epi_regulator FROM ",orgType, sep="");
     return(GetUniqueEntries(db.path, statement));
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname SetCurrentDataMulti
-#' @export 
 SetCurrentDataMulti <- function(){
   dataSet$type <- nms.vec;
   dataSet <<- dataSet;
   if(.on.public.web){
-    return(1);  
+    return(1);
   }else{
     return (paste("Targets were entered!"))
   }
@@ -235,19 +133,6 @@ SetCurrentDataMulti <- function(){
 
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname QueryMultiList
-#' @export 
 QueryMultiList <- function(){
   .init.multilist();
   for(i in 1:length(dataSet$type)){
@@ -283,8 +168,8 @@ QueryMultiList <- function(){
   edgeu.res[edgeu.res== "<NA>"] = 'NA'
   edgeu.res = na.omit(edgeu.res);
 
-  write.csv(node.res, file="orig_node_list.csv", row.names=FALSE);
-  write.csv(mir.resu, file="mirnet_mir_target.csv", row.names=FALSE);
+  fast.write.csv(node.res, file="orig_node_list.csv", row.names=FALSE);
+  fast.write.csv(mir.resu, file="mirnet_mir_target.csv", row.names=FALSE);
 
   dataSet$mir.mapped <- na.omit(mir.mappedu);
   dataSet$mir.res <- mir.resu;
@@ -299,7 +184,7 @@ QueryMultiList <- function(){
     edge.data = edgeu.res
   );
   if(.on.public.web){
-    return(1);  
+    return(1);
   }else{
     return(current.msg);
   }
@@ -340,19 +225,6 @@ QueryMultiList <- function(){
   return(net.info)
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname QueryMultiListMir
-#' @export 
 QueryMultiListMir <- function(){
   .init.multilist();
 
@@ -380,8 +252,8 @@ QueryMultiListMir <- function(){
   edgeu.res[edgeu.res== "<NA>"] = 'NA'
   edgeu.res = na.omit(edgeu.res);
 
-  write.csv(node.res, file="orig_node_list.csv", row.names=FALSE);
-  write.csv(mir.resu, file="mirnet_mir_target.csv", row.names=FALSE);
+  fast.write.csv(node.res, file="orig_node_list.csv", row.names=FALSE);
+  fast.write.csv(mir.resu, file="mirnet_mir_target.csv", row.names=FALSE);
 
   dataSet$mir.mapped <- na.omit(mir.mappedu);
   dataSet$mir.res <- mir.resu;
@@ -396,7 +268,7 @@ QueryMultiListMir <- function(){
     edge.data = edgeu.res
   );
   if(.on.public.web){
-    return(1);  
+    return(1);
   }else{
     return(current.msg);
   }
@@ -408,39 +280,53 @@ QueryMultiListMir <- function(){
       idType <- dataSet$mirnaType;
       mir.mat <- dataSet$mir.orig;
       idVec <- rownames(mir.mat);
+      db.type <- "mirtarbase";
+      orgType <- dataSet$org;
+    }else if(input.type %in% c("mir2gene_mirtarbase", "mir2gene_tarbase", "mir2gene_mirecords", "mir2gene_miranda")){
+      idType <- dataSet$mirnaType;
+      mir.mat <- dataSet$mir.orig;
+      idVec <- rownames(mir.mat);
+      db.type <- gsub("mir2gene_", "", input.type);
+      orgType <- dataSet$org;
     }else if(input.type=="snpmir2gene"){
       idType <- "mir_id";
       mir.mat <- data.frame(unique(mir.nms))
       rownames(mir.mat) = unique(mir.nms)
       mir.mat[,1] = 0
       idVec <- rownames(mir.mat);
+      db.type <- "";
+      orgType <- dataSet$org;
     }else{
       if(length(dataSet$data[["gene"]])!= 0){
         idType <- dataSet$id.types[["gene"]];
         mir.mat <- dataSet$data[["gene"]];
         idVec <- rownames(mir.mat);
+        db.type <- "";
+        orgType <- dataSet$org;
       }else{
         idType <- dataSet$mirnaType;
         mir.mat <- dataSet$mir.orig;
         idVec <- rownames(mir.mat);
+        db.type <- "";
+        orgType <- dataSet$org;
       }
     }
-
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), idVec, dataSet$org, idType);
+    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), idVec, orgType, idType, db.type);
 
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
-      current.msg <<- "No hits found in the miRNA-gene database. Please check your input.";
+      current.msg <<- paste("No hits found in the", db.type,"miRNA-gene database. Please check your input.", sep = " ");
       print(current.msg);
       return(0);
     } else if (hit.num == 0 && dataSet$tissue != "na") {
-      current.msg <<- "No hits found in the miRNA-gene database. The miRNA list has not been annotated by this tissue type. Please try NOT to specify the tissue.";
+      current.msg <<- paste("No hits found in the", db.type,"miRNA-gene database. The miRNA list has not been annotated by this tissue type. Please try NOT to specify the tissue.", sep = " ");
       print(current.msg);
       return(2);
     } else {
+      fast.write.csv(mir.dic, file="mirnet_mir_gene.csv", row.names=FALSE); # this is just for mir2gene results table to show different db source with 0/1 to indicate present
       res <- mir.dic[ , c("mir_id", "mir_acc", "symbol", "entrez", "experiment", "pmid", "tissue")];
       rownames(res) <- mir.dic$mirnet;
-      current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-gene targets were identified!");
+      current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-gene targets were identified from", db.type, sep = " ");
 
       # record the mapped queries and change to same IDs used in network
       uniq.mat <- unique(mir.dic[, c("mir_id", "symbol", idType)]);
@@ -456,7 +342,7 @@ QueryMultiListMir <- function(){
       # update col names
       colnames(res) <- c("ID", "Accession", "Gene", "Entrez", "Experiment", "Literature", "Tissue");
       display.res <- res;
-      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"],stringsAsFactors = FALSE);    # IDs
+      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"]);    # IDs
       if(nrow(res)!=0){
         row.names(edge.res) <- 1:nrow(res);
       }
@@ -472,18 +358,18 @@ QueryMultiListMir <- function(){
 
       gene.nms <<- c(gene.nms, as.vector(res[,"Gene"]));
       mir.nms <<- res[, "ID"];
-      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"], stringsAsFactors = FALSE);
+      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"]);
       mir.resu <<- rbind(mir.resu, res);
       mirtargetu <<- c(mirtargetu, "gene");
 
-      if(input.type == "mir2gene"){
-        dataSet$mir2gene <<- res;         # save this for network builder and table view
-        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(gene.nms)),stringsAsFactors = FALSE);
+      if(input.type %in% c("mir2gene", "mir2gene_mirtarbase", "mir2gene_tarbase", "mir2gene_mirecords", "mir2gene_miranda")){
+        dataSet$mir2gene <<- mir.resu;         # save this for network builder and table view
+        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(gene.nms)));
         seedsu <<- c(seedsu, mir.nms);
         mirtableu <<- c(mirtableu, "mir2gene");
       } else{
         dataSet$gene2mir <<- res;
-        dataSet$tableStats <<- data.frame(Query=length(unique(gene.nms)),Mapped=length(unique(mir.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(gene.nms)),Mapped=length(unique(mir.nms)));
         seedsu <<- c(seedsu, gene.nms);
         mirtableu <<- c(mirtableu, "gene2mir");
       }
@@ -532,7 +418,7 @@ QueryMultiListMir <- function(){
 
       colnames(res) <- c("ID","Accession","Molecule", "Pubchem_ID", "Experiment", "Literature", "Tissue");
       display.res <- res;
-      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Molecule"],stringsAsFactors = FALSE);    # IDs
+      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Molecule"]);    # IDs
       if(nrow(res)!=0){
         row.names(edge.res) <- 1:nrow(res);
       }
@@ -548,17 +434,17 @@ QueryMultiListMir <- function(){
 
       mol.nms <<- res[,"Molecule"];
       mir.nms <<- res[, "ID"];
-      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Molecule"], TargetID=res[,"Pubchem_ID"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"], stringsAsFactors = FALSE);
+      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Molecule"], TargetID=res[,"Pubchem_ID"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"]);
       mir.resu <<- rbind(mir.resu, res);
       mirtargetu <<- c(mirtargetu, "molecule");
       if(input.type == "mir2molecule"){
         dataSet$mir2mol <<- res;         # save this for network builder and table view
-        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(mol.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(mol.nms)));
         seedsu <<- c(seedsu, mir.nms);
         mirtableu <<- c(mirtableu, "mir2mol");
       } else{
         dataSet$mol2mir <<- res;
-        dataSet$tableStats <<- data.frame(Query=length(unique(mol.nms)),Mapped=length(unique(mir.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(mol.nms)),Mapped=length(unique(mir.nms)));
         seedsu <<- c(seedsu, mol.nms);
         mirtableu <<- c(mirtableu, "mol2mir");
       }
@@ -610,7 +496,7 @@ QueryMultiListMir <- function(){
       res$Literature <- rep("24297251", nrow(res));
       res <- res[, c("ID", "Accession", "Gene", "Entrez", "Experiment", "Literature", "Tissue")];
       display.res <- res;
-      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"],stringsAsFactors = FALSE);    # IDs
+      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"]);    # IDs
       if(nrow(res)!=0){
         row.names(edge.res) <- 1:nrow(res);
       }
@@ -626,17 +512,17 @@ QueryMultiListMir <- function(){
 
       lnc.nms <<- res[,"Gene"];
       mir.nms <<- res[, "ID"];
-      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"], stringsAsFactors = FALSE);
+      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"]);
       mir.resu <<- rbind(mir.resu, res);
       mirtargetu <<- c(mirtargetu, "lncrna");
       if(input.type == "mir2lncrna"){
         dataSet$mir2lnc <<- res;         # save this for network builder and table view
-        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(lnc.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(lnc.nms)));
         seedsu <<- c(seedsu, mir.nms);
         mirtableu <<- c(mirtableu, "mir2lnc");
       } else{
         dataSet$lnc2mir <<- res;
-        dataSet$tableStats <<- data.frame(Query=length(unique(lnc.nms)),Mapped=length(unique(mir.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(lnc.nms)),Mapped=length(unique(mir.nms)));
         seedsu <<- c(seedsu, lnc.nms);
         mirtableu <<- c(mirtableu, "lnc2mir");
       }
@@ -690,7 +576,7 @@ QueryMultiListMir <- function(){
       res$Literature <- rep("24297251", nrow(res));
       res <- res[, c("ID", "Accession", "Gene", "Entrez", "Experiment", "Literature", "Tissue")];
       display.res <- res;
-      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"],stringsAsFactors = FALSE);    # IDs
+      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"]);    # IDs
       if(nrow(res)!=0){
         row.names(edge.res) <- 1:nrow(res);
       }
@@ -706,17 +592,17 @@ QueryMultiListMir <- function(){
 
       circ.nms <<- res[,"Gene"];
       mir.nms <<- res[, "ID"];
-      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"], stringsAsFactors = FALSE);
+      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"]);
       mir.resu <<- rbind(mir.resu, res);
       mirtargetu <<- c(mirtargetu, "circrna");
       if(input.type == "mir2circrna"){
         dataSet$mir2circ <<- res;         # save this for network builder and table view
-        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(circ.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(circ.nms)));
         seedsu <<- c(seedsu, mir.nms);
         mirtableu <<- c(mirtableu, "mir2circ");
       } else{
         dataSet$circ2mir <<- res;
-        dataSet$tableStats <<- data.frame(Query=length(unique(circ.nms)),Mapped=length(unique(mir.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(circ.nms)),Mapped=length(unique(mir.nms)));
         seedsu <<- c(seedsu, circ.nms);
         mirtableu <<- c(mirtableu, "circ2mir");
       }
@@ -769,7 +655,7 @@ QueryMultiListMir <- function(){
       res$Literature <- rep("24297251", nrow(res));
       res <- res[, c("ID", "Accession", "Gene", "Entrez", "Experiment", "Literature", "Tissue")];
       display.res <- res;
-      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"],stringsAsFactors = FALSE);    # IDs
+      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"]);    # IDs
       if(nrow(res)!=0){
         row.names(edge.res) <- 1:nrow(res);
       }
@@ -785,17 +671,17 @@ QueryMultiListMir <- function(){
 
       pseudo.nms <<- res[,"Gene"];
       mir.nms <<- res[, "ID"];
-      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"], stringsAsFactors = FALSE);
+      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"]);
       mir.resu <<- rbind(mir.resu, res);
       mirtargetu <<- c(mirtargetu, "pseudogene");
       if(input.type == "mir2pseudogene"){
         dataSet$mir2pseudo <<- res;         # save this for network builder and table view
-        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(pseudo.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(pseudo.nms)));
         seedsu <<- c(seedsu, mir.nms);
         mirtableu <<- c(mirtableu, "mir2pseudo");
       } else{
         dataSet$pseudo2mir <<- res;
-        dataSet$tableStats <<- data.frame(Query=length(unique(pseudo.nms)),Mapped=length(unique(mir.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(pseudo.nms)),Mapped=length(unique(mir.nms)));
         seedsu <<- c(seedsu, pseudo.nms);
         mirtableu <<- c(mirtableu, "pseudo2mir");
       }
@@ -847,7 +733,7 @@ QueryMultiListMir <- function(){
       res$Literature <- rep("24297251", nrow(res));
       res <- res[, c("ID", "Accession", "Gene", "Entrez", "Experiment", "Literature", "Tissue")];
       display.res <- res;
-      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"],stringsAsFactors = FALSE);    # IDs
+      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"]);    # IDs
       if(nrow(res)!=0){
         row.names(edge.res) <- 1:nrow(res);
       }
@@ -863,17 +749,17 @@ QueryMultiListMir <- function(){
 
       snc.nms <<- res[,"Gene"];
       mir.nms <<- res[, "ID"];
-      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"], stringsAsFactors = FALSE);
+      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"]);
       mir.resu <<- rbind(mir.resu, res);
       mirtargetu <<- c(mirtargetu, "sncrna");
       if(input.type == "mir2sncrna"){
         dataSet$mir2snc <<- res;         # save this for network builder and table view
-        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(snc.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(snc.nms)));
         seedsu <<- c(seedsu, mir.nms);
         mirtableu <<- c(mirtableu, "mir2snc");
       } else{
         dataSet$snc2mir <<- res;
-        dataSet$tableStats <<- data.frame(Query=length(unique(snc.nms)),Mapped=length(unique(mir.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(snc.nms)),Mapped=length(unique(mir.nms)));
         seedsu <<- c(seedsu, snc.nms);
         mirtableu <<- c(mirtableu, "snc2mir");
       }
@@ -950,7 +836,7 @@ QueryMultiListMir <- function(){
         res <- res[, c("ID", "Accession", "Gene", "Entrez", "Direction", "Experiment", "Literature", "Tissue")];
         direction <- res$Direction;
         display.res <- res;
-        edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"],stringsAsFactors = FALSE);    # IDs
+        edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"]);    # IDs
         if(nrow(res)!=0){
           row.names(edge.res) <- 1:nrow(res);
         }
@@ -972,7 +858,7 @@ QueryMultiListMir <- function(){
         res$Experiment <- rep("ChIP-seq", nrow(res));
         res <- res[, c("ID", "Accession", "Gene", "Entrez")];
         display.res <- res;
-        edge.res <- data.frame(Source=res[,3],Target=res[,1],stringsAsFactors = FALSE);    # IDs
+        edge.res <- data.frame(Source=res[,3],Target=res[,1]);    # IDs
         if(nrow(res)!=0){
           row.names(edge.res) <- 1:nrow(res);
         }
@@ -992,7 +878,7 @@ QueryMultiListMir <- function(){
         direction <- gsub("Activation", "+", direction);
         direction <- gsub("Repression", "-", direction);
         res$Direction <- direction;
-        res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Direction"], Literature=res[,"Literature"], Tissue=res[,"Tissue"], stringsAsFactors = FALSE);
+        res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Direction"], Literature=res[,"Literature"], Tissue=res[,"Tissue"]);
         l = nrow(mir.resu);
         dataSet$directionInx =c(dataSet$directionInx, paste0(res[,1],res[,3]));
         dataSet$regDirection =c(dataSet$regDirection, res$Experiment);
@@ -1026,13 +912,13 @@ QueryMultiListMir <- function(){
           res$Direction <- direction
         }
         if(targetType %in% c("trrust", "regnetwork")){
-             res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Direction"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)),stringsAsFactors = FALSE);
+             res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Direction"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)));
              l = nrow(mir.resu)
              dataSet$directionInx =c(dataSet$directionInx, paste0(res[,1],res[,3]))
              dataSet$regDirection =c(dataSet$regDirection, res$Experiment)
              dataSet<<-dataSet
             }else{
-             res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)),stringsAsFactors = FALSE);
+             res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)));
             }
     }
       mir.resu <<- rbind(mir.resu, res);
@@ -1111,7 +997,7 @@ QueryMultiListMir <- function(){
       res$Experiment <- rep("ChIP-seq", nrow(res));
       res <- res[, c("ID", "Accession", "Gene", "Entrez")];
       display.res <- res;
-      edge.res <- data.frame(Source=res[,3],Target=res[,1],stringsAsFactors = FALSE);    # IDs
+      edge.res <- data.frame(Source=res[,3],Target=res[,1]);    # IDs
       if(nrow(res)!=0){
         row.names(edge.res) <- 1:nrow(res);
       }
@@ -1121,7 +1007,7 @@ QueryMultiListMir <- function(){
       # update col names
       colnames(res2) <- c("ID", "Accession", "Gene", "Entrez", "Experiment", "Literature", "Tissue");
 
-      edge.res2 <- data.frame(Source=res2[,"Accession"],Target=res2[,"Entrez"],stringsAsFactors = FALSE);    # IDs
+      edge.res2 <- data.frame(Source=res2[,"Accession"],Target=res2[,"Entrez"]);    # IDs
       if(nrow(res2)!=0){
         row.names(edge.res2) <- 1:nrow(res2);
       }
@@ -1166,15 +1052,15 @@ QueryMultiListMir <- function(){
         res$Direction <- direction
       }
       if(targetType %in% c("trrust", "regnetwork")){
-        res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Direction"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)),stringsAsFactors = FALSE);
+        res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Direction"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)));
         l = nrow(mir.resu)
         dataSet$directionInx =c(dataSet$directionInx, paste0(res[,1],res[,3]))
         dataSet$regDirection =c(dataSet$regDirection, res$Experiment)
         dataSet<<-dataSet
       }else{
-        res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)),stringsAsFactors = FALSE);
+        res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)));
       }
-      res2 <- data.frame(ID=res2[,"ID"], Accession=res2[,"Accession"], Target=res2[,"Gene"], TargetID=res2[,"Entrez"], Experiment=res2[,"Experiment"], Literature=res2[,"Literature"], Tissue=res2[,"Tissue"], stringsAsFactors = FALSE);
+      res2 <- data.frame(ID=res2[,"ID"], Accession=res2[,"Accession"], Target=res2[,"Gene"], TargetID=res2[,"Entrez"], Experiment=res2[,"Experiment"], Literature=res2[,"Literature"], Tissue=res2[,"Tissue"]);
         mir.resu <<- rbind(mir.resu, res, res2);
         mirtargetu <<- c(mirtargetu, "tf");
       dataSet$tf2gene <<- res;
@@ -1233,7 +1119,7 @@ QueryMultiListMir <- function(){
     res$Experiment <- rep("ChIP-seq", nrow(res));
     res <- res[, c("ID", "Accession", "Gene", "Entrez")];
     display.res <- res;
-    edge.res <- data.frame(Source=res[,3],Target=res[,1],stringsAsFactors = FALSE);    # IDs
+    edge.res <- data.frame(Source=res[,3],Target=res[,1]);    # IDs
     if(nrow(res)!=0){
       row.names(edge.res) <- 1:nrow(res);
     }
@@ -1245,7 +1131,7 @@ QueryMultiListMir <- function(){
     res2$Experiment <- rep("ChIP-seq", nrow(res2));
     res2 <- res2[, c("ID", "Accession", "Gene", "Entrez", "Direction", "Experiment", "Literature", "Tissue")];
     direction2 <- res2$Direction;
-    edge.res2 <- data.frame(Source=res2[,"Accession"],Target=res2[,"Entrez"],stringsAsFactors = FALSE);    # IDs
+    edge.res2 <- data.frame(Source=res2[,"Accession"],Target=res2[,"Entrez"]);    # IDs
     if(nrow(res2)!=0){
       row.names(edge.res2) <- 1:nrow(res2);
     }
@@ -1289,20 +1175,20 @@ QueryMultiListMir <- function(){
       res$Direction <- direction
     }
     if(targetType %in% c("trrust", "regnetwork")){
-      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Direction"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)),stringsAsFactors = FALSE);
+      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Direction"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)));
       l = nrow(mir.resu)
       dataSet$directionInx =c(dataSet$directionInx, paste0(res[,1],res[,3]))
       dataSet$regDirection =c(dataSet$regDirection, res$Experiment)
       dataSet<<-dataSet
     }else{
-      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)),stringsAsFactors = FALSE);
+      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Experiment"], Literature=res[,"Literature"],Tissue=rep("Not Applicable", nrow(res)));
     }
     direction2 <- gsub("Activation[(]feedback[)]", "+", direction2);
     direction2 <- gsub("Repression[(]feedback[)]", "-", direction2);
     direction2 <- gsub("Activation", "+", direction2);
     direction2 <- gsub("Repression", "-", direction2);
     res2$Direction <- direction2;
-    res2 <- data.frame(ID=res2[,"ID"], Accession=res2[,"Accession"], Target=res2[,"Gene"], TargetID=res2[,"Entrez"], Experiment=res2[,"Direction"], Literature=res2[,"Literature"], Tissue=res2[,"Tissue"], stringsAsFactors = FALSE);
+    res2 <- data.frame(ID=res2[,"ID"], Accession=res2[,"Accession"], Target=res2[,"Gene"], TargetID=res2[,"Entrez"], Experiment=res2[,"Direction"], Literature=res2[,"Literature"], Tissue=res2[,"Tissue"]);
     mir.resu <<- rbind(mir.resu, res, res2);
     mirtargetu <<- c(mirtargetu, "tf");
     dataSet$gene2tf <<- res;
@@ -1360,7 +1246,7 @@ QueryMultiListMir <- function(){
     res <- res[, c("ID", "Accession", "Gene", "Entrez", "Direction", "Experiment", "Literature", "Tissue")];
     direction <- res$Direction;
     display.res <- res;
-    edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"],stringsAsFactors = FALSE);    # IDs
+    edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Entrez"]);    # IDs
     if(nrow(res)!=0){
       row.names(edge.res) <- 1:nrow(res);
     }
@@ -1371,7 +1257,7 @@ QueryMultiListMir <- function(){
     colnames(res2)[c(1:4)] <- c("ID", "Accession", "Gene", "Entrez");
     res2$Experiment <- rep("ChIP-seq", nrow(res2));
     res2 <- res2[, c("ID", "Accession", "Gene", "Entrez")];
-    edge.res2 <- data.frame(Source=res2[,3],Target=res2[,1],stringsAsFactors = FALSE);    # IDs
+    edge.res2 <- data.frame(Source=res2[,3],Target=res2[,1]);    # IDs
     if(nrow(res2)!=0){
       row.names(edge.res2) <- 1:nrow(res2);
     }
@@ -1397,7 +1283,7 @@ QueryMultiListMir <- function(){
     direction <- gsub("Activation", "+", direction);
     direction <- gsub("Repression", "-", direction);
     res$Direction <- direction;
-    res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Direction"], Literature=res[,"Literature"], Tissue=res[,"Tissue"], stringsAsFactors = FALSE);
+    res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Gene"], TargetID=res[,"Entrez"], Experiment=res[,"Direction"], Literature=res[,"Literature"], Tissue=res[,"Tissue"]);
     dataSet$directionInx =c(dataSet$directionInx, paste0(res[,1],res[,3]));
     dataSet$regDirection =c(dataSet$regDirection, res$Experiment);
     dataSet<<-dataSet;
@@ -1405,7 +1291,7 @@ QueryMultiListMir <- function(){
     res2$Experiment <- rep("TRRUST", nrow(res2));
       res2$Literature <- literature2
       res2$Direction <- direction2
-      res2 <- data.frame(ID=res2[,"ID"], Accession=res2[,"Accession"], Target=res2[,"Gene"], TargetID=res2[,"Entrez"], Experiment=res2[,"Direction"], Literature=res2[,"Literature"],Tissue=rep("Not Applicable", nrow(res2)),stringsAsFactors = FALSE);
+      res2 <- data.frame(ID=res2[,"ID"], Accession=res2[,"Accession"], Target=res2[,"Gene"], TargetID=res2[,"Entrez"], Experiment=res2[,"Direction"], Literature=res2[,"Literature"],Tissue=rep("Not Applicable", nrow(res2)));
       dataSet$directionInx =c(dataSet$directionInx, paste0(res2[,1],res2[,3]))
       dataSet$regDirection =c(dataSet$regDirection, res2$Experiment)
       dataSet<<-dataSet
@@ -1459,7 +1345,7 @@ QueryMultiListMir <- function(){
 
       colnames(res) <- c("ID","Accession","Epigenetics","Experiment", "Condition","Literature", "Tissue");
       display.res <- res;
-      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Epigenetics"],stringsAsFactors = FALSE);    # IDs
+      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Epigenetics"]);    # IDs
       if(nrow(res)!=0){
         row.names(edge.res) <- 1:nrow(res);
       }
@@ -1475,17 +1361,17 @@ QueryMultiListMir <- function(){
 
       epi.nms <<- res[,"Epigenetics"];
       mir.nms <<- res[, "ID"];
-      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Epigenetics"], TargetID=res[,"Epigenetics"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"],stringsAsFactors = FALSE);
+      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Epigenetics"], TargetID=res[,"Epigenetics"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"]);
       mir.resu <<- rbind(mir.resu, res);
       mirtargetu <<- c(mirtargetu, "epigenetics");
       if(input.type == "mir2epigene"){
         dataSet$mir2epi <<- res;         # save this for network builder and table view
-        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(epi.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(epi.nms)));
         seedsu <<- c(seedsu, mir.nms);
         mirtableu <<- c(mirtableu, "mir2epi");
       } else{
         dataSet$epi2mir <<- res;
-        dataSet$tableStats <<- data.frame(Query=length(unique(epi.nms)),Mapped=length(unique(mir.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(epi.nms)),Mapped=length(unique(mir.nms)));
         seedsu <<- c(seedsu, epi.nms);
         mirtableu <<- c(mirtableu, "epi2mir");
       }
@@ -1533,7 +1419,7 @@ QueryMultiListMir <- function(){
 
       colnames(res) <- c("ID","Accession","Disease","Experiment", "Database", "Literature", "Tissue");
       display.res <- res;
-      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Disease"],stringsAsFactors = FALSE);    # IDs
+      edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Disease"]);    # IDs
       if(nrow(res)!=0){
         row.names(edge.res) <- 1:nrow(res);
       }
@@ -1549,17 +1435,17 @@ QueryMultiListMir <- function(){
 
       dis.nms <<- res[,"Disease"];
       mir.nms <<- res[, "ID"];
-      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Disease"], TargetID=res[,"Disease"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"], stringsAsFactors = FALSE);
+      res <- data.frame(ID=res[,"ID"], Accession=res[,"Accession"], Target=res[,"Disease"], TargetID=res[,"Disease"], Experiment=res[,"Experiment"], Literature=res[,"Literature"], Tissue=res[,"Tissue"]);
       mir.resu <<- rbind(mir.resu, res);
       mirtargetu <<- c(mirtargetu, "disease");
       if(input.type == "mir2disease"){
         dataSet$mir2dis <<- res;         # save this for network builder and table view
-        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(dis.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(mir.nms)),Mapped=length(unique(dis.nms)));
         seedsu <<- c(seedsu, mir.nms);
         mirtableu <<- c(mirtableu, "mir2dis");
       } else{
         dataSet$dis2mir <<- res;
-        dataSet$tableStats <<- data.frame(Query=length(unique(dis.nms)),Mapped=length(unique(mir.nms)),stringsAsFactors = FALSE);
+        dataSet$tableStats <<- data.frame(Query=length(unique(dis.nms)),Mapped=length(unique(mir.nms)));
         seedsu <<- c(seedsu, dis.nms);
         mirtableu <<- c(mirtableu, "dis2mir");
       }
@@ -1593,7 +1479,7 @@ QueryMultiListMir <- function(){
 
       colnames(res) <- c("ID1","ID2","Symbol1","Symbol2");
       display.res <- res;
-      edge.res <- data.frame(Source=res[,"Symbol1"],Target=res[,"Symbol2"],stringsAsFactors = FALSE);    # IDs
+      edge.res <- data.frame(Source=res[,"Symbol1"],Target=res[,"Symbol2"]);    # IDs
 
       if(nrow(res)!=0){
         row.names(edge.res) <- 1:nrow(res);
@@ -1617,7 +1503,7 @@ QueryMultiListMir <- function(){
       }
 
       na.res = rep("Not Applicable", nrow(res))
-      res <- data.frame(ID=res[,"Symbol1"], Accession=res[,"ID1"], Target=res[,"Symbol2"], TargetID=res[,"ID2"], Experiment=na.res, Literature=res[,"Literature"], Tissue=na.res,stringsAsFactors = FALSE);
+      res <- data.frame(ID=res[,"Symbol1"], Accession=res[,"ID1"], Target=res[,"Symbol2"], TargetID=res[,"ID2"], Experiment=na.res, Literature=res[,"Literature"], Tissue=na.res);
 
       mir.resu <<- rbind(mir.resu, res);
       if(input.type == "protein2protein"){
@@ -1629,24 +1515,11 @@ QueryMultiListMir <- function(){
     return(1);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param input.type PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname SearchMultiNet
-#' @export 
 SearchMultiNet <- function(input.type){
 
   node.ids <- vector();
   res <- 0;
-  if (input.type %in% c("gene2mir","mir2gene","snpmir2gene")){
+  if (input.type %in% c("gene2mir","mir2gene","snpmir2gene", "mir2gene_mirtarbase", "mir2gene_tarbase", "mir2gene_mirecords", "mir2gene_miranda")){
     res <- .searchMultiNet_mir2gene(input.type);
   }else if (input.type %in% c("molecule2mir","mir2molecule","mol2mir","mir2mol")){
     res <- .searchMultiNet_molecule2mir(input.type)
@@ -1678,21 +1551,6 @@ SearchMultiNet <- function(input.type){
   return(res);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param db PARAM_DESCRIPTION
-#' @param req PARAM_DESCRIPTION
-#' @param conf PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname SetPpiDb
-#' @export 
 SetPpiDb  <- function(db, req, conf){
   dataSet$ppiOpts$db.name=db;
   if(req=="true"){

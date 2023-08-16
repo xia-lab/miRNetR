@@ -1,19 +1,4 @@
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param mirs PARAM_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION
-#' @param idType PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname SetupXenoMirListData
-#' @export 
 SetupXenoMirListData <- function(mirs, orgType, idType){
 
     dataSet$listData <- TRUE;
@@ -46,38 +31,12 @@ SetupXenoMirListData <- function(mirs, orgType, idType){
 }
 
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param rowid PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetSeqnm
-#' @export 
 GetSeqnm <- function(rowid){
   inx <- which(rownames(dataSet$mir.res) == rowid);
   mirid <- dataSet$mir.res[inx, "miRNA"];
   return(mirid);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param mir.id PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetSeq
-#' @export 
 GetSeq <- function(mir.id){
   inx <- which(rownames(dataSet$mir.res) == mir.id);
   seq <- dataSet$mir.res[inx, "Accession"];
@@ -85,22 +44,6 @@ GetSeq <- function(mir.id){
 }
 
 # batch remove based on
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param col.id PARAM_DESCRIPTION
-#' @param method PARAM_DESCRIPTION
-#' @param value PARAM_DESCRIPTION
-#' @param action PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname UpdateXenoMirEntries
-#' @export 
 UpdateXenoMirEntries <- function(col.id, method, value, action) {
 
     if (col.id == "source"){
@@ -134,26 +77,13 @@ UpdateXenoMirEntries <- function(col.id, method, value, action) {
     if(sum(hits) > 0){
         row.ids <- rownames(dataSet$mir.res)[hits];
         dataSet$mir.res <<- dataSet$mir.res[!hits,];
-        write.csv(dataSet$mir.res, file="xeno_mirnet_target.csv", row.names=FALSE);
+        fast.write.csv(dataSet$mir.res, file="xeno_mirnet_target.csv", row.names=FALSE);
         return(row.ids);
     }else{
         return("NA");
     }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUniqueSourceNames
-#' @export 
 GetUniqueSourceNames <- function(orgType){
     db.path <- paste("../../data/libs/xenomir.hosts.json");
     library("RJSONIO");
@@ -163,96 +93,27 @@ GetUniqueSourceNames <- function(orgType){
     return(res);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION
-#' @param source PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUniqueClassNames
-#' @export 
 GetUniqueClassNames <- function(orgType, source){
     res <- sort(names(browse[[orgType]][[source]]));
     return(res);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUniqueSpeciesNames
-#' @export 
 GetUniqueSpeciesNames <- function(orgType){
     res <- unique(unlist(browse[[orgType]][[1]]));
     return(res);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION
-#' @param source PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUpdateClassNames
-#' @export 
 GetUpdateClassNames <- function(orgType, source){
     res <- sort(names(browse[[orgType]][[source]]));
     return(res);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION
-#' @param source PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUpdateSpeNames
-#' @export 
 GetUpdateSpeNames <- function(orgType, source){
     res <- unlist(browse[[orgType]][[source]]);
     res <- sort(res);
     return(res);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param orgType PARAM_DESCRIPTION
-#' @param species PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname SetupItemFromList
-#' @export 
 SetupItemFromList <- function(orgType, species){
     mir.mat <- cbind(species, rep("*", length(species)));
     rownames(mir.mat) <- mir.mat[,1];
@@ -265,19 +126,6 @@ SetupItemFromList <- function(orgType, species){
     return(nrow(mir.mat));
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param source PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname SetupSourceFromList
-#' @export 
 SetupSourceFromList <- function(source){
     if(source == ""){
         print("Please at least choose one source!");
@@ -289,19 +137,6 @@ SetupSourceFromList <- function(source){
     #return(length(source));
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param status PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformSpeciesMapping
-#' @export 
 PerformSpeciesMapping <- function(status){
     orgType <- dataSet$org;
     source <- dataSet$source;
@@ -332,7 +167,7 @@ PerformSpeciesMapping <- function(status){
        colnames(res) <- c("Source", "Xeno.species", "miRNA", "Accession", "Gene", "Entrez", "Reference", "Expression", "miRanda", "TarPmiR");
        mir.nms <- res[, "miRNA"];
        dataSet$seeds <- mir.nms;
-       write.csv(res, file="xeno_mirnet_target.csv", row.names=FALSE);
+       fast.write.csv(res, file="xeno_mirnet_target.csv", row.names=FALSE);
 
        #control if res is too big for view (table display and network visualization)
        # based on overall score and detected
@@ -366,19 +201,6 @@ PerformSpeciesMapping <- function(status){
     }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param status PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformXenoMirGeneMapping
-#' @export 
 PerformXenoMirGeneMapping <- function(status){
 
     orgType <- dataSet$org;
@@ -429,7 +251,7 @@ PerformXenoMirGeneMapping <- function(status){
         } else{
           dataSet$seeds <- gene.nms
         }
-        write.csv(res, file="xeno_mirnet_target.csv", row.names=FALSE);
+        fast.write.csv(res, file="xeno_mirnet_target.csv", row.names=FALSE);
 
         #control if res is too big for view (table display and network visualization)
         # based on overall score and detected
@@ -466,20 +288,6 @@ PerformXenoMirGeneMapping <- function(status){
 ## Author: Xu, Taosheng taosheng.x@gmail.com
 ###################################################
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param miRNANames PARAM_DESCRIPTION
-#' @param version PARAM_DESCRIPTION, Default: NULL
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname miRNA_PrecursorToMature
-#' @export 
 miRNA_PrecursorToMature<-function(miRNANames,version=NULL){
   if(is.null(version)){
     c_version <- checkMiRNAVersion(miRNANames,verbose = FALSE)
@@ -508,26 +316,12 @@ miRNA_PrecursorToMature<-function(miRNANames,version=NULL){
     OriginalName = uid,
     Mature1 = VMAP[ind[,1],2],
     Mature2 = VMAP[ind[,1],3],
-    row.names = NULL, stringsAsFactors = FALSE)
+    row.names = NULL)
   target = target[match(miRNANames, target$OriginalName),]
   rownames(target)=NULL
   target
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param miRNANames PARAM_DESCRIPTION
-#' @param verbose PARAM_DESCRIPTION, Default: TRUE
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname checkMiRNAVersion
-#' @export 
 checkMiRNAVersion <- function(miRNANames,verbose=TRUE){
   miRNANames <- as.character(miRNANames)
   miRNANames <- gsub(" ","",miRNANames)##Remove the possible space
@@ -535,9 +329,9 @@ checkMiRNAVersion <- function(miRNANames,verbose=TRUE){
   uid <- unique(as.vector(miRNANames))
   SYM_ID <- match(uid,SYM)
   SYM_ID <- na.omit(SYM_ID)
-  #result=data.frame(matrix(vector(),length(VER), 3,dimnames=list(c(), c("Version","Proportion","Recommend") )),stringsAsFactors=FALSE)
+  #result=data.frame(matrix(vector(),length(VER), 3,dimnames=list(c(), c("Version","Proportion","Recommend") )))
   #result$Version <- VER
-  result <- data.frame("Version"=VER,"Proportion"=NA,"Recommend"="",stringsAsFactors=FALSE)
+  result <- data.frame("Version"=VER,"Proportion"=NA,"Recommend"="")
 
   for(i in 1:length(VER)){
     allSYM <- miRNA_data[[i]]
@@ -557,25 +351,8 @@ checkMiRNAVersion <- function(miRNANames,verbose=TRUE){
   VER[ind]
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param db.path PARAM_DESCRIPTION
-#' @param q.vec PARAM_DESCRIPTION
-#' @param table.nm PARAM_DESCRIPTION
-#' @param col.nm PARAM_DESCRIPTION
-#' @param source PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname QueryXenoMirSQLite
-#' @export 
 QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
-  
+    
   db.path <- paste0(db.path, ".sqlite");
   if(.on.public.web){
     mir.db <- dbConnect(SQLite(), db.path);
@@ -584,8 +361,7 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      options(timeout=200);
-      download.file(db.path, db.name, mode = "wb");
+      download.file(db.path, db.name);
     }
     mir.db <- dbConnect(SQLite(), db.name);
   }
@@ -606,14 +382,7 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
         mir.lib <- as.vector(unique(mir.dic$exo_mirna));
         notMatch <- setdiff(q.vec, mir.lib);
         if (length(notMatch) > 0){ # Converting miRBase version and mature id.
-          if(.on.public.web){
-            load("../../data/libs/mbcdata.rda");
-          }else{
-            mbcdata.rda <- paste(lib.path, "/mbcdata.rda", sep="");
-            destfile <- paste("mbcdata.rda");
-            download.file(mbcdata.rda, destfile, mode = "wb");
-            load(destfile);
-          }
+          load("../../data/libs/mbcdata.rda");
           miRNANames <- gsub(" ","", as.character(notMatch));
           targetVersion <- "v21";
           ver_index <- match(tolower(targetVersion), VER)
@@ -628,15 +397,14 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
 
                 uid <- unique(as.vector(miRNANames))
                 SYM_ID <- match(uid, SYM)
-                df <- data.frame(uid = uid, SYM = SYM_ID, stringsAsFactors=FALSE)
+                df <- data.frame(uid = uid, SYM = SYM_ID)
                 df <- merge(df, ACC_SYM)[, c("uid", "ACC")]
                 df <- unique( merge(df, VMAP, by="ACC") )
 
                 target <- data.frame(
                     OriginalName = df$uid,
                     TargetName = SYM[df$SYM],
-                    Accession = ACC[df$ACC],
-                    stringsAsFactors = FALSE
+                    Accession = ACC[df$ACC]
                 );
 
                 idx <- (target$OriginalName == target$TargetName) | (!target$OriginalName %in% target$TargetName)
@@ -653,7 +421,7 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
                     OriginalName = uid,
                     TargetName = splitpaste(target$TargetName, f),
                     Accession = splitpaste(target$Accession, f),
-                    row.names=NULL, stringsAsFactors = FALSE);
+                    row.names=NULL);
 
                 target <- target[match(miRNANames, target$OriginalName),];
                 mir.vec <- as.vector(target$TargetName);
@@ -668,8 +436,7 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
                       db.name <- gsub(sqlite.path, "", db.path);
                       if(!file.exists(db.name)){
                         print(msg);
-                        options(timeout=200);
-                        download.file(db.path, db.name, mode = "wb");
+                        download.file(db.path, db.name);
                       }
                       mir.db <- dbConnect(SQLite(), db.name);
                     }
@@ -690,8 +457,7 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
                           db.name <- gsub(sqlite.path, "", db.path);
                           if(!file.exists(db.name)){
                             print(msg);
-                            options(timeout=200);
-                            download.file(db.path, db.name, mode = "wb");
+                            download.file(db.path, db.name);
                           }
                           mir.db <- dbConnect(SQLite(), db.name);
                         }

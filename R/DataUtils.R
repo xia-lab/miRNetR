@@ -3,24 +3,12 @@
 ## Description: Data/resource management functions
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
-.on.public.web <- FALSE; # only TRUE when on mirnet web server
 
 # init resources for analysis
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param dataType PARAM_DESCRIPTION
-#' @param analType PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname Init.Data
-#' @export 
 Init.Data<-function(dataType, analType){
+    globalConfig <- list();
+    globalConfig$anal.mode <- "web";
+    globalConfig <<- globalConfig;
     mir.nmsu <- vector();
     mir.nmsu <<- mir.nmsu;
     dataSet <- list(data=list());
@@ -29,6 +17,7 @@ Init.Data<-function(dataType, analType){
     dataSet$ppiOpts$require.exp<-T
     dataSet$ppiOpts$min.score<-"900"
     dataSet <<- dataSet
+    cmdSet <<- list(objName="cmdSet");
     net.info<- list();
     net.info <<- net.info
     data.type <<- dataType; # mir or xeno.mir
@@ -36,49 +25,47 @@ Init.Data<-function(dataType, analType){
     current.msg <<- "";
     msg.vec <<- vector(mode="character");
     module.count <<- 0;
+
+    #api.base <<- "132.216.38.6:8987"
+    api.base <<- "http://api.xialab.ca"
+
     if(.on.public.web){
       lib.path <<- "../../data/libs/";
     }else{
-      lib.path <<- "https://www.mirnet.ca/resources/data/libs/";
+      lib.path <<- "https://www.mirnet.ca/resources/data/libs/";     
     }
 
     if(file.exists("/home/glassfish/sqlite/")){ #public server
         sqlite.path <<- "/home/glassfish/sqlite/";
     }else if(file.exists("/Users/xia/Dropbox/sqlite/")){# xia local
         sqlite.path <<- "/Users/xia/Dropbox/sqlite/";
-    }else if(file.exists("/home/le/sqlite/gene-id-mapping/")){# le local
-        sqlite.path <<- "/home/le/sqlite/mirnet/";
+    }else if(file.exists("/Users/jeffxia/Dropbox/sqlite/")){# xia local2
+        sqlite.path <<- "/Users/jeffxia/Dropbox/sqlite/";
+    }else if(file.exists("/home/le/sqlite/")){# le local
+        sqlite.path <<- "/home/le/sqlite/";
     }else if(file.exists("/home/soufanom/Database/")){# Othman local
         sqlite.path <<- "/home/soufanom/Database/sqlite/";
     }else if(file.exists("/home/zzggyy")){# zgy local
-        sqlite.path <<- "/home/zzggyy/Downloads/netsqlite/";
+        sqlite.path <<- "/media/zzggyy/disk/sqlite/";
+    }else if(file.exists("/home/zgy/sqlite")){# zgy local
+        sqlite.path <<- "/home/zgy/sqlite/";
+    }else if(file.exists("/home/jasmine/Downloads/sqlite/")){
+        sqlite.path <<- "/home/jasmine/Downloads/mirnet_sqlite/";
     }else{
-      sqlite.path <<- "https://www.xialab.ca/resources/sqlite/";
+        sqlite.path <<- "https://www.xialab.ca/resources/sqlite/";
     }
 
     # preload some general package
     library("RSQLite");
     library('Cairo');
     CairoFonts("Arial:style=Regular","Arial:style=Bold","Arial:style=Italic","Helvetica","Symbol")
+
+    saveSet(cmdSet);
     print("miRNet init done!");
 }
 
 
 # "ID", "Accession","Gene", "PMID"
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param netType PARAM_DESCRIPTION
-#' @param colInx PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetMirResCol
-#' @export 
 GetMirResCol <- function(netType, colInx){
   if (anal.type == "multilist"  || anal.type == "snp2mir" || anal.type == "tf2genemir" || anal.type == "gene2tfmir") {
     res <- dataSet[netType][[1]][, colInx];
@@ -90,19 +77,6 @@ GetMirResCol <- function(netType, colInx){
     return(res);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param netType PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetMirResRowNames
-#' @export 
 GetMirResRowNames <- function(netType){
   if (anal.type == "multilist"  || anal.type == "snp2mir" || anal.type == "tf2genemir" || anal.type == "gene2tfmir") {
    resTable <- dataSet[netType][[1]]
@@ -116,20 +90,6 @@ GetMirResRowNames <- function(netType){
   rownames(resTable);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param tblnm PARAM_DESCRIPTION
-#' @param mir.id PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname RemoveMirEntry
-#' @export 
 RemoveMirEntry <- function(tblnm, mir.id) {
     id <<- mir.id
     inx <- which(rownames(dataSet[tblnm][[1]]) == mir.id);
@@ -141,22 +101,6 @@ RemoveMirEntry <- function(tblnm, mir.id) {
 }
 
 # batch remove based on
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param col.id PARAM_DESCRIPTION
-#' @param method PARAM_DESCRIPTION
-#' @param value PARAM_DESCRIPTION
-#' @param action PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname UpdateMirEntries
-#' @export 
 UpdateMirEntries <- function(col.id, method, value, action) {
 
     if(col.id == "evidence"){
@@ -197,9 +141,98 @@ UpdateMirEntries <- function(col.id, method, value, action) {
     if(sum(hits) > 0){
         row.ids <- rownames(dataSet$mir.res)[hits];
         dataSet$mir.res <<- dataSet$mir.res[!hits,];
-        write.csv(dataSet$mir.res, file="mirnet_mir_target.csv", row.names=FALSE);
+        fast.write.csv(dataSet$mir.res, file="mirnet_mir_target.csv", row.names=FALSE);
         return(row.ids);
     }else{
         return("NA");
     }
+}
+
+PrepareJsonFromR <- function(fileNm, type, jsonString, dataSetString){
+  library(RJSONIO)
+  dataSet <- fromJSON(dataSetString);
+  dataSet <<- dataSet
+  sink(fileNm);
+  cat(jsonString);
+  sink();
+  return(1)
+}
+
+saveSet <- function(obj=NA, set="", output=1){
+
+    if(globalConfig$anal.mode == "api"){ 
+      qs:::qsave(obj, paste0(set, ".qs"));
+    }else{
+      if(set == ""){
+        set <- obj$objName;
+      }
+      if(set == "dataSet"){
+        dataSet <<- obj;
+      }else if(set == "analSet"){
+        analSet <<- obj;
+      }else if(set == "imgSet"){
+        imgSet <<- obj;
+      }else if(set == "paramSet"){
+        paramSet <<- obj;
+      }else if(set == "msgSet"){
+        msgSet <<- obj;
+      }else if(set == "cmdSet"){
+        cmdSet <<- obj;
+      }
+
+    }
+      return(output);
+
+}
+
+readSet <- function(obj=NA, set=""){
+    if(globalConfig$anal.mode == "api"){
+      path <- "";
+      if(exists('user.path')){
+        path <- user.path;
+      }
+
+      if(path != ""){
+        obj <- load_qs(paste0(path, set, ".qs"));
+      }else{
+        obj <- qs:::qread(paste0(set, ".qs"));
+      }
+    }
+    return(obj);
+}
+
+
+#'Record R Commands
+#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+#'@param cmd Commands 
+#'@export
+RecordRCommand <- function(cmd){
+  cmdSet <- readSet(cmdSet, "cmdSet"); 
+  cmdSet$cmdVec <- c(cmdSet$cmdVec, cmd);
+  saveSet(cmdSet, "cmdSet");
+  return(1);
+}
+
+SaveRCommands <- function(){
+  cmdSet <- readSet(cmdSet, "cmdSet"); 
+  cmds <- paste(cmdSet$cmdVec, collapse="\n");
+  pid.info <- paste0("# PID of current job: ", Sys.getpid());
+  cmds <- c(pid.info, cmds);
+  write(cmds, file = "Rhistory.R", append = FALSE);
+}
+
+#'Export R Command History
+#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+#'@export
+GetRCommandHistory <- function(){
+  cmdSet <- readSet(cmdSet, "cmdSet"); 
+  if(length(cmdSet$cmdVec) == 0){
+    return("No commands found");
+  }
+  return(cmdSet$cmdVec);
+}
+
+ClearRCommandHistory <- function(){
+  cmdSet <- readSet(cmdSet, "cmdSet"); 
+  cmdSet$cmdVec <- c();
 }

@@ -8,19 +8,6 @@
 # stored in dataSet list object
 # can have many classes, stored in meta.info
 # type: array, count, qpcr
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param dataName PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname ReadTabExpressData
-#' @export 
 ReadTabExpressData <- function(dataName) {
 
     dataSet <- ReadTabData(dataName);
@@ -74,19 +61,6 @@ ReadTabExpressData <- function(dataName) {
     }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname SetupMirExpressData
-#' @export 
 SetupMirExpressData <- function(){
     idType <- dataSet$id.current;
     mydata <- data.matrix(dataSet$sig.mat[,"max.logFC",drop=FALSE]);
@@ -106,58 +80,15 @@ SetupMirExpressData <- function(){
     }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetClassInfo
-#' @export 
 GetClassInfo <- function(){
     return(levels(dataSet$cls));
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetAnotNames
-#' @export 
 GetAnotNames<-function(){
     return(rownames(dataSet$data.anot));
 }
 
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param org PARAM_DESCRIPTION
-#' @param idType PARAM_DESCRIPTION
-#' @param tissue PARAM_DESCRIPTION
-#' @param lvlOpt PARAM_DESCRIPTION
-#' @param matchMin PARAM_DESCRIPTION, Default: 0.5
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformDataAnnot
-#' @export 
 PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
     data.org <<- dataSet$org <- org;
     dataSet$id.orig <- dataSet$id.current <- idType;
@@ -209,7 +140,7 @@ PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
         }
     }
     dataSet$data.norm <- dataSet$data.anot; # before
-    write.csv(dataSet$data.anot, file="cleaned_annot.csv");
+    fast.write.csv(dataSet$data.anot, file="cleaned_annot.csv");
     dataSet <<- dataSet;
     if(.on.public.web){
       return(matched.len);
@@ -219,22 +150,6 @@ PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
 }
 
 # update result based on new cutoff
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param p.lvl PARAM_DESCRIPTION
-#' @param fc.lvl PARAM_DESCRIPTION
-#' @param direction PARAM_DESCRIPTION
-#' @param update PARAM_DESCRIPTION, Default: T
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetSigGenes
-#' @export 
 GetSigGenes<-function(p.lvl, fc.lvl, direction, update=T){
 
     resTable <- readRDS("resTable");
@@ -270,7 +185,7 @@ GetSigGenes<-function(p.lvl, fc.lvl, direction, update=T){
         }
     #}
 
-    write.csv(signif(resTable,5), file="mirnet_siggenes.csv");
+    fast.write.csv(signif(resTable,5), file="mirnet_siggenes.csv");
         
     de.Num <- nrow(resTable);
     current.msg <<- paste(current.msg, "A total of", de.Num, "significant genes were identified!"); 
@@ -316,19 +231,6 @@ GetSigGenes<-function(p.lvl, fc.lvl, direction, update=T){
 }
 
 # note, here also update data type array/count
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param norm.opt PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformArrayDataNormalization
-#' @export 
 PerformArrayDataNormalization <- function(norm.opt){
 
     data <- dataSet$data.anot;
@@ -368,19 +270,6 @@ PerformArrayDataNormalization <- function(norm.opt){
     }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param target.grp PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformLimma
-#' @export 
 PerformLimma<-function(target.grp){
 
     myargs <- list();
@@ -440,20 +329,6 @@ PerformLimma<-function(target.grp){
 ###########################
 ## for RNAseq data
 ##########################
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param norm.opt PARAM_DESCRIPTION
-#' @param disp.opt PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformCountDataNormalization
-#' @export 
 PerformCountDataNormalization <- function(norm.opt, disp.opt){
 
     msg <- NULL;
@@ -487,19 +362,6 @@ PerformCountDataNormalization <- function(norm.opt, disp.opt){
     }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param target.grp PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformEdgeR
-#' @export 
 PerformEdgeR<-function(target.grp){
 
     myargs <- list();
@@ -548,19 +410,6 @@ PerformEdgeR<-function(target.grp){
 ## for QPCR data
 ##########################
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param norm.opt PARAM_DESCRIPTION, Default: 'quantile'
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformQpcrDataNormalization
-#' @export 
 PerformQpcrDataNormalization <- function(norm.opt = "quantile") {
     
     data <- dataSet$data.anot;
@@ -590,20 +439,6 @@ PerformQpcrDataNormalization <- function(norm.opt = "quantile") {
     }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param target.grp PARAM_DESCRIPTION
-#' @param method PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformHTqPCR
-#' @export 
 PerformHTqPCR<-function(target.grp, method){
 
     if(method == "limma"){
@@ -644,25 +479,6 @@ PerformHTqPCR<-function(target.grp, method){
 }
 
 # utility method to get p values
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param my.dat PARAM_DESCRIPTION
-#' @param my.cls PARAM_DESCRIPTION
-#' @param grp1 PARAM_DESCRIPTION
-#' @param grp2 PARAM_DESCRIPTION
-#' @param paired PARAM_DESCRIPTION, Default: FALSE
-#' @param equal.var PARAM_DESCRIPTION, Default: TRUE
-#' @param nonpar PARAM_DESCRIPTION, Default: F
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetTtestP
-#' @export 
 GetTtestP <- function(my.dat, my.cls, grp1, grp2, paired=FALSE, equal.var=TRUE, nonpar=F){
 
     inx1 <- which(my.cls==grp1);
@@ -699,22 +515,6 @@ GetTtestP <- function(my.dat, my.cls, grp1, grp2, paired=FALSE, equal.var=TRUE, 
 }
 
 # utility method to calculate FC
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param my.dat PARAM_DESCRIPTION
-#' @param my.cls PARAM_DESCRIPTION
-#' @param grp1 PARAM_DESCRIPTION
-#' @param grp2 PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetFC
-#' @export 
 GetFC <- function(my.dat, my.cls, grp1, grp2){
     m1 <- rowMeans(my.dat[, which(my.cls==grp1)]);
     m2 <- rowMeans(my.dat[, which(my.cls==grp2)]);
@@ -724,19 +524,6 @@ GetFC <- function(my.dat, my.cls, grp1, grp2){
     return(fc);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param imgNm PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PlotDataOverview
-#' @export 
 PlotDataOverview<-function(imgNm){
     dat <- dataSet$data.anot;
     library('lattice');
@@ -783,21 +570,6 @@ PlotDataOverview<-function(imgNm){
 }
 
 # given a data with duplicates, dups is the one with duplicates
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param data PARAM_DESCRIPTION
-#' @param lvlOpt PARAM_DESCRIPTION
-#' @param quiet PARAM_DESCRIPTION, Default: T
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname RemoveDuplicates
-#' @export 
 RemoveDuplicates <- function(data, lvlOpt, quiet=T){
 
     all.nms <- rownames(data);

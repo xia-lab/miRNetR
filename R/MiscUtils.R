@@ -5,21 +5,6 @@
 ###################################################
 
 # new range [a, b]
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param qvec PARAM_DESCRIPTION
-#' @param a PARAM_DESCRIPTION
-#' @param b PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname rescale2NewRange
-#' @export
 rescale2NewRange <- function(qvec, a, b){
     q.min <- min(qvec);
     q.max <- max(qvec);
@@ -43,55 +28,15 @@ rescale2NewRange <- function(qvec, a, b){
 `%notin%` <- Negate(`%in%`);
 
 # normalize to zero mean and unit variance
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname AutoNorm
-#' @export
 AutoNorm<-function(x){
     (x - mean(x))/sd(x, na.rm=T);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param min.val PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname LogNorm
-#' @export
 LogNorm<-function(x, min.val){
     log2((x + sqrt(x^2 + min.val^2))/2)
 }
 
 # #FFFFFF to rgb(1, 0, 0)
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param cols PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname hex2rgba
-#' @export
 hex2rgba <- function(cols){
   return(apply(sapply(cols, col2rgb), 2, function(x){paste("rgba(", x[1], ",", x[2], ",", x[3], ",0.8)", sep="")}));
 }
@@ -99,20 +44,6 @@ hex2rgba <- function(cols){
 # re-arrange one vector elements according to another vector values
 # usually src is character vector to be arranged
 # target is numberic vector of same length
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param src.vec PARAM_DESCRIPTION
-#' @param tgt.vec PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname sync2vecs
-#' @export
 sync2vecs <- function(src.vec, tgt.vec){
     if(length(unique(src.vec)) != length(unique(tgt.vec))){
         print("must be of the same unique length!");
@@ -126,20 +57,6 @@ sync2vecs <- function(src.vec, tgt.vec){
 }
 
 # col vec is for low high null
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param nd.vec PARAM_DESCRIPTION
-#' @param col.vec PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname getExpColors
-#' @export
 getExpColors <- function(nd.vec, col.vec){
     nvec <- rep("", length(nd.vec));
     m.inx <- is.null(nd.vec) | is.na(nd.vec);
@@ -150,19 +67,6 @@ getExpColors <- function(nd.vec, col.vec){
     as.character(nvec);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param my.grps PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetColorSchema
-#' @export
 GetColorSchema <- function(my.grps){
     # test if total group number is over 9
      grp.num <- length(levels(my.grps));
@@ -184,21 +88,6 @@ GetColorSchema <- function(my.grps){
 }
 
 # borrowed from Hmisc
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param what PARAM_DESCRIPTION, Default: c("test", "vector")
-#' @param extras PARAM_DESCRIPTION, Default: c(".", "NA")
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname all.numeric
-#' @export
 all.numeric <- function (x, what = c("test", "vector"), extras = c(".", "NA")){
     what <- match.arg(what)
     old <- options(warn = -1)
@@ -218,19 +107,6 @@ all.numeric <- function (x, what = c("test", "vector"), extras = c(".", "NA")){
 # utils to remove from
 # within, leading and trailing spaces
 # remove /
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param query PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname ClearStrings
-#' @export
 ClearStrings<-function(query){
     # remove leading and trailing space
     query<- sub("^[[:space:]]*(.*?)[[:space:]]*$", "\\1", query, perl=TRUE);
@@ -243,19 +119,6 @@ ClearStrings<-function(query){
 }
 
 # need to obtain the full path to convert (from imagemagik) for cropping images
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetBashFullPath
-#' @export
 GetBashFullPath<-function(){
     path <- system("which bash", intern=TRUE);
     if((length(path) == 0) && (typeof(path) == "character")){
@@ -266,20 +129,6 @@ GetBashFullPath<-function(){
 }
 
 # overwrite ave, => na.rm=T
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname myave
-#' @export
 myave <- function (x, ...) {
     n <- length(list(...))
     if (n) {
@@ -291,19 +140,6 @@ myave <- function (x, ...) {
 }
 
 # log scale ratio
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param mat PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname CalculatePairwiseDiff
-#' @export
 CalculatePairwiseDiff <- function(mat){
     f <- function(i, mat) {
        z <- mat[, i-1] - mat[, i:ncol(mat), drop = FALSE]
@@ -314,20 +150,6 @@ CalculatePairwiseDiff <- function(mat){
     round(res,5);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param vec PARAM_DESCRIPTION
-#' @param unit PARAM_DESCRIPTION, Default: 10
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetExtendRange
-#' @export
 GetExtendRange<-function(vec, unit=10){
     var.max <- max(vec);
     var.min <- min(vec);
@@ -336,19 +158,6 @@ GetExtendRange<-function(vec, unit=10){
 }
 
 # perform scale on row (scale is on column)
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname RowScale
-#' @export
 RowScale <- function(x){
     x <- sweep(x, 1L, rowMeans(x, na.rm = T), check.margin = FALSE)
     sx <- apply(x, 1L, sd, na.rm = T)
@@ -359,20 +168,6 @@ RowScale <- function(x){
 # utils to remove from
 # within, leading and trailing spaces
 # remove /
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param cls.nm PARAM_DESCRIPTION
-#' @param query PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname ClearFactorStrings
-#' @export
 ClearFactorStrings<-function(cls.nm, query){
     # remove leading and trailing space
     query<- sub("^[[:space:]]*(.*?)[[:space:]]*$", "\\1", query, perl=TRUE);
@@ -425,19 +220,6 @@ ClearFactorStrings<-function(cls.nm, query){
 # read tab delimited file
 # stored in dataSet list object
 # can have many classes, stored in meta.info
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param dataName PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname ReadTabData
-#' @export
 ReadTabData <- function(dataName) {
 
     msg <- NULL;
@@ -468,13 +250,7 @@ ReadTabData <- function(dataName) {
     }
 
     meta.info <- data.frame(meta.info);
-    # now remove all comments in dat1
-    # assign rownames after covert to matrix as data.frame does not allow duplicate names
-    comments.inx <- grep("^#", dat1[,1]);
-    dat1.nms <- dat1[-comments.inx,1];
-    dat1<-dat1[-comments.inx,-1];
-    dat1 <- data.matrix(dat1);
-    rownames(dat1) <- dat1.nms;
+    dat1 <- .to.numeric.mat(dat1);
 
     list(
         name = basename(dataName),
@@ -531,24 +307,8 @@ ReadTabData <- function(dataName) {
   return(dat);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param db.path PARAM_DESCRIPTION
-#' @param q.vec PARAM_DESCRIPTION
-#' @param table.nm PARAM_DESCRIPTION
-#' @param col.nm PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname Query.miRNetDB
-#' @export
 Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase"){
-  
+
   db.path <- paste0(db.path, ".sqlite");
   if(.on.public.web){
     mir.db <- dbConnect(SQLite(), db.path);
@@ -557,7 +317,6 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      options(timeout=200);
       download.file(db.path, db.name, mode = "wb");
     }
     mir.db <- dbConnect(SQLite(), db.name);
@@ -569,12 +328,12 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
     statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query, ")", sep="");
   }
   mir.dic <- .query.sqlite(mir.db, statement);
-  
+
   #Check the matched miRNA from upload list to database
   if (col.nm == "mir_id"){
     mir.lib <- as.vector(unique(mir.dic$mir_id));
     notMatch <- setdiff(q.vec, mir.lib);
-    
+
     if (length(notMatch) > 0){ # Converting miRBase version and mature id.
       print("Converting ids for different miRBase versions ....");
       notMatch <- gsub("mir", "miR", notMatch);
@@ -589,49 +348,48 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
       
       miRNANames <- gsub(" ","", as.character(notMatch));
       targetVersion <- "v22";
-      
+
       ver_index <- match(tolower(targetVersion), VER)
       if (!is.na(ver_index)) {
         MiRNAs <- as.matrix(miRNA_data[[ver_index]])
         MiRNAs <- rbind(MiRNAs[, c(1,2,4)], MiRNAs[, c(5,6,7)], MiRNAs[, c(8,9,10)])
         colnames(MiRNAs) <- c("ACC","SYM","SEQ")
-        
+
         ##check the rows with all NA
         ind <- apply(MiRNAs, 1, function(x) all(is.na(x)))
         VMAP <- as.data.frame(unique(MiRNAs[-ind,]))[, c("ACC", "SYM")];
-        
+
         uid <- unique(as.vector(miRNANames))
         SYM_ID <- match(uid, SYM)
-        df <- data.frame(uid = uid, SYM = SYM_ID, stringsAsFactors=FALSE)
+        df <- data.frame(uid = uid, SYM = SYM_ID)
         df <- merge(df, ACC_SYM)[, c("uid", "ACC")]
         df <- unique( merge(df, VMAP, by="ACC") )
-        
+
         target <- data.frame(
           OriginalName = df$uid,
           TargetName = SYM[df$SYM],
-          Accession = ACC[df$ACC],
-          stringsAsFactors = FALSE
+          Accession = ACC[df$ACC]
         );
-        
+
         idx <- (target$OriginalName == target$TargetName) | (!target$OriginalName %in% target$TargetName)
         target <- target[idx, , drop=FALSE]
-        
+
         ## collapse 1:many maps
         splitpaste <- function(x, f) {
           result <- vapply(split(x, f), paste, character(1), collapse="&")
           result[!nzchar(result)] <- NA
           result
         }
-        
+
         f <- factor(target$OriginalName, levels=uid)
         target <- data.frame(
           OriginalName = uid,
           TargetName = splitpaste(target$TargetName, f),
           Accession = splitpaste(target$Accession, f),
-          row.names=NULL, stringsAsFactors = FALSE);
-        
+          row.names=NULL);
+
         target <- target[match(miRNANames, target$OriginalName),];
-        
+
         # map to mature form
         VMAP <-miRNA_data[[ver_index]][,c(2,6,9)]
         # [1] "Precursor" "Mature1"   "Mature2"
@@ -642,7 +400,7 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
         miRNANames=as.character(miRNANames)
         miRNANames=gsub(" ","",miRNANames)##Remove the possible space
         uid = unique(as.vector(miRNANames))
-        
+
         uid=na.omit(uid)
         ind=apply(VMAP,2,function(x){match(uid,x)})
         if(length(miRNANames) == 1){
@@ -656,9 +414,9 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
           OriginalName = uid,
           Mature1 = VMAP[ind[,1],2],
           Mature2 = VMAP[ind[,1],3],
-          row.names=NULL, stringsAsFactors = FALSE)
+          row.names=NULL)
         target2=target2[match(miRNANames, target2$OriginalName),]
-        
+
         #merge
         mir.vec <- tolower(as.vector(target$TargetName));
         mir.vec2 <- c(tolower(as.vector(target2$Mature1)),tolower(as.vector(target2$Mature2)));
@@ -679,29 +437,28 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
           db.name <- gsub(sqlite.path, "", db.path);
           if(!file.exists(db.name)){
             print(msg);
-            options(timeout=200);
             download.file(db.path, db.name, mode = "wb");
           }
           mir.db <- dbConnect(SQLite(), db.name);
         }
         mir.dic2 <- .query.sqlite(mir.db, statement2);
-        
+
         # now add back to the main data
         mir.dic <- rbind(mir.dic, mir.dic2);
-        
+
         # remove duplicates
         dup.inx <- duplicated(mir.dic$mirnet);
         mir.dic <- mir.dic[!dup.inx, ];
       }
     }
   }
-  
+
   if(col.nm == "mir_acc"){
     # when use Accession number, it can match both new and old version, use the new one (old one is ranked later)
     dup.inx <- duplicated(mir.dic[, c("mir_acc", "symbol")]);
     mir.dic <- mir.dic[!dup.inx, ];
   }
-  
+
   # Perform tissue annotation if specified
   if (nrow(mir.dic) > 0){
     tissue <- dataSet$tissue;
@@ -734,25 +491,10 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
       }
     }
   }
-  
+
   return(mir.dic);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param table.nm PARAM_DESCRIPTION
-#' @param q.vec PARAM_DESCRIPTION
-#' @param col.nm PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname QueryTFSQLite
-#' @export
 QueryTFSQLite <- function(table.nm, q.vec, col.nm){
   require('RSQLite');
   db.path <- paste(sqlite.path, "tf2gene.sqlite", sep="");
@@ -763,8 +505,7 @@ QueryTFSQLite <- function(table.nm, q.vec, col.nm){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      options(timeout=200);
-      download.file(db.path, db.name, mode = "wb");
+      download.file(db.path, db.name);
     }
     tf.db <- dbConnect(SQLite(), db.name);
   }
@@ -773,37 +514,9 @@ QueryTFSQLite <- function(table.nm, q.vec, col.nm){
   return(.query.sqlite(tf.db, statement));
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param n PARAM_DESCRIPTION, Default: 10
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname cleanMem
-#' @export
 cleanMem <- function(n=10) { for (i in 1:n) gc() }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param db.path PARAM_DESCRIPTION
-#' @param statement PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetUniqueEntries
-#' @export
 GetUniqueEntries <- function(db.path, statement){
-  
   if(.on.public.web){
     mir.db <- dbConnect(SQLite(), db.path);
   }else{
@@ -811,8 +524,7 @@ GetUniqueEntries <- function(db.path, statement){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      options(timeout=200);
-      download.file(db.path, db.name, mode = "wb");
+      download.file(db.path, db.name);
     }
     mir.db <- dbConnect(SQLite(), db.name);
   }
@@ -822,21 +534,6 @@ GetUniqueEntries <- function(db.path, statement){
 }
 
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param n PARAM_DESCRIPTION
-#' @param center PARAM_DESCRIPTION, Default: F
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname generate_breaks
-#' @export
 generate_breaks = function(x, n, center = F){
     if(center){
         m = max(abs(c(min(x, na.rm = T), max(x, na.rm = T))))
@@ -848,21 +545,7 @@ generate_breaks = function(x, n, center = F){
     return(res)
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param nd.vec PARAM_DESCRIPTION
-#' @param background PARAM_DESCRIPTION, Default: 'black'
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname ComputeColorGradient
-#' @export
-ComputeColorGradient <- function(nd.vec, background="black"){
+ComputeColorGradient <- function(nd.vec, background="black", centered){
     library("RColorBrewer");
     if(sum(nd.vec<0, na.rm=TRUE) > 0){
         centered <- T;
@@ -874,20 +557,6 @@ ComputeColorGradient <- function(nd.vec, background="black"){
     return(scale_vec_colours(nd.vec, col = color, breaks = breaks));
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param background PARAM_DESCRIPTION
-#' @param center PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname GetColorGradient
-#' @export
 GetColorGradient <- function(background, center){
     if(background == "black"){
         if(center){
@@ -904,40 +573,10 @@ GetColorGradient <- function(background, center){
     }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param col PARAM_DESCRIPTION, Default: rainbow(10)
-#' @param breaks PARAM_DESCRIPTION, Default: NA
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname scale_vec_colours
-#' @export
 scale_vec_colours = function(x, col = rainbow(10), breaks = NA){
     return(col[as.numeric(cut(x, breaks = breaks, include.lowest = T))])
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param mat PARAM_DESCRIPTION
-#' @param col PARAM_DESCRIPTION, Default: rainbow(10)
-#' @param breaks PARAM_DESCRIPTION, Default: NA
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname scale_colours
-#' @export
 scale_colours = function(mat, col = rainbow(10), breaks = NA){
     mat = as.matrix(mat)
     return(matrix(scale_vec_colours(as.vector(mat), col = col, breaks = breaks), nrow(mat), ncol(mat), dimnames = list(rownames(mat), colnames(mat))))
@@ -970,20 +609,6 @@ scale_colours = function(mat, col = rainbow(10), breaks = NA){
 }
 
 # shorthand
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param ... PARAM_DESCRIPTION
-#' @param n PARAM_DESCRIPTION, Default: 30
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname ShowMemoryUse
-#' @export
 ShowMemoryUse <- function(..., n=30) {
     library(pryr);
     sink(); # make sure print to screen
@@ -993,19 +618,6 @@ ShowMemoryUse <- function(..., n=30) {
     print(warnings());
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname CleanMemory
-#' @export
 CleanMemory <- function(){
     for (i in 1:10){
         gc(reset = T);
@@ -1024,24 +636,8 @@ CleanMemory <- function(){
   return(res);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param table.nm PARAM_DESCRIPTION
-#' @param q.vec PARAM_DESCRIPTION
-#' @param requireExp PARAM_DESCRIPTION
-#' @param min.score PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname QueryPpiSQLiteZero
-#' @export
 QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
-    require('RSQLite');
+    require('RSQLite')
   db.path <- paste(sqlite.path, "ppi.sqlite", sep="");
   if(.on.public.web){
     ppi.db <- dbConnect(SQLite(), db.path);
@@ -1050,12 +646,11 @@ QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
     db.name <- gsub(sqlite.path, "", db.path);
     if(!file.exists(db.name)){
       print(msg);
-      options(timeout=200);
-      download.file(db.path, db.name, mode = "wb");
+      download.file(db.path, db.name);
     }
     ppi.db <- dbConnect(SQLite(), db.name);
   }
-    query <- paste(shQuote(q.vec),collapse=",");
+  query <- paste(shQuote(q.vec),collapse=",");
 
     if(grepl("string$", table.nm)){
         if(requireExp){
@@ -1080,42 +675,15 @@ QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
     return(ppi.res);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname simpleCap
-#' @export
 simpleCap <- function(x) {
   s <- strsplit(x, " ")[[1]]
   paste(toupper(substring(s, 1,1)), substring(s, 2),
       sep="", collapse=" ")
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param grp.num PARAM_DESCRIPTION
-#' @param filenm PARAM_DESCRIPTION, Default: NULL
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname gg_color_hue
-#' @export
 gg_color_hue <- function(grp.num, filenm=NULL) {
     grp.num <- as.numeric(grp.num)
-    pal18 <- c( "#911eb4", "#3cb44b", "#4363d8",  "#f032e6", "#ffe119", "#e6194B", "#f58231", "#bfef45", "#fabebe", "#469990", "#e6beff", "#9A6324", "#800000", "#aaffc3", "#808000", "#ffd8b1", "#42d4f4","#000075");
+    pal18 <- c("#3cb44b", "#f032e6", "#ffe119", "#e6194B", "#f58231", "#bfef45", "#fabebe", "#469990", "#e6beff", "#9A6324", "#800000", "#aaffc3", "#808000", "#ffd8b1", "#42d4f4","#000075", "#ff4500");
     if(grp.num <= 18){ # update color and respect default
         colArr <- pal18[1:grp.num];
     }else{
@@ -1131,3 +699,41 @@ gg_color_hue <- function(grp.num, filenm=NULL) {
     }
 }
 
+# obtain a numeric matrix, exclude comments if any
+.to.numeric.mat <- function(dat1){
+  # now remove all comments in dat1
+  # assign rownames after covert to matrix as data.frame does not allow duplicate names
+  comments.inx <- grep("^#", dat1[,1]);
+  if(sum(comments.inx) > 0){
+    row.nms <- dat1[-comments.inx,1];
+    dat1 <- dat1[-comments.inx,-1];
+  }else{
+    row.nms <- dat1[,1];
+    dat1 <- dat1[,-1];
+  }
+  dimensions <- dim(dat1)
+  col.nms <- colnames(dat1)
+  dat1 <- sapply(dat1, as.numeric);
+  dat1 <- matrix(data=dat1, ncol=dimensions[2], nrow=dimensions[1])
+  rownames(dat1) <- row.nms;
+  colnames(dat1) <- col.nms;
+  return(dat1);
+}
+
+fast.write.csv <- function(dat, file, row.names=TRUE){
+    tryCatch(
+        {
+           if(is.data.frame(dat)){
+                # there is a rare bug in data.table (R 3.6) which kill the R process in some cases 
+                data.table::fwrite(dat, file, row.names=row.names);
+           }else{
+                write.csv(dat, file, row.names=row.names);  
+           }
+        }, error=function(e){
+            print(e);
+            fast.write.csv(dat, file, row.names=row.names);   
+        }, warning=function(w){
+            print(w);
+            fast.write.csv(dat, file, row.names=row.names); 
+        });
+}

@@ -4,16 +4,15 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
-#' @title PerformMirGeneMapping
-#' @description Map miRNAs to target genes or from target genes to miRNAs
-
-#' @return "mirnet_mir_target.csv" results table will be downloaded in your working directory
-#' @rdname PerformMirGeneMapping
-#' @export 
-PerformMirGeneMapping <- function(){
+PerformMirGeneMapping <- function(input.type){
+    if(input.type %in% c("mir2gene_mirtarbase", "mir2gene_tarbase", "mir2gene_mirecords", "mir2gene_miranda")){
+      db.type <- gsub("mir2gene_", "", input.type);
+    }else{
+      db.type <- "mirtarbase";
+    }
     mir.mat <- dataSet$mir.orig;
 
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), rownames(mir.mat), dataSet$org, dataSet$idType);
+    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), rownames(mir.mat), dataSet$org, dataSet$idType, db.type);
 
     hit.num <- nrow(mir.dic);
     if (hit.num == 0){
@@ -26,11 +25,11 @@ PerformMirGeneMapping <- function(){
         return(0);
     } else {
         current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-gene targets were identified!");
-
+        fast.write.csv(mir.dic, file="mirnet_mir_gene.csv", row.names=FALSE); # this is just for mir2gene results table to show different db source with 0/1 to indicate present
         res <- mir.dic[ , c("mir_id", "mir_acc", "symbol", "entrez", "experiment", "pmid", "tissue")];
         rownames(res) <- mir.dic$mirnet;
         colnames(res) <- c("ID", "Accession", "Gene", "Entrez", "Experiment", "Literature", "Tissue");
-        write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
+        fast.write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
         dataSet$mir.res <- res;
 
         gene.nms <- res[,"Gene"];
@@ -60,24 +59,11 @@ PerformMirGeneMapping <- function(){
     }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformMolMapping
-#' @export 
 PerformMolMapping <- function(){
   mir.mat <- dataSet$mir.orig;
-  
+
   mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2molecule", sep=""), rownames(mir.mat), dataSet$org, dataSet$idType);
-  
+
   hit.num <- nrow(mir.dic);
   if (hit.num == 0){
     if(dataSet$tissue == "na") {
@@ -89,17 +75,17 @@ PerformMolMapping <- function(){
     return(0);
   } else {
     current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-molecule interactions were identified!");
-    
+
     res <- mir.dic[ , c("mir_id","mir_acc","molecule", "pubchem_id", "method", "pmid", "tissue")];
     rownames(res) <- mir.dic$mirnet;
     colnames(res) <- c("ID","Accession","Molecule", "Pubchem_ID", "Experiment", "Literature", "Tissue");
-    write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
+    fast.write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
     dataSet$mir.res <- res;
-    
+
     mol.nms <- res[,"Molecule"];
     net.info$mol.nms <- mol.nms;
     net.info <<-net.info;
-    
+
     # record the mapped queries and change to same IDs used in network
     uniq.mat <- unique(mir.dic[, c("mir_id", "molecule", dataSet$idType)]);
     hit.inx <- match(rownames(mir.mat), uniq.mat[, dataSet$idType]);
@@ -123,19 +109,6 @@ PerformMolMapping <- function(){
   }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformLncRNAMapping
-#' @export 
 PerformLncRNAMapping <- function(){
   orgType <- dataSet$org;
   if(orgType != "hsa" ){
@@ -143,12 +116,12 @@ PerformLncRNAMapping <- function(){
     print(current.msg);
     return(0);
   }
-  
+
   mir.mat <- dataSet$mir.orig;
   idType <- dataSet$idType;
   mir.vec <- rownames(mir.mat);
   mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2lncRNA", sep=""), mir.vec, orgType, idType);
-  
+
   hit.num <- nrow(mir.dic)
   if (hit.num == 0 && dataSet$tissue == "na") {
     current.msg <<- "No hits found in the database. Please check your input. ";
@@ -162,11 +135,11 @@ PerformLncRNAMapping <- function(){
     res <- mir.dic[ , c("mir_id","mir_acc","symbol","entrez", "tissue")];
     rownames(res) <- mir.dic$mirnet;
     current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-lncRNA targets were identified!");
-    
+
     # update the data
     gd.inx <- rownames(mir.mat) %in% unique(res[, idType]);
     dataSet$mir.mapped <- mir.mat[gd.inx,,drop=F];
-    
+
     colnames(res) <- c("ID", "Accession", "Gene", "Entrez", "Tissue");
     res$Experiment <- rep("CLIP-Seq", nrow(res));
     res$Literature <- rep("24297251", nrow(res));
@@ -181,7 +154,7 @@ PerformLncRNAMapping <- function(){
     lnc.nms <- res[,"Gene"];
     net.info$lnc.nms <- lnc.nms;
     net.info <<-net.info;
-    write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
+    fast.write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
     dataSet$mir.res <- res;
     dataSet$mirtarget <- "lncrna";
     dataSet$mirtable <- "mir2lnc"
@@ -195,19 +168,6 @@ PerformLncRNAMapping <- function(){
   }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformCircRNAMapping
-#' @export 
 PerformCircRNAMapping <- function(){
   orgType <- dataSet$org;
   if(orgType != "hsa" ){
@@ -215,12 +175,12 @@ PerformCircRNAMapping <- function(){
     print(current.msg);
     return(0);
   }
-  
+
   mir.mat <- dataSet$mir.orig;
   idType <- dataSet$idType;
   mir.vec <- rownames(mir.mat);
   mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2circRNA", sep=""), mir.vec, orgType, idType);
-  
+
   hit.num <- nrow(mir.dic)
   if (hit.num == 0 && dataSet$tissue == "na") {
     current.msg <<- "No hits found in the database. Please check your input. ";
@@ -234,11 +194,11 @@ PerformCircRNAMapping <- function(){
     res <- mir.dic[ , c("mir_id","mir_acc","symbol","entrez", "tissue")];
     rownames(res) <- mir.dic$mirnet;
     current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-circRNA targets were identified!");
-    
+
     # update the data
     gd.inx <- rownames(mir.mat) %in% unique(res[, idType]);
     dataSet$mir.mapped <- mir.mat[gd.inx,,drop=F];
-    
+
     colnames(res) <- c("ID", "Accession", "Gene", "Entrez", "Tissue");
     res$Experiment <- rep("CLIP-Seq", nrow(res));
     res$Literature <- rep("24297251", nrow(res));
@@ -253,7 +213,7 @@ PerformCircRNAMapping <- function(){
     circ.nms <- res[,"Gene"];
     net.info$circ.nms <- circ.nms;
     net.info <<-net.info;
-    write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
+    fast.write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
     dataSet$mir.res <- res;
     dataSet$mirtarget <- "circrna";
     dataSet$mirtable <- "mir2circ"
@@ -267,19 +227,6 @@ PerformCircRNAMapping <- function(){
   }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformPseudoMapping
-#' @export 
 PerformPseudoMapping <- function(){
   orgType <- dataSet$org;
   if(orgType != "hsa" ){
@@ -287,12 +234,12 @@ PerformPseudoMapping <- function(){
     print(current.msg);
     return(0);
   }
-  
+
   mir.mat <- dataSet$mir.orig;
   idType <- dataSet$idType;
   mir.vec <- rownames(mir.mat);
   mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2pseudogene", sep=""), mir.vec, orgType, idType);
-  
+
   hit.num <- nrow(mir.dic)
   if (hit.num == 0 && dataSet$tissue == "na") {
     current.msg <<- "No hits found in the database. Please check your input. ";
@@ -306,11 +253,11 @@ PerformPseudoMapping <- function(){
     res <- mir.dic[ , c("mir_id","mir_acc","symbol","entrez", "tissue")];
     rownames(res) <- mir.dic$mirnet;
     current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-pseudogene targets were identified!");
-    
+
     # update the data
     gd.inx <- rownames(mir.mat) %in% unique(res[, idType]);
     dataSet$mir.mapped <- mir.mat[gd.inx,,drop=F];
-    
+
     colnames(res) <- c("ID", "Accession", "Gene", "Entrez", "Tissue");
     res$Experiment <- rep("CLIP-Seq", nrow(res));
     res$Literature <- rep("24297251", nrow(res));
@@ -325,7 +272,7 @@ PerformPseudoMapping <- function(){
     pseudo.nms <- res[,"Gene"];
     net.info$pseudo.nms <- pseudo.nms;
     net.info <<-net.info;
-    write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
+    fast.write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
     dataSet$mir.res <- res;
     dataSet$mirtarget <- "pseudogene";
     dataSet$mirtable <- "mir2pseudo"
@@ -339,19 +286,6 @@ PerformPseudoMapping <- function(){
   }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformSncRNAMapping
-#' @export 
 PerformSncRNAMapping <- function(){
   orgType <- dataSet$org;
   if(orgType != "hsa" ){
@@ -359,12 +293,12 @@ PerformSncRNAMapping <- function(){
     print(current.msg);
     return(0);
   }
-  
+
   mir.mat <- dataSet$mir.orig;
   idType <- dataSet$idType;
   mir.vec <- rownames(mir.mat);
   mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2sncRNA", sep=""), mir.vec, orgType, idType);
-  
+
   hit.num <- nrow(mir.dic)
   if (hit.num == 0 && dataSet$tissue == "na") {
     current.msg <<- "No hits found in the database. Please check your input. ";
@@ -378,11 +312,11 @@ PerformSncRNAMapping <- function(){
     res <- mir.dic[ , c("mir_id","mir_acc","symbol","entrez", "tissue")];
     rownames(res) <- mir.dic$mirnet;
     current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-sncRNA targets were identified!");
-    
+
     # update the data
     gd.inx <- rownames(mir.mat) %in% unique(res[, idType]);
     dataSet$mir.mapped <- mir.mat[gd.inx,,drop=F];
-    
+
     colnames(res) <- c("ID", "Accession", "Gene", "Entrez", "Tissue");
     res$Experiment <- rep("CLIP-Seq", nrow(res));
     res$Literature <- rep("24297251", nrow(res));
@@ -397,7 +331,7 @@ PerformSncRNAMapping <- function(){
     snc.nms <- res[,"Gene"];
     net.info$snc.nms <- snc.nms;
     net.info <<-net.info;
-    write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
+    fast.write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
     dataSet$mir.res <- res;
     dataSet$mirtarget <- "sncrna";
     dataSet$mirtable <- "mir2snc"
@@ -411,19 +345,6 @@ PerformSncRNAMapping <- function(){
   }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformMir2EpiMapping
-#' @export 
 PerformMir2EpiMapping <- function(){
   orgType <- dataSet$org;
   if(orgType %in% c("bta", "dme","gga","sma", "cel","dre","rno", "ssc") ){
@@ -431,15 +352,15 @@ PerformMir2EpiMapping <- function(){
     print(current.msg);
     return(0);
   }
-  
+
   mir.mat <- dataSet$mir.orig;
-  
+
   idType <- dataSet$idType;
   mir.vec <- rownames(mir.mat);
   print("Perform epi2mir");
   print(dataSet$tissue);
   mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2epi", sep=""), mir.vec, orgType, idType);
-  
+
   hit.num <- nrow(mir.dic)
   if (hit.num == 0 && dataSet$tissue == "na") {
     current.msg <<- "No hits found in the database. Please check your input. ";
@@ -453,11 +374,11 @@ PerformMir2EpiMapping <- function(){
     res <- mir.dic[ , c("mir_id", "mir_acc", "epi_regulator", "experiment", "condition", "pmid", "tissue")];
     rownames(res) <- mir.dic$mirnet;
     current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-epigene targets were identified!");
-    
+
     # update the data
     gd.inx <- rownames(mir.mat) %in% unique(res[, idType]);
     dataSet$mir.mapped <- mir.mat[gd.inx,,drop=F];
-    
+
     colnames(res) <- c("ID","Accession","Epigenetics","Experiment", "Condition","Literature", "Tissue");
     epi.nms <- res[,"Epigenetics"];
     mir.nms <- res[, "ID"];
@@ -469,7 +390,7 @@ PerformMir2EpiMapping <- function(){
     epi.nms <- res[,"Epigenetics"];
     net.info$epi.nms <- epi.nms;
     net.info <<-net.info;
-    write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
+    fast.write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
     dataSet$mir.res <- res;
     dataSet$mirtarget <- "epigenetics";
     dataSet$mirtable <- "mir2epi"
@@ -483,31 +404,18 @@ PerformMir2EpiMapping <- function(){
   }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformDisMapping
-#' @export 
 PerformDisMapping <- function(){
   if(dataSet$org != "hsa" ){
     curent.msg <<- "Only huamn support the disease network."
     print(current.msg);
     return(0);
   }
-  
+
   mir.mat <- dataSet$mir.orig;
   idType <- dataSet$idType;
   mir.vec <- rownames(mir.mat);
   mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2disease", sep=""), mir.vec, "disease", idType);
-  
+
   hit.num <- nrow(mir.dic)
   if (hit.num == 0 && dataSet$tissue == "na") {
     current.msg <<- "No hits found in the database. Please check your input. ";
@@ -521,11 +429,11 @@ PerformDisMapping <- function(){
     res <- mir.dic[ , c("mir_id", "mir_acc", "disease", "method", "database", "pmid", "tissue")];
     rownames(res) <- mir.dic$mirnet;
     current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-disease associations were identified!");
-    
+
     # update the data
     gd.inx <- rownames(mir.mat) %in% unique(res[, idType]);
     dataSet$mir.mapped <- mir.mat[gd.inx,,drop=F];
-    
+
     colnames(res) <- c("ID","Accession","Disease","Experiment", "Database", "Literature", "Tissue");
     dis.nms <- res[,"Disease"];
     mir.nms <- res[, "ID"];
@@ -537,7 +445,7 @@ PerformDisMapping <- function(){
     dis.nms <- res[,"Disease"];
     net.info$dis.nms <- dis.nms;
     net.info <<-net.info;
-    write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
+    fast.write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
     dataSet$mir.res <- res;
     dataSet$mirtarget <- "disease";
     dataSet$mirtable <- "mir2dis"
@@ -551,19 +459,6 @@ PerformDisMapping <- function(){
   }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformTFMapping
-#' @export 
 PerformTFMapping <- function(){
   orgType <- dataSet$org;
   if(orgType %in% c("bta", "ssc","gga","dme", "sma") ){
@@ -571,12 +466,12 @@ PerformTFMapping <- function(){
     print(current.msg);
     return(0);
   }
-  
+
   mir.mat <- dataSet$mir.orig;
   idType <- dataSet$idType;
   mir.vec <- rownames(mir.mat);
   mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2tf", sep=""), mir.vec, orgType, idType);
-  
+
   hit.num <- nrow(mir.dic)
   if (hit.num == 0 && dataSet$tissue == "na") {
     current.msg <<- "No hits found in the database. Please check your input. ";
@@ -590,11 +485,11 @@ PerformTFMapping <- function(){
     res <- mir.dic[ , c("mir_id","mir_acc","symbol","entrez", "pmid", "tissue")];
     rownames(res) <- mir.dic$mirnet;
     current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-TF targets were identified!");
-    
+
     # update the data
     gd.inx <- rownames(mir.mat) %in% unique(res[, idType]);
     dataSet$mir.mapped <- mir.mat[gd.inx,,drop=F];
-    
+
     colnames(res) <- c("ID", "Accession", "Gene", "Entrez", "Literature", "Tissue");
     res$Experiment <- rep("ChIP-seq", nrow(res));
     res <- res[, c("ID", "Accession", "Gene", "Entrez", "Experiment", "Literature", "Tissue")];
@@ -608,7 +503,7 @@ PerformTFMapping <- function(){
     tf.nms <- res[,"Gene"];
     net.info$tf.nms <- tf.nms;
     net.info <<-net.info;
-    write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
+    fast.write.csv(res, file="mirnet_mir_target.csv", row.names=FALSE);
     dataSet$mir.res <- res;
     dataSet$mirtarget <- "tf";
     dataSet$nodeNumbers <- nrow(res);
@@ -623,19 +518,6 @@ PerformTFMapping <- function(){
   }
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformSNPMirGeneMapping
-#' @export 
 PerformSNPMirGeneMapping <- function(){
   snp.mat <- dataSet$mir.orig;
   snpidVec <- rownames(snp.mat);
@@ -644,7 +526,7 @@ PerformSNPMirGeneMapping <- function(){
   # first try to match snp2mir, if still have unmatched, do snp2mirbs
   snp.dic <- Query.miRNetDB(paste(sqlite.path, "snp2mir", sep=""), snpidVec, dataSet$org, dataSet$idType);
   hit.inx <- match(snpidVec, snp.dic$rsid);
-    
+
   na.hits <- is.na(hit.inx);
   if(sum(na.hits) > 0){
     unmatched.snp <- snpidVec[na.hits];
@@ -727,7 +609,7 @@ PerformSNPMirGeneMapping <- function(){
       merge.edge <- rbind(snp.edge, mir.edge, snp.edge2, mir.edge2, tf.edge, tf.edge2);
       rownames(merge.edge) <- 1:nrow(merge.edge);
       dataSet$mir.res <- merge.edge; # for network
-      write.csv(merge.edge, file="mirnet_snp_mir_target.csv", row.names=FALSE);
+      fast.write.csv(merge.edge, file="mirnet_snp_mir_target.csv", row.names=FALSE);
 
       dataSet$snp2mir <- snp.res;
       dataSet$mir2gene <- mir.res;
@@ -772,7 +654,7 @@ PerformSNPMirGeneMapping <- function(){
       merge.edge <- rbind(snp.edge, mir.edge);
       rownames(merge.edge) <- 1:nrow(merge.edge);
 
-      write.csv(merge.edge, file="mirnet_snp_mir_target.csv", row.names=FALSE);
+      fast.write.csv(merge.edge, file="mirnet_snp_mir_target.csv", row.names=FALSE);
 
       # update the data
       gd.inx <- rownames(snp.mat) %in% unique(c(snp.edge[, "Name2"]));
@@ -793,20 +675,6 @@ PerformSNPMirGeneMapping <- function(){
 
 
 ### convert to gene symbols!!! not entrez
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param id.vec PARAM_DESCRIPTION
-#' @param idType PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname doMirGeneAnnotation
-#' @export 
 doMirGeneAnnotation <- function(id.vec, idType){
      feature.vec <- id.vec;
      if(idType %in% c("entrez", "symbol", "refseq", "genbank", "emblgene", "embltranscript", "orfid","mir_id","mir_acc")){
@@ -820,20 +688,6 @@ doMirGeneAnnotation <- function(id.vec, idType){
      return(anot.id);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param id.vec PARAM_DESCRIPTION
-#' @param idType PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname doAnnotation
-#' @export 
 doAnnotation <- function(id.vec, idType){
      feature.vec <- id.vec;
      if(idType %in% c("entrez", "symbol", "refseq", "genbank", "emblgene", "embltranscript", "orfid","mir_id","mir_acc")){
@@ -845,19 +699,6 @@ doAnnotation <- function(id.vec, idType){
      return(anot.id);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname PerformGeneAnnotation
-#' @export 
 PerformGeneAnnotation <- function(){
     if(!exists("entrez.vec")){
         print("Could not find Entrez ID list!");
@@ -869,61 +710,33 @@ PerformGeneAnnotation <- function(){
 
     hit.inx <- match(entrez.vec, gene.map[, "gene_id"]);
     dat <- cbind(query=entrez.vec, gene.map[hit.inx, c("symbol","name")]);
-    write.csv(dat, file="EntrezID2Gene.csv", row.names=F);
+    fast.write.csv(dat, file="EntrezID2Gene.csv", row.names=F);
     rm(entrez.vec, envir = .GlobalEnv);
     return(1);
 }
 
 # from probe ID to entrez ID
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param probe.vec PARAM_DESCRIPTION
-#' @param platform PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname doProbeMapping
-#' @export 
 doProbeMapping <- function(probe.vec, platform){
-  platform.path <- paste(lib.path,  data.org, "/", platform, ".csv", sep="");
-  if(.on.public.web){
-    probe.map <- read.csv(platform.path, header=T, as.is=T);
-  }else{
-    destfile <- paste(platform, ".csv", sep="");
-    download.file(platform.path, destfile);
-    probe.map <- read.csv(destfile, header=T, as.is=T);
-  }
-  if(is.null(probe.vec)){
-    entrez <- probe.map[, "entrez"];
-  }else{
-    hit.inx <- match(probe.vec, probe.map[, "probe"]);
-    entrez <- probe.map[hit.inx, "entrez"];
-  }
-  rm(probe.map);
-  return(entrez);
+    platform.path <- paste(lib.path,  data.org, "/", platform, ".csv", sep="");
+    if(.on.public.web){
+      probe.map <- read.csv(platform.path, header=T, as.is=T);
+    }else{
+      destfile <- paste(platform, ".csv", sep="");
+      download.file(platform.path, destfile);
+      probe.map <- read.csv(destfile, header=T, as.is=T);
+    }
+    if(is.null(probe.vec)){
+        entrez <- probe.map[, "entrez"];
+    }else{
+        hit.inx <- match(probe.vec, probe.map[, "probe"]);
+        entrez <- probe.map[hit.inx, "entrez"];
+    }
+    rm(probe.map);
+    return(entrez);
 }
 
 
 # mapping between genebank, refseq and entrez
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param q.vec PARAM_DESCRIPTION
-#' @param type PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname doGeneIDMapping
-#' @export 
 doGeneIDMapping <- function(q.vec, type){
     require('RSQLite');
     mir.db <- dbConnect(SQLite(), paste(sqlite.path, data.org, "_genes.sqlite", sep=""));
@@ -977,19 +790,6 @@ doGeneIDMapping <- function(q.vec, type){
     return(entrezs);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param entrez.vec PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname doEntrez2SymbolMapping
-#' @export 
 doEntrez2SymbolMapping <- function(entrez.vec){
     gene.map <-  queryGeneDB("entrez", data.org);
     gene.map[] <- lapply(gene.map, as.character)
@@ -1003,19 +803,6 @@ doEntrez2SymbolMapping <- function(entrez.vec){
     return(symbols);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param entrez.vec PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname doSymbol2EntrezMapping
-#' @export 
 doSymbol2EntrezMapping <- function(entrez.vec){
     gene.map <-  queryGeneDB("entrez", data.org);
     gene.map[] <- lapply(gene.map, as.character)
@@ -1029,20 +816,6 @@ doSymbol2EntrezMapping <- function(entrez.vec){
     return(symbols);
 }
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param table.nm PARAM_DESCRIPTION
-#' @param data.org PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname queryGeneDB
-#' @export 
 queryGeneDB <- function(table.nm, data.org){
     require('RSQLite')
 
