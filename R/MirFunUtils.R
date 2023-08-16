@@ -12,7 +12,7 @@
 
 PerformMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, IDs, algo, mode="serial"){
      if(!exists("my.mir.target.enrich")){ # public web on same user dir
-        compiler::loadcmp("../../rscripts/mirnetr/_utils_mir_target_enrich.Rc");    
+        compiler::loadcmp("../../rscripts/miRNetR/R/_utils_mir_target_enrich.Rc");    
     }
     return(my.mir.target.enrich(adjust.type, fun.type, file.nm, IDs, algo, mode));
 }
