@@ -262,6 +262,7 @@ FilterMirNetByList <- function(net.type, ids, id.type, remove){
 convertIgraph2JSON <- function(g, filenm){
   #g <<- g
   #save.image("net.RData");
+  library(igraph);
   nms <- V(g)$name;
   lbls <- as.character(dataSet$node.anot[nms]);
   
@@ -620,14 +621,18 @@ GetNetNames <- function(){
 
 GetTableNames <- function(){
   if(anal.type == "multilist"|| anal.type == "gene" || anal.type == "qpcr"){
-    unique(dataSet$mirtable);
+    res <- unique(dataSet$mirtable);
   }else if(anal.type == "gene2tfmir" ){
-    dataSet$type
+    res <- dataSet$type
   }else if(anal.type == "snp2mir" || anal.type == "tf2genemir"){
-    dataSet$mirtable;
+    res <- dataSet$mirtable;
   } else {
-    dataSet$mirnet
+    res <- dataSet$mirnet
   }
+  infoSet <- readSet(infoSet, "infoSet");
+  infoSet$paramSet$tableNames <- res;
+  saveSet(infoSet, "infoSet");
+  return(res)
 }
 
 GetSeedsColumn <- function(){
@@ -662,6 +667,9 @@ GetSeedsColumn <- function(){
       vec[i]=paste0(nms[1],":" ,length(unique(dataSet[tbls[i]][[1]][,1])),", ",nms[2],": ",length(unique(dataSet[tbls[i]][[1]][,3])))
     }
   }
+  infoSet <- readSet(infoSet, "infoSet");
+  infoSet$paramSet$seedsColumn <- vec;
+  saveSet(infoSet, "infoSet");
   return(vec)
 }
 

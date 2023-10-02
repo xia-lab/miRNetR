@@ -17,7 +17,6 @@ Init.Data<-function(dataType, analType){
     dataSet$ppiOpts$require.exp<-T
     dataSet$ppiOpts$min.score<-"900"
     dataSet <<- dataSet
-    cmdSet <<- list(objName="cmdSet");
     net.info<- list();
     net.info <<- net.info
     data.type <<- dataType; # mir or xeno.mir
@@ -59,8 +58,20 @@ Init.Data<-function(dataType, analType){
     library("RSQLite");
     library('Cairo');
     CairoFonts("Arial:style=Regular","Arial:style=Bold","Arial:style=Italic","Helvetica","Symbol")
+    paramSet <- list(objName="paramSet", jsonNms=list());
+    msgSet <- list(objName="msgSet");
+    cmdSet <<- list(objName="cmdSet");
+    imgSet <- list(objName="imgSet", enrTables=list());
+    infoSet <- list();
+   
+    infoSet$objName <- "infoSet";
+    infoSet$paramSet <- paramSet;
+    infoSet$cmdSet <- cmdSet;
+    infoSet$msgSet <- msgSet;
+    infoSet$imgSet <- imgSet;
+    saveSet(infoSet);
 
-    saveSet(cmdSet);
+    data.org <<- "NA";
     print("miRNet init done!");
 }
 
@@ -178,6 +189,8 @@ saveSet <- function(obj=NA, set="", output=1){
         msgSet <<- obj;
       }else if(set == "cmdSet"){
         cmdSet <<- obj;
+      }else if(set == "infoSet"){
+        infoSet <<- obj;
       }
 
     }
@@ -207,15 +220,15 @@ readSet <- function(obj=NA, set=""){
 #'@param cmd Commands 
 #'@export
 RecordRCommand <- function(cmd){
-  cmdSet <- readSet(cmdSet, "cmdSet"); 
-  cmdSet$cmdVec <- c(cmdSet$cmdVec, cmd);
-  saveSet(cmdSet, "cmdSet");
+  infoSet <- readSet(infoSet, "infoSet"); 
+  infoSet$cmdSet$cmdVec <- c(infoSet$cmdSet$cmdVec, cmd);
+  saveSet(infoSet, "infoSet");
   return(1);
 }
 
 SaveRCommands <- function(){
-  cmdSet <- readSet(cmdSet, "cmdSet"); 
-  cmds <- paste(cmdSet$cmdVec, collapse="\n");
+  infoSet <- readSet(infoSet, "infoSet"); 
+  cmds <- paste(infoSet$cmdSet$cmdVec, collapse="\n");
   pid.info <- paste0("# PID of current job: ", Sys.getpid());
   cmds <- c(pid.info, cmds);
   write(cmds, file = "Rhistory.R", append = FALSE);
@@ -225,14 +238,14 @@ SaveRCommands <- function(){
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@export
 GetRCommandHistory <- function(){
-  cmdSet <- readSet(cmdSet, "cmdSet"); 
-  if(length(cmdSet$cmdVec) == 0){
+  infoSet <- readSet(infoSet, "infoSet"); 
+  if(length(infoSet$cmdSet$cmdVec) == 0){
     return("No commands found");
   }
-  return(cmdSet$cmdVec);
+  return(infoSet$cmdSet$cmdVec);
 }
 
 ClearRCommandHistory <- function(){
-  cmdSet <- readSet(cmdSet, "cmdSet"); 
-  cmdSet$cmdVec <- c();
+  infoSet <- readSet(infoSet, "infoSet"); 
+  infoSet$cmdSet$cmdVec <- c();
 }

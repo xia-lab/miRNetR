@@ -27,7 +27,9 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
 
     mir.mat <- mir.mat[,-1, drop=F];
     dataSet$mir.orig <- mir.mat;
-
+    dataSet$data[["miRNA"]] <- mir.mat;
+    dataSet$id.types[["miRNA"]] <- idType;
+    dataSet$target.types[["miRNA"]] <- targetOpt;
     dataSet<<- dataSet;
     if(.on.public.web){
       return (nrow(mir.mat));
