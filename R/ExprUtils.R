@@ -98,7 +98,8 @@ PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
 
     # should not contain duplicates, however sanity check
     data.proc <- readRDS("data.proc");
-    dataSet$data.anot <- RemoveDuplicates(data.proc, "mean", quiet=T);
+    dataSet$lvlOpt <- lvlOpt;
+    dataSet$data.anot <- RemoveDuplicates(data.proc, lvlOpt, quiet=T);
     feature.vec <- rownames(data.proc);
 
     if(idType == "mir_id" | idType=="mir_acc"){
@@ -116,6 +117,11 @@ PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
             }else{
                 current.msg <<- paste("ID annotation: ", "Total [", length(anot.id),
                     "] Matched [", matched.len, "] Unmatched [", sum(!hit.inx),"]", collapse="\n");
+                    dataSet$anotList <- list();
+                    dataSet$anotList$total <- length(anot.id);
+                    dataSet$anotList$match <- length(matched.len);
+                    dataSet$anotList$unmatch <- sum(!hit.inx);
+                    dataSet$anotList$smpl.num <- colnames(dataSet$data.anot);
 
                 if(lvlOpt != 'NA' | idType == "entrez"){
                     # do actual summarization to gene level
@@ -260,7 +266,7 @@ PerformArrayDataNormalization <- function(norm.opt){
     rownames(data) <- row.nms;
     colnames(data) <- col.nms;
     dataSet$data.norm <- data;
-
+    dataSet$norm.opt <- norm.opt;
     current.msg <<- msg;
     dataSet <<- dataSet;
     if(.on.public.web){
@@ -274,6 +280,7 @@ PerformLimma<-function(target.grp){
 
     myargs <- list();
     cls <- dataSet$cls; 
+    dataSet$comparison <- target.grp;
     design <- model.matrix(~ 0 + cls) # no intercept
     colnames(design) <- levels(cls);
 
@@ -317,6 +324,8 @@ PerformLimma<-function(target.grp){
     topFeatures <- cbind(topFeatures, max.logFC = max.logFC);
 
     dataSet$filename <- filename;
+    dataSet$norm.opt <- "limma";
+
     dataSet <<- dataSet;
     saveRDS(topFeatures, file="resTable");
     if(.on.public.web){
@@ -363,8 +372,8 @@ PerformCountDataNormalization <- function(norm.opt, disp.opt){
 }
 
 PerformEdgeR<-function(target.grp){
-
     myargs <- list();
+    dataSet$comparison <- target.grp;
     grp.nms <- strsplit(target.grp, " vs. ")[[1]];
     myargs[[1]] <- paste(grp.nms, collapse="-");
     filename = paste("SigGene_", paste(grp.nms, collapse="_vs_"), sep="");
@@ -397,6 +406,7 @@ PerformEdgeR<-function(target.grp){
     topFeatures <- cbind(topFeatures, max.logFC = max.logFC);
 
     dataSet$filename <- filename;
+    dataSet$de.method <- "EdgeR";
     dataSet <<- dataSet;
     saveRDS(topFeatures, file="resTable");
     if(.on.public.web){
@@ -411,7 +421,7 @@ PerformEdgeR<-function(target.grp){
 ##########################
 
 PerformQpcrDataNormalization <- function(norm.opt = "quantile") {
-    
+    dataSet$norm.opt <- norm.opt;
     data <- dataSet$data.anot;
 
     library('HTqPCR');
@@ -440,7 +450,7 @@ PerformQpcrDataNormalization <- function(norm.opt = "quantile") {
 }
 
 PerformHTqPCR<-function(target.grp, method){
-
+    dataSet$comparison <- target.grp;
     if(method == "limma"){
         return(PerformLimma(target.grp));
     }
@@ -469,6 +479,7 @@ PerformHTqPCR<-function(target.grp, method){
 
     filename = paste("SigGene_", paste(grp.nms, collapse="_vs_"), sep="");
     dataSet$filename <- filename;
+    dataSet$de.method <- method;
     dataSet <<- dataSet;
     saveRDS(topFeatures, file="resTable");
     if(.on.public.web){
@@ -567,6 +578,10 @@ PlotDataOverview<-function(imgNm){
         })
   print(box);
   dev.off();
+
+  infoSet <- readSet(infoSet, "infoSet"); 
+  infoSet$imgSet$pca_box <- imgNm;
+  saveSet(infoSet, "infoSet");
 }
 
 # given a data with duplicates, dups is the one with duplicates

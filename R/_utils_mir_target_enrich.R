@@ -302,6 +302,12 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
     # write csv
     # csv.nm <- paste(file.nm, ".csv", sep="");
     fast.write.csv(resTable, file="mirnet_enrichment.csv", row.names=F);
+
+    infoSet <- readSet(infoSet, "infoSet"); 
+    infoSet$imgSet$enrTables$network <- resTable;
+    infoSet$imgSet$enrTablesInfo$network <- list(library=fun.type, algo=algo);
+    saveSet(infoSet, "infoSet");
+
      if(.on.public.web){
        return(1);   
      }else{
