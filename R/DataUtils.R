@@ -36,20 +36,14 @@ Init.Data<-function(dataType, analType){
 
     if(file.exists("/home/glassfish/sqlite/")){ #public server
         sqlite.path <<- "/home/glassfish/sqlite/";
-    }else if(file.exists("/Users/xia/Dropbox/sqlite/")){# xia local
-        sqlite.path <<- "/Users/xia/Dropbox/sqlite/";
+    }else if(file.exists("/Users/xialab/Dropbox/sqlite/")){# xia local
+        sqlite.path <<- "/Users/xialab/Dropbox/sqlite/";
     }else if(file.exists("/Users/jeffxia/Dropbox/sqlite/")){# xia local2
         sqlite.path <<- "/Users/jeffxia/Dropbox/sqlite/";
-    }else if(file.exists("/home/le/sqlite/")){# le local
-        sqlite.path <<- "/home/le/sqlite/";
-    }else if(file.exists("/home/soufanom/Database/")){# Othman local
-        sqlite.path <<- "/home/soufanom/Database/sqlite/";
     }else if(file.exists("/home/zzggyy")){# zgy local
         sqlite.path <<- "/media/zzggyy/disk/sqlite/";
-    }else if(file.exists("/home/zgy/sqlite")){# zgy local
+    }else if(file.exists("/home/zgy/sqlite")){# zgy local2
         sqlite.path <<- "/home/zgy/sqlite/";
-    }else if(file.exists("/home/jasmine/Downloads/sqlite/")){
-        sqlite.path <<- "/home/jasmine/Downloads/mirnet_sqlite/";
     }else{
         sqlite.path <<- "https://www.xialab.ca/resources/sqlite/";
     }
