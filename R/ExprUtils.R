@@ -53,6 +53,7 @@ ReadTabExpressData <- function(dataName) {
     }
     current.msg <<- paste(msg, collapse="; ");
     saveRDS(int.mat, file="data.proc");
+    rownames(dataSet$meta.info) <- colnames(int.mat);
     dataSet <<- dataSet;
     if(.on.public.web){
       return (1);  
@@ -220,7 +221,8 @@ GetSigGenes<-function(p.lvl, fc.lvl, direction, update=T){
          data <- data[,hit.inx];
          meta.info <- dataSet$meta.info[hit.inx,];
     }
-
+    dataSet$fc.val <- fc.lvl
+    dataSet$pval <- p.lvl
     dataSet$sig.mat <- resTable;
     dataSet$sig.genes.anot <- gene.anot;
     dataSet$cls.stat <- cls;
@@ -363,6 +365,7 @@ PerformCountDataNormalization <- function(norm.opt, disp.opt){
     saveRDS(y, file="edger.y");
     dataSet$design <- design;
     current.msg <<- msg;
+    dataSet$norm.opt <- norm.opt;
     dataSet <<- dataSet;
     if(.on.public.web){
       return(1);
@@ -441,7 +444,8 @@ PerformQpcrDataNormalization <- function(norm.opt = "quantile") {
         norm.obj <- normalizeCtData(obj, norm=norm.opt)
     }
 
-    dataSet$data.norm <<- exprs(norm.obj);
+    dataSet$data.norm <- exprs(norm.obj);
+    dataSet <<- dataSet;
     if(.on.public.web){
       return(1);
     }else{
