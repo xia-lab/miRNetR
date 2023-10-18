@@ -49,6 +49,8 @@ Init.Data<-function(dataType, analType){
         sqlite.path <<- "/media/zzggyy/disk/sqlite/";
     }else if(file.exists("/home/zgy/sqlite")){# zgy local2
         sqlite.path <<- "/home/zgy/sqlite/";
+    }else if(file.exists("/home/fiona/Documents")){# fiona local
+        sqlite.path <<- "/home/fiona/Documents/sqlite/";
     }else{
         sqlite.path <<- "https://www.xialab.ca/resources/sqlite/";
     }
