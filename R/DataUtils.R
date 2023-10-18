@@ -3,6 +3,11 @@
 ## Description: Data/resource management functions
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
+.on.public.web <- FALSE; # only TRUE when on mirnet web server
+
+SetOnWeb <- function(){
+    .on.public.web <<- TRUE;
+}
 
 # init resources for analysis
 Init.Data<-function(dataType, analType){

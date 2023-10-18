@@ -17,7 +17,7 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
     mir.vec <- mir.mat[,1];
 
     if(data.type=="xeno.mir" && idType == "mir_id"){
-        mir.vec <- gsub("mir", "miR", mir.vec);;
+        mir.vec <- gsub("mir", "miR", mir.vec);
     }
     if(idType == "mir_id"){
       rownames(mir.mat) <-  tolower(as.vector(mir.vec));
@@ -229,7 +229,6 @@ QueryMultiList <- function(){
 
 QueryMultiListMir <- function(){
   .init.multilist();
-
   for(i in 1:length(dataSet$type)){
     if(dataSet$type[i] == "protein2protein"){
       input.type=dataSet$type[i]
@@ -277,7 +276,6 @@ QueryMultiListMir <- function(){
 }
 
 .searchMultiNet_mir2gene<-function(input.type){
-
     if (input.type == "mir2gene"){
       idType <- dataSet$mirnaType;
       mir.mat <- dataSet$mir.orig;
