@@ -3,15 +3,20 @@
 ## Description: Data/resource management functions
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
-.on.public.web <- FALSE; # only TRUE when on mirnet web server
 
-SetOnWeb <- function(){
-    .on.public.web <<- TRUE;
+.onAttach <- function (libname, pkgname){
+  .on.public.web <<- FALSE;
+  k1 <- paste("miRNetR",
+              utils::packageVersion( "miRNetR"),
+              "initialized Successfully !")
+  k0 <- "\n";
+  packageStartupMessage(c(k1,k0));
 }
 
 # init resources for analysis
-Init.Data<-function(dataType, analType){
+Init.Data<-function(dataType, analType, onWeb=T){
     globalConfig <- list();
+    .on.public.web <<- onWeb;
     globalConfig$anal.mode <- "web";
     globalConfig <<- globalConfig;
     mir.nmsu <- vector();
