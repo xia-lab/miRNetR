@@ -291,7 +291,7 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
                     adj.p = adj.p,
                     hit.num = hit.num
         );
-     json.mat <- toJSON(json.res, .na='null');
+     json.mat <- toJSON(json.res);
      json.nm <- paste(file.nm, ".json", sep="");
 
      sink(json.nm)
