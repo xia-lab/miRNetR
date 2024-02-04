@@ -14,8 +14,10 @@ Init.Data<-function(dataType, analType){
     dataSet <- list(data=list());
     dataSet$ppiOpts<-list()
     dataSet$ppiOpts$db.name<-"innate"
-    dataSet$ppiOpts$require.exp<-T
-    dataSet$ppiOpts$min.score<-"900"
+    dataSet$ppiOpts$require.exp<-T;
+    dataSet$ppiOpts$min.score<-"900";
+    dataSet$report.format <- "html";
+
     dataSet <<- dataSet
     net.info<- list();
     net.info <<- net.info
@@ -24,7 +26,7 @@ Init.Data<-function(dataType, analType){
     current.msg <<- "";
     msg.vec <<- vector(mode="character");
     module.count <<- 0;
-
+    
     #api.base <<- "132.216.38.6:8987"
     api.base <<- "http://api.xialab.ca"
 
@@ -106,7 +108,7 @@ RemoveMirEntry <- function(tblnm, mir.id) {
 }
 
 # batch remove based on
-UpdateMirEntries <- function(col.id, method, value, action) {
+UpdateMirEntries <- function(col.id, method, value, action, tblnm="") {
 
     if(col.id == "evidence"){
         col <- dataSet$mir.res$Experiment;
@@ -143,9 +145,15 @@ UpdateMirEntries <- function(col.id, method, value, action) {
         hits = !hits;
     }
 
+    print(paste(sum(hits)));
     if(sum(hits) > 0){
         row.ids <- rownames(dataSet$mir.res)[hits];
-        dataSet$mir.res <<- dataSet$mir.res[!hits,];
+        dataSet$mir.res <- dataSet$mir.res[!hits,];
+        if(tblnm != "NA"){
+            hits <- rownames(dataSet[tblnm][[1]]) %in% row.ids
+            dataSet[tblnm][[1]] <- dataSet[tblnm][[1]][!hits,];
+        }
+        dataSet<<-dataSet;
         fast.write.csv(dataSet$mir.res, file="mirnet_mir_target.csv", row.names=FALSE);
         return(row.ids);
     }else{

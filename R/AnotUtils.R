@@ -461,6 +461,7 @@ PerformDisMapping <- function(){
 
 PerformTFMapping <- function(){
   orgType <- dataSet$org;
+  print(dataSet);
   if(orgType %in% c("bta", "ssc","gga","dme", "sma") ){
     curent.msg <<- "This organism is not supported for transcription factors network research."
     print(current.msg);
