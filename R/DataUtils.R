@@ -4,9 +4,19 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
+.onAttach <- function (libname, pkgname){
+  .on.public.web <<- FALSE;
+  k1 <- paste("miRNetR",
+              utils::packageVersion( "miRNetR"),
+              "initialized Successfully !")
+  k0 <- "\n";
+  packageStartupMessage(c(k1,k0));
+}
+
 # init resources for analysis
-Init.Data<-function(dataType, analType){
+Init.Data<-function(dataType, analType, onWeb=T){
     globalConfig <- list();
+    .on.public.web <<- onWeb;
     globalConfig$anal.mode <- "web";
     globalConfig <<- globalConfig;
     mir.nmsu <- vector();
@@ -46,6 +56,8 @@ Init.Data<-function(dataType, analType){
         sqlite.path <<- "/media/zzggyy/disk/sqlite/";
     }else if(file.exists("/home/zgy/sqlite")){# zgy local2
         sqlite.path <<- "/home/zgy/sqlite/";
+    }else if(file.exists("/home/fiona/Documents")){# fiona local
+        sqlite.path <<- "/home/fiona/Documents/sqlite/";
     }else{
         sqlite.path <<- "https://www.xialab.ca/resources/sqlite/";
     }

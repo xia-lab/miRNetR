@@ -4,7 +4,7 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
-PerformMirGeneMapping <- function(input.type){
+PerformMirGeneMapping <- function(input.type="none"){
     if(input.type %in% c("mir2gene_mirtarbase", "mir2gene_tarbase", "mir2gene_mirecords", "mir2gene_miranda")){
       db.type <- gsub("mir2gene_", "", input.type);
     }else{
@@ -740,7 +740,20 @@ doProbeMapping <- function(probe.vec, platform){
 # mapping between genebank, refseq and entrez
 doGeneIDMapping <- function(q.vec, type){
     require('RSQLite');
-    mir.db <- dbConnect(SQLite(), paste(sqlite.path, data.org, "_genes.sqlite", sep=""));
+    db.path <- paste(sqlite.path, data.org, "_genes.sqlite", sep="");
+    if(.on.public.web){
+        mir.db <- dbConnect(SQLite(), db.path);
+    }else{
+        msg <- paste("Downloading", db.path);
+        db.name <- gsub(sqlite.path, "", db.path);
+        if(!file.exists(db.name)){
+          print(msg);
+          download.file(db.path, db.name, mode = "wb");
+        }
+        mir.db <- dbConnect(SQLite(), db.name);
+    }
+  
+    #mir.db <- dbConnect(SQLite(), paste(sqlite.path, data.org, "_genes.sqlite", sep=""));
     query <- paste (shQuote(q.vec),collapse=",");
     if(is.null(q.vec)){
         type.query <- paste("entrez");
@@ -819,8 +832,20 @@ doSymbol2EntrezMapping <- function(entrez.vec){
 
 queryGeneDB <- function(table.nm, data.org){
     require('RSQLite')
-
-    conv.db <- dbConnect(SQLite(), paste(sqlite.path, data.org, "_genes.sqlite", sep=""));
+    
+    db.path <- paste(sqlite.path, data.org, "_genes.sqlite", sep="")
+    if(.on.public.web){
+      conv.db <- dbConnect(SQLite(), db.path);
+    }else{
+      msg <- paste("Downloading", db.path);
+      db.name <- gsub(sqlite.path, "", db.path);
+      if(!file.exists(db.name)){
+        print(msg);
+        download.file(db.path, db.name, mode = "wb");
+      }
+      conv.db <- dbConnect(SQLite(), db.name);
+    }
+    #conv.db <- dbConnect(SQLite(), paste(sqlite.path, data.org, "_genes.sqlite", sep=""));
     db.map <- dbReadTable(conv.db, table.nm)
     dbDisconnect(conv.db); cleanMem();
 
