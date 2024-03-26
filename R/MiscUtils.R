@@ -514,7 +514,9 @@ QueryTFSQLite <- function(table.nm, q.vec, col.nm){
   return(.query.sqlite(tf.db, statement));
 }
 
-cleanMem <- function(n=10) { for (i in 1:n) gc() }
+CleanMemory <- function() { 
+    gc(); 
+}
 
 GetUniqueEntries <- function(db.path, statement){
   if(.on.public.web){
@@ -618,11 +620,6 @@ ShowMemoryUse <- function(..., n=30) {
     print(warnings());
 }
 
-CleanMemory <- function(){
-    for (i in 1:10){
-        gc(reset = T);
-    }
-}
 
 # private method for all sqlite queries
 .query.sqlite <- function(db.con, statement, offline=TRUE){
@@ -632,7 +629,7 @@ CleanMemory <- function(){
   if(offline){
     dbDisconnect(db.con);
   }
-  cleanMem();
+  CleanMemory();
   return(res);
 }
 

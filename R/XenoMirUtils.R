@@ -469,6 +469,6 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
             }
         }
     }
-    dbDisconnect(mir.db); cleanMem();
+    dbDisconnect(mir.db); CleanMemory();
     return(mir.dic);
 }
