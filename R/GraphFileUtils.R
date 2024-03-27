@@ -104,7 +104,7 @@ ReadGraphData <- function(fileName, fileType, org) {
   node.data = data.frame(nms, nms);
   seed.proteins <<- nms;
   seed.genes <<- seed.proteins;
-  e=get.edgelist(graphX)
+  e=as_edgelist(graphX)
   edge.data= data.frame(Source=e[,1], Target=e[,2])
   seed.expr <<- rep(0, length(node.data));
   substats <- DecomposeMirGraph("graphfile",graphX);
@@ -176,7 +176,7 @@ convertIgraph2JSONFromFile <- function(net.nm, filenm){
   shapes <- rep("circle", length(nms));
 
   # get edge data
-  edge.mat <- get.edgelist(g);
+  edge.mat <- as_edgelist(g);
 
   edge.mat1 = data.frame(edge.mat)
   edge.mat1$color = "target"
@@ -200,7 +200,7 @@ convertIgraph2JSONFromFile <- function(net.nm, filenm){
   node.tra=transitivity(g,type=c("local"))
 
   node.dgr <- as.numeric(degree(g));
-  node.exp <- as.numeric(get.vertex.attribute(g, name="Expression", index = V(g)));
+  node.exp <- as.numeric(vertex_attr(g, name="Expression", index = V(g)));
 
   if(length(node.exp) == 0){
     node.exp <- rep(0,length(node.dgr));
@@ -309,7 +309,7 @@ convertIgraph2JSONFromFile <- function(net.nm, filenm){
   fast.write.csv(nd.tbl, file="node_table.csv", row.names=FALSE);
   # covert to json
   require(RJSONIO);
-  # dg <- decompose.graph(g)
+  # dg <- decompose(g)
   # if(length(dg)>1){
   #   modules = "NA"
   # }else{
@@ -325,6 +325,6 @@ convertIgraph2JSONFromFile <- function(net.nm, filenm){
 getGraphStatsFromFile <- function(){
   g <- mir.nets[[net.nmu]];
   nms <- V(g)$name;
-  edge.mat <- get.edgelist(g);
+  edge.mat <- as_edgelist(g);
   return(c(length(nms), nrow(edge.mat)));
 }

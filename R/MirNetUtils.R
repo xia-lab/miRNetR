@@ -44,7 +44,7 @@ CreateMirNets <- function(net.type){
     dups <- duplicated(nd.ids); #note using unique will lose the names attribute
     dataSet$node.anot <<- nd.ids[!dups];
     library(igraph);
-    mir.graph <- simplify(graph.data.frame(my.nodes, directed=FALSE));
+    mir.graph <- simplify(graph_from_data_frame(my.nodes, directed=FALSE));
     if(length(dataSet$nodeNumbers) == 0){
       dataSet$nodeNumber = nrow(dataSet$mir.res);
       dataSet<<- dataSet
@@ -54,7 +54,7 @@ CreateMirNets <- function(net.type){
   match.index <- match(V(mir.graph)$name, rownames(dataSet$mir.mapped));
   
   expr.vals <- dataSet$mir.mapped[match.index, 1];
-  mir.graph <- set.vertex.attribute(mir.graph, "abundance", index = V(mir.graph), value = expr.vals);
+  mir.graph <- set_vertex_attr(mir.graph, "abundance", index = V(mir.graph), value = expr.vals);
   mir.graph <<- mir.graph;
   
   substats <- DecomposeMirGraph(net.type, mir.graph, 2);
@@ -81,7 +81,7 @@ CreateMirNets <- function(net.type){
 
 # decompose to individual connected subnetworks, discard very small ones (defined by minNodeNum)
 DecomposeMirGraph <- function(net.type, gObj, minNodeNum = 2){
-  comps <-decompose.graph(gObj, min.vertices=minNodeNum);
+  comps <-decompose(gObj, min.vertices=minNodeNum);
   
   if(length(comps) == 0){
     current.msg <<- paste("No connected nodes found after this filtering!");
@@ -151,7 +151,7 @@ DecomposeMirGraph <- function(net.type, gObj, minNodeNum = 2){
 ReduceEdgeDensity <- function(net.type, nd.type="all"){
   library(igraph);
   all.nms <- V(mir.graph)$name;
-  edge.mat <- get.edgelist(mir.graph);
+  edge.mat <- as_edgelist(mir.graph);
   dgrs <- degree(mir.graph);
   nodes2rm <- NULL;
   
@@ -198,7 +198,7 @@ ReduceEdgeDensity <- function(net.type, nd.type="all"){
 FilterMirNet <- function(net.type, nd.type, min.dgr, min.btw){
   library(igraph);
   all.nms <- V(mir.graph)$name;
-  edge.mat <- get.edgelist(mir.graph);
+  edge.mat <- as_edgelist(mir.graph);
   dgrs <- degree(mir.graph);
   nodes2rm.dgr <- nodes2rm.btw <- NULL;
   
@@ -282,7 +282,7 @@ convertIgraph2JSON <- function(g, filenm){
   shapes <- rep("circle", length(nms));
   
   # get edge data
-  edge.mat <- get.edgelist(g);
+  edge.mat <- as_edgelist(g);
   edge.mat <- cbind(id=1:nrow(edge.mat), source=edge.mat[,1], target=edge.mat[,2], type=rep("arrow", nrow(edge.mat)));
   
   # now get coords
@@ -293,9 +293,9 @@ convertIgraph2JSON <- function(g, filenm){
   node.dgr <- as.numeric(degree(g));
   
   if(anal.type %notin% c("array", "rnaseq", "qpcr")){
-    node.exp <- as.character(get.vertex.attribute(g, name="abundance", index = V(g)));
+    node.exp <- as.character(vertex_attr(g, name="abundance", index = V(g)));
   }else{
-    node.exp <- as.numeric(get.vertex.attribute(g, name="abundance", index = V(g)));
+    node.exp <- as.numeric(vertex_attr(g, name="abundance", index = V(g)));
   }
   
   if(vcount(g) > 1000){
@@ -484,7 +484,7 @@ convertIgraph2JSON <- function(g, filenm){
   sink();
   
   # also save to GraphML
-  write.graph(g, file="mirnet.graphml", format="graphml");
+  write_graph(g, file="mirnet.graphml", format="graphml");
   
   if(!.on.public.web){
     library(httr);
@@ -495,7 +495,7 @@ convertIgraph2JSON <- function(g, filenm){
 
 
 PrepareGraphML <- function(net.nm){
-  write.graph(mir.nets[[net.nm]], file=paste(net.nm, ".graphml", sep=""), format="graphml");
+  write_graph(mir.nets[[net.nm]], file=paste(net.nm, ".graphml", sep=""), format="graphml");
 }
 
 PrepareCSV <- function(table.nm){
@@ -719,12 +719,12 @@ GetMinConnectedGraphs <- function(net.type, max.len = 200){
   nodes2rm <- V(mir.graph)$name[-nds.inxs];
   g <- simplify(delete.vertices(mir.graph, nodes2rm));
   
-  nodeList <- get.data.frame(g, "vertices");
+  nodeList <- as_data_frame(g, "vertices");
   nodeList <- as.data.frame(nodeList[, 1]);
   colnames(nodeList) <- c("ID");
   fast.write.csv(nodeList, file="orig_node_list.csv", row.names=F);
   
-  edgeList <- get.data.frame(g, "edges");
+  edgeList <- as_data_frame(g, "edges");
   edgeList <- cbind(rownames(edgeList), edgeList);
   colnames(edgeList) <- c("Id", "Source", "Target");
   fast.write.csv(edgeList, file="orig_edge_list.csv", row.names=F);
@@ -893,7 +893,7 @@ ExtractMirNetModule<- function(nodeids){
   gObj <- induced.subgraph(g, V(g)$name[hit.inx]);
   
   # now find connected components
-  comps <-decompose.graph(gObj, min.vertices=1);
+  comps <-decompose(gObj, min.vertices=1);
   
   if(length(comps) == 1){ # nodes are all connected
     g <- comps[[1]];
@@ -908,7 +908,7 @@ ExtractMirNetModule<- function(nodeids){
     nodes2rm <- V(g)$name[-nds.inxs];
     g <- simplify(delete.vertices(g, nodes2rm));
   }
-  nodeList <- get.data.frame(g, "vertices");
+  nodeList <- as_data_frame(g, "vertices");
   if(nrow(nodeList) < 3){
     return ("NA");
   }
@@ -919,7 +919,7 @@ ExtractMirNetModule<- function(nodeids){
   ndFileNm = "mirnet_node_list.csv";
   fast.write.csv(nodeList, file=ndFileNm, row.names=F);
   
-  edgeList <- get.data.frame(g, "edges");
+  edgeList <- as_data_frame(g, "edges");
   edgeList <- cbind(rownames(edgeList), edgeList);
   colnames(edgeList) <- c("Id", "Source", "Target");
   edgFileNm = "mirnet_edge_list.csv";
@@ -953,9 +953,9 @@ ExcludeNodes <- function(nodeids, filenm){
   node.dgr <- as.numeric(degree(current.mirnet));
   
   if(anal.type %notin% c("array", "rnaseq", "qpcr")){
-    node.exp <- as.character(get.vertex.attribute(current.mirnet, name="abundance", index = V(current.mirnet)));
+    node.exp <- as.character(vertex_attr(current.mirnet, name="abundance", index = V(current.mirnet)));
   }else{
-    node.exp <- as.numeric(get.vertex.attribute(current.mirnet, name="abundance", index = V(current.mirnet)));
+    node.exp <- as.numeric(vertex_attr(current.mirnet, name="abundance", index = V(current.mirnet)));
   }
   nms <- V(current.mirnet)$name;
   nodes <- vector(mode="list");
@@ -1002,12 +1002,12 @@ GetNetNms <-function(){
 
 ComputePCSFNet <- function(){
   
-  edg <- as.data.frame(get.edgelist(mir.graph));
+  edg <- as.data.frame(as_edgelist(mir.graph));
   edg$V3 <- rep(1, nrow(edg));
   colnames(edg) <- c("from", "to", "cost");
 
   node_names <- unique(c(as.character(edg[,1]),as.character(edg[,2])))
-  ppi <- graph.data.frame(edg[,1:2],vertices=node_names,directed=F)
+  ppi <- graph_from_data_frame(edg[,1:2],vertices=node_names,directed=F)
   E(ppi)$weight <- as.numeric(edg[,3])
   ppi <- simplify(ppi)
 
@@ -1017,11 +1017,11 @@ ComputePCSFNet <- function(){
   names(expr.vec) <- rownames(dataSet$mir.mapped);
   g <- Compute.SteinerForest(ppi, expr.vec, w = 5, b = 100, mu = 0.0005);
 
-  nodeList <- get.data.frame(g, "vertices");
+  nodeList <- as_data_frame(g, "vertices");
   colnames(nodeList) <- c("Id", "Label");
   write.csv(nodeList, file="orig_node_list.csv", row.names=F, quote=F);
   
-  edgeList <- get.data.frame(g, "edges");
+  edgeList <- as_data_frame(g, "edges");
   edgeList <- cbind(rownames(edgeList), edgeList);
   colnames(edgeList) <- c("Id", "Source", "Target");
   write.csv(edgeList, file="orig_edge_list.csv", row.names=F, quote=F);
@@ -1106,7 +1106,7 @@ Compute.SteinerForest <- function(ppi, terminals, w = 2, b = 1, mu = 0.0005, dum
 
     v <- data.frame(output[[4]], output[[5]], type)
     names(v) <- c("terminals", "prize", "type")
-    subnet <- graph.data.frame(e,vertices=v,directed=F)
+    subnet <- graph_from_data_frame(e,vertices=v,directed=F)
     E(subnet)$weight <- as.numeric(output[[3]])
     subnet <- delete_vertices(subnet, "DUMMY")
     subnet <- delete_vertices(subnet, names(which(degree(subnet)==0)));
@@ -1128,7 +1128,7 @@ FindCommunities <- function(method="walktrap", use.weight=FALSE){
   current.net <- current.mirnet
   g <- current.net;
   if(!is.connected(g)){
-    g <- decompose.graph(current.net, min.vertices=2)[[1]];
+    g <- decompose(current.net, min.vertices=2)[[1]];
   }
   total.size <- length(V(g));
   

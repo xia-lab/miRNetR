@@ -37,7 +37,7 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
   mirnet.type <- dataSet$mirnet;
   
   # prepare query, current.mirnet may be subset of all networks
-  nodeList <- get.data.frame(current.mirnet, "vertices");
+  nodeList <- as_data_frame(current.mirnet, "vertices");
   if(identical(colnames(dataSet$mir.filtered), c("Name1","ID1","Name2","ID2"))){
     colnames(dataSet$mir.filtered) = c("ID","Accession","Gene","Entrez")
   }
