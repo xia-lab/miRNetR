@@ -121,7 +121,7 @@ RemoveMirEntry <- function(tblnm, mir.id) {
 
 # batch remove based on
 UpdateMirEntries <- function(col.id, method, value, action, tblnm="") {
-  save.image("updateentries.RData");
+  #save.image("updateentries.RData");
   use.mir.res <- T;
   if(col.id == "evidence"){
     col <- dataSet$mir.res$Experiment;
