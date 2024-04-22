@@ -520,24 +520,23 @@ PrepareMirNet <- function(mir.nm, file.nm){
 PerformLayOut <- function(g, layers, algo, focus=""){
   vc <- vcount(g);
   if(algo == "Default"){
-    if(vc > 1000) {
-      # pos.xy <- layout.fruchterman.reingold(g, area=30*vc^2);
-      pos.xy <- layout.lgl(g);
+    if(vc > 5000) {
+      pos.xy <- layout_with_lgl(g);
     }else if(vc < 100){
-      pos.xy <- layout.kamada.kawai(g);
+      pos.xy <- layout_with_kk(g);
     }else{
-      pos.xy <- layout.fruchterman.reingold(g, area=40*vc^2);
+      pos.xy <- layout_with_fr(g);
     }
   }else if(algo == "FrR"){
-    pos.xy <- layout.fruchterman.reingold(g, area=34*vc^2);
+    pos.xy <- layout_with_fr(g, area=34*vc^2);
   }else if(algo == "circle"){
-    pos.xy <- layout.circle(g);
+    pos.xy <- layout_in_circle(g);
   }else if(algo == "random"){
-    pos.xy <- layout.random(g);
+    pos.xy <- layout_randomly (g);
   }else if(algo == "lgl"){
-    pos.xy <- layout.lgl(g);
+    pos.xy <- layout_with_lgl(g);
   }else if(algo == "gopt"){
-    pos.xy <- layout.graphopt(g)
+    pos.xy <- layout_with_graphopt(g)
   }else if(algo == "circular_tripartite"){
     library(ggforce)
     l <- layout_with_sugiyama(g, layers = V(g)$group*(vc/3) +30)
