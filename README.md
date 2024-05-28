@@ -65,5 +65,5 @@ Fan Y, Siklenka, K., Arora, SK., Ribeiro, P., Kimmins, S. and Xia, J. (2016) miR
 
 ## Bugs or feature requests
 
-To inform us of any bugs or requests, please open a new issue or send an email to #le.chang@mail.mcgill.ca.
+To inform us of any bugs or requests, please open a new issue or post on [OmicsForum](https://omicsforum.ca/c/mirnet/9)
 
