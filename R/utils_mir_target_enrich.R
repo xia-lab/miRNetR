@@ -306,7 +306,7 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
   cat(json.mat);
   sink();
   
-  cleanMem();
+  CleanMemory();
   # write csv
   # csv.nm <- paste(file.nm, ".csv", sep="");
   fast.write.csv(resTable, file="mirnet_enrichment.csv", row.names=F);
