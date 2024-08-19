@@ -697,7 +697,7 @@ queryGeneDB <- function(table.nm, data.org){
     }
     #conv.db <- dbConnect(SQLite(), paste(sqlite.path, data.org, "_genes.sqlite", sep=""));
     db.map <- dbReadTable(conv.db, table.nm)
-    dbDisconnect(conv.db); cleanMem();
+    dbDisconnect(conv.db); CleanMemory();
 
     return(db.map)
 }
