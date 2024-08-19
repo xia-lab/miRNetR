@@ -2,26 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{ReadTabExpressData}
 \alias{ReadTabExpressData}
-\title{FUNCTION_TITLE}
+\title{Read Expression Data}
 \usage{
 ReadTabExpressData(dataName)
 }
-\arguments{
-\item{dataName}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Read Expression Data
 }

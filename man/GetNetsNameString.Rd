@@ -2,23 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{GetNetsNameString}
 \alias{GetNetsNameString}
-\title{FUNCTION_TITLE}
+\title{Get Network Names as String}
 \usage{
 GetNetsNameString()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Network Names as String
 }

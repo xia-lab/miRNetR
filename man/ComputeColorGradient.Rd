@@ -2,28 +2,17 @@
 % Please edit documentation in R/MiscUtils.R
 \name{ComputeColorGradient}
 \alias{ComputeColorGradient}
-\title{FUNCTION_TITLE}
+\title{Compute Color Gradient}
 \usage{
-ComputeColorGradient(nd.vec, background = "black")
+ComputeColorGradient(nd.vec, background = "black", centered)
 }
 \arguments{
-\item{nd.vec}{PARAM_DESCRIPTION}
+\item{nd.vec}{Numeric vector.}
 
-\item{background}{PARAM_DESCRIPTION, Default: 'black'}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{background}{Background color.}
+
+\item{centered}{Logical.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Compute Color Gradient
 }

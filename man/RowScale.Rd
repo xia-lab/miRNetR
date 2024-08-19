@@ -2,26 +2,13 @@
 % Please edit documentation in R/MiscUtils.R
 \name{RowScale}
 \alias{RowScale}
-\title{FUNCTION_TITLE}
+\title{Row Scale}
 \usage{
 RowScale(x)
 }
 \arguments{
-\item{x}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{x}{Numeric matrix to standardize.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Row Scale
 }

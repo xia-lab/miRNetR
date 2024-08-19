@@ -2,26 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{GetSeqnm}
 \alias{GetSeqnm}
-\title{FUNCTION_TITLE}
+\title{Get miRNA Name}
 \usage{
 GetSeqnm(rowid)
 }
-\arguments{
-\item{rowid}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get miRNA Name
 }

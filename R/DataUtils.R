@@ -14,6 +14,8 @@
 }
 
 # init resources for analysis
+#' Initiate Data
+#' @export
 Init.Data<-function(dataType, analType, onWeb=T){
   globalConfig <- list();
   .on.public.web <<- onWeb;
@@ -56,8 +58,8 @@ Init.Data<-function(dataType, analType, onWeb=T){
     sqlite.path <<- "/media/zzggyy/disk/sqlite/";
   }else if(file.exists("/home/zgy/sqlite")){# zgy local2
     sqlite.path <<- "/home/zgy/sqlite/";
-  }else if(file.exists("/home/fiona/Documents")){# fiona local
-    sqlite.path <<- "/home/fiona/Documents/sqlite/";
+  }else if(file.exists("/home/fiona")){# fiona local
+    sqlite.path <<- "/home/fiona/sqlite/";
   }else{
     sqlite.path <<- "https://www.xialab.ca/resources/sqlite/";
   }
@@ -85,6 +87,8 @@ Init.Data<-function(dataType, analType, onWeb=T){
 
 
 # "ID", "Accession","Gene", "PMID"
+#' Get Result Column
+#' @export
 GetMirResCol <- function(netType, colInx){
   if (anal.type == "multilist"  || anal.type == "snp2mir" || anal.type == "tf2genemir" || anal.type == "gene2tfmir") {
     res <- dataSet[netType][[1]][, colInx];
@@ -96,6 +100,8 @@ GetMirResCol <- function(netType, colInx){
   return(res);
 }
 
+#' Get Result Row
+#' @export
 GetMirResRowNames <- function(netType){
   if (anal.type == "multilist"  || anal.type == "snp2mir" || anal.type == "tf2genemir" || anal.type == "gene2tfmir") {
     resTable <- dataSet[netType][[1]]
@@ -109,6 +115,8 @@ GetMirResRowNames <- function(netType){
   rownames(resTable);
 }
 
+#' Remove miRNA Entry
+#' @export
 RemoveMirEntry <- function(tblnm, mir.id) {
   id <<- mir.id
   inx <- which(rownames(dataSet[tblnm][[1]]) == mir.id);
@@ -120,6 +128,8 @@ RemoveMirEntry <- function(tblnm, mir.id) {
 }
 
 # batch remove based on
+#' Update miRNA Entries
+#' @export
 UpdateMirEntries <- function(col.id, method, value, action, tblnm="") {
   #save.image("updateentries.RData");
   use.mir.res <- T;
@@ -199,6 +209,8 @@ UpdateMirEntries <- function(col.id, method, value, action, tblnm="") {
   }
 }
 
+#' Prepare JSON File
+#' @export
 PrepareJsonFromR <- function(fileNm, type, jsonString, dataSetString){
   library(RJSONIO)
   dataSet <- fromJSON(dataSetString);
@@ -208,6 +220,7 @@ PrepareJsonFromR <- function(fileNm, type, jsonString, dataSetString){
   sink();
   return(1)
 }
+
 
 saveSet <- function(obj=NA, set="", output=1){
   
@@ -256,7 +269,6 @@ readSet <- function(obj=NA, set=""){
 
 
 #'Record R Commands
-#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param cmd Commands 
 #'@export
 RecordRCommand <- function(cmd){
@@ -275,7 +287,6 @@ SaveRCommands <- function(){
 }
 
 #'Export R Command History
-#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@export
 GetRCommandHistory <- function(){
   infoSet <- readSet(infoSet, "infoSet"); 

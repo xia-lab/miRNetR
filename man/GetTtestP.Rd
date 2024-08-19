@@ -2,7 +2,7 @@
 % Please edit documentation in R/ExprUtils.R
 \name{GetTtestP}
 \alias{GetTtestP}
-\title{FUNCTION_TITLE}
+\title{Get p-value from t-test}
 \usage{
 GetTtestP(
   my.dat,
@@ -14,34 +14,6 @@ GetTtestP(
   nonpar = F
 )
 }
-\arguments{
-\item{my.dat}{PARAM_DESCRIPTION}
-
-\item{my.cls}{PARAM_DESCRIPTION}
-
-\item{grp1}{PARAM_DESCRIPTION}
-
-\item{grp2}{PARAM_DESCRIPTION}
-
-\item{paired}{PARAM_DESCRIPTION, Default: FALSE}
-
-\item{equal.var}{PARAM_DESCRIPTION, Default: TRUE}
-
-\item{nonpar}{PARAM_DESCRIPTION, Default: F}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get p-value from t-test
 }

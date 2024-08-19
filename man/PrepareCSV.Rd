@@ -2,26 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{PrepareCSV}
 \alias{PrepareCSV}
-\title{FUNCTION_TITLE}
+\title{Prepare CSV}
 \usage{
 PrepareCSV(table.nm)
 }
-\arguments{
-\item{table.nm}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Prepare CSV
 }

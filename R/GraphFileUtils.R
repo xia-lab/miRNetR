@@ -4,7 +4,8 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
-
+#' Read Graph Data
+#' @export
 ReadGraphData <- function(fileName, fileType, org) {
   require("igraph");
   data.org<<- org;
@@ -161,7 +162,8 @@ read.sif <- function (sif.file, format = "graphNEL", directed = FALSE, header = 
 }
 
 
-
+#' Convert Igraph to JSON
+#' @export
 convertIgraph2JSONFromFile <- function(net.nm, filenm){
   g <- mir.nets[[net.nm]];
 

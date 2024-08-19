@@ -2,23 +2,10 @@
 % Please edit documentation in R/AnotUtils.R
 \name{PerformGeneAnnotation}
 \alias{PerformGeneAnnotation}
-\title{FUNCTION_TITLE}
+\title{Perform Gene Annotation}
 \usage{
 PerformGeneAnnotation()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Perform Gene Annotation
 }

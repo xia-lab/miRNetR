@@ -2,23 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{GetAnotNames}
 \alias{GetAnotNames}
-\title{FUNCTION_TITLE}
+\title{Get annotated names}
 \usage{
 GetAnotNames()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get annotated names
 }

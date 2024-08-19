@@ -2,28 +2,10 @@
 % Please edit documentation in R/DataUtils.R
 \name{RemoveMirEntry}
 \alias{RemoveMirEntry}
-\title{FUNCTION_TITLE}
+\title{Remove miRNA Entry}
 \usage{
 RemoveMirEntry(tblnm, mir.id)
 }
-\arguments{
-\item{tblnm}{PARAM_DESCRIPTION}
-
-\item{mir.id}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Remove miRNA Entry
 }

@@ -2,23 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{GetNetNames}
 \alias{GetNetNames}
-\title{FUNCTION_TITLE}
+\title{Get Network Names}
 \usage{
 GetNetNames()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Network Names
 }

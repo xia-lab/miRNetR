@@ -2,23 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{SetupMirExpressData}
 \alias{SetupMirExpressData}
-\title{FUNCTION_TITLE}
+\title{Setup miRNA Expression Data}
 \usage{
 SetupMirExpressData()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Setup miRNA Expression Data
 }

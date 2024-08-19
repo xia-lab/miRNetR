@@ -8,8 +8,6 @@ RecordRCommand(cmd)
 }
 \arguments{
 \item{cmd}{Commands}
-
-\item{mSetObj}{Input the name of the created mSetObj (see InitDataObjects)}
 }
 \description{
 Record R Commands

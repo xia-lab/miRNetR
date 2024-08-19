@@ -2,34 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{PerformDataAnnot}
 \alias{PerformDataAnnot}
-\title{FUNCTION_TITLE}
+\title{Peform data annotation}
 \usage{
 PerformDataAnnot(org, idType, tissue, lvlOpt, matchMin = 0.5)
 }
-\arguments{
-\item{org}{PARAM_DESCRIPTION}
-
-\item{idType}{PARAM_DESCRIPTION}
-
-\item{tissue}{PARAM_DESCRIPTION}
-
-\item{lvlOpt}{PARAM_DESCRIPTION}
-
-\item{matchMin}{PARAM_DESCRIPTION, Default: 0.5}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Peform data annotation
 }

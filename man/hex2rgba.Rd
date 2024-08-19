@@ -2,26 +2,13 @@
 % Please edit documentation in R/MiscUtils.R
 \name{hex2rgba}
 \alias{hex2rgba}
-\title{FUNCTION_TITLE}
+\title{Hex color to RGBA format}
 \usage{
 hex2rgba(cols)
 }
 \arguments{
-\item{cols}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{cols}{Hexadecimal color code (e.g., "#FFFFFF").}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Hex color to RGBA format
 }

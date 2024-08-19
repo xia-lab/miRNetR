@@ -2,23 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{GetNetNms}
 \alias{GetNetNms}
-\title{FUNCTION_TITLE}
+\title{Network Names}
 \usage{
 GetNetNms()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Network Names
 }

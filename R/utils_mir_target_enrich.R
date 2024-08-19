@@ -1,3 +1,4 @@
+
 my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode="serial"){
   #adjust.type <<- adjust.type;
   #fun.type <<- fun.type;
@@ -323,6 +324,8 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
   }
 }
 
+#' Load KEGG Library
+#' @export
 LoadKEGGLib<-function(){
   kegg.rda <- paste(lib.path, dataSet$org, "/kegg_", dataSet$org, ".rda", sep="");
   print(paste("adding library:", kegg.rda));
@@ -344,6 +347,8 @@ LoadKEGGLib<-function(){
     current.universe <<- unique(unlist(current.geneset));
 }
 
+#' Load Reactome Library
+#' @export
 LoadREACTOMELib<-function(){
     reactome.rda <- paste(lib.path, dataSet$org, "/reactome_", dataSet$org, ".rda", sep="");
     print(paste("adding library:", reactome.rda));
@@ -363,6 +368,8 @@ LoadREACTOMELib<-function(){
     current.universe <<- unique(unlist(current.geneset));
 }
 
+#' Load Gene Ontology Library
+#' @export
 LoadGOLib<-function(onto){
     go.rda <- paste(lib.path, dataSet$org, "/go_", tolower(onto), ".rda", sep="");
     print(paste("adding library:", go.rda));
@@ -398,6 +405,8 @@ LoadGOLib<-function(onto){
 }
 
 # loading miRNA tissue annotation library (human only)
+#' Load Tissue Library
+#' @export
 LoadTissueLib <- function(){
   tissue.rda <- paste(lib.path, "tissue.rda", sep="");
   if(.on.public.web){
@@ -418,6 +427,8 @@ LoadTissueLib <- function(){
 }
 
 # loading miRNA functional annotation library Tam 2.0 (human only)
+#' Load miRNA Functional Annotation Library
+#' @export
 LoadFuncLib <- function(){
   func.rda <- paste(lib.path, dataSet$org, "/tam_func.rda", sep="");
   if(.on.public.web){
@@ -438,6 +449,8 @@ LoadFuncLib <- function(){
 }
 
 # loading miRNA hmdd disease annotation library Tam 2.0 (human only)
+#' Load HMDD Library
+#' @export
 LoadHMDDLib <- function(){
   hmdd.rda <- paste(lib.path, dataSet$org, "/tam_hmdd.rda", sep="");
   if(.on.public.web){
@@ -459,6 +472,8 @@ LoadHMDDLib <- function(){
 
 
 # loading miRNA cluster annotation library Tam 2.0 (human only)
+#' Load Cluster Annotation Library
+#' @export
 LoadClusterLib <- function(){
   cluster.rda <- paste(lib.path, dataSet$org, "/tam_cluster.rda", sep="");
   if(.on.public.web){
@@ -479,6 +494,8 @@ LoadClusterLib <- function(){
 }
 
 # loading miRNA TF annotation library Tam 2.0 (human only)
+#' Load Transcription Factor Library
+#' @export
 LoadTFLib <- function(){
   tf.rda <- paste(lib.path, dataSet$org, "/tam_tf.rda", sep="");
   if(.on.public.web){
@@ -499,6 +516,8 @@ LoadTFLib <- function(){
 }
 
 # loading miRNA TF annotation library Tam 2.0 (human only)
+#' Load Disease Library
+#' @export
 LoadDiseaseLib <- function(){
   disease.path <- paste(lib.path, "hsa/disease.rds", sep="");
   if(.on.public.web){
@@ -519,6 +538,8 @@ LoadDiseaseLib <- function(){
 }
 
 # loading mirfamily library accroding to the species. The names for set.ids are the same as set.ids.
+#' Load miRNA Family Library
+#' @export
 LoadmiRFamLib <- function(){
   mirfamily.rda <- paste(lib.path, "mirfamily.rda", sep="");
   if(.on.public.web){
@@ -540,6 +561,8 @@ LoadmiRFamLib <- function(){
 
 # return a list of gene targets from the same size but randomly selected mirs
 # qSize is the query mir vec size
+#' Get Random miRNA Target Genes
+#' @export
 GetRandomMirTargetGenes <- function(qSize, perm.num){
 
   db.path <- paste(sqlite.path, "mir2gene.sqlite", sep="");
@@ -575,6 +598,8 @@ GetRandomMirTargetGenes <- function(qSize, perm.num){
 
 # return a list of gene targets from the same size but randomly selected mirs
 # qSize is the query mir vec size
+#' Get Random Xeno-miRNA Target Genes
+#' @export
 GetRandomXenoMirTargetGenes <- function(qSize, perm.num){
     
   db.path <- paste(sqlite.path, "xenomirnet.sqlite", sep="");

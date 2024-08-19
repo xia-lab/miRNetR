@@ -2,28 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{GetUpdateSpeNames}
 \alias{GetUpdateSpeNames}
-\title{FUNCTION_TITLE}
+\title{Get Updated Species Names}
 \usage{
 GetUpdateSpeNames(orgType, source)
 }
-\arguments{
-\item{orgType}{PARAM_DESCRIPTION}
-
-\item{source}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Updated Species Names
 }

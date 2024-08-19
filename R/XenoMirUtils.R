@@ -1,4 +1,8 @@
-
+#' Setup Xeno miRNA List
+#' @param mirs miRNAs.
+#' @param orgType Organism type.
+#' @param idType ID type.
+#' @export
 SetupXenoMirListData <- function(mirs, orgType, idType){
 
     dataSet$listData <- TRUE;
@@ -30,13 +34,16 @@ SetupXenoMirListData <- function(mirs, orgType, idType){
     return (nrow(mir.mat));
 }
 
-
+#' Get miRNA Name
+#' @export
 GetSeqnm <- function(rowid){
   inx <- which(rownames(dataSet$mir.res) == rowid);
   mirid <- dataSet$mir.res[inx, "miRNA"];
   return(mirid);
 }
 
+#' Get miRNA Accession
+#' @export
 GetSeq <- function(mir.id){
   inx <- which(rownames(dataSet$mir.res) == mir.id);
   seq <- dataSet$mir.res[inx, "Accession"];
@@ -44,6 +51,8 @@ GetSeq <- function(mir.id){
 }
 
 # batch remove based on
+#' Update Xeno miRNA Entries
+#' @export
 UpdateXenoMirEntries <- function(col.id, method, value, action) {
 
     if (col.id == "source"){
@@ -84,6 +93,8 @@ UpdateXenoMirEntries <- function(col.id, method, value, action) {
     }
 }
 
+#' Get Unique Source Names
+#' @export
 GetUniqueSourceNames <- function(orgType){
     db.path <- paste("../../data/libs/xenomir.hosts.json");
     library("RJSONIO");
@@ -93,27 +104,37 @@ GetUniqueSourceNames <- function(orgType){
     return(res);
 }
 
+#' Get Unique Class Names
+#' @export
 GetUniqueClassNames <- function(orgType, source){
     res <- sort(names(browse[[orgType]][[source]]));
     return(res);
 }
 
+#' Get Unique Species Names
+#' @export
 GetUniqueSpeciesNames <- function(orgType){
     res <- unique(unlist(browse[[orgType]][[1]]));
     return(res);
 }
 
+#' Get Updated Class Names
+#' @export
 GetUpdateClassNames <- function(orgType, source){
     res <- sort(names(browse[[orgType]][[source]]));
     return(res);
 }
 
+#' Get Updated Species Names
+#' @export
 GetUpdateSpeNames <- function(orgType, source){
     res <- unlist(browse[[orgType]][[source]]);
     res <- sort(res);
     return(res);
 }
 
+#' Set up items
+#' @export
 SetupItemFromList <- function(orgType, species){
     mir.mat <- cbind(species, rep("*", length(species)));
     rownames(mir.mat) <- mir.mat[,1];
@@ -126,6 +147,8 @@ SetupItemFromList <- function(orgType, species){
     return(nrow(mir.mat));
 }
 
+#' Set up source
+#' @export
 SetupSourceFromList <- function(source){
     if(source == ""){
         print("Please at least choose one source!");
@@ -137,6 +160,8 @@ SetupSourceFromList <- function(source){
     #return(length(source));
 }
 
+#' Species Mapping
+#' @export
 PerformSpeciesMapping <- function(status){
     orgType <- dataSet$org;
     source <- dataSet$source;
@@ -201,6 +226,8 @@ PerformSpeciesMapping <- function(status){
     }
 }
 
+#' Xeno-miRNA Gene Target Mapping
+#' @export
 PerformXenoMirGeneMapping <- function(status){
 
     orgType <- dataSet$org;
@@ -288,6 +315,8 @@ PerformXenoMirGeneMapping <- function(status){
 ## Author: Xu, Taosheng taosheng.x@gmail.com
 ###################################################
 
+#' miRNA Name Conversion From Precursor to Mature
+#' @export
 miRNA_PrecursorToMature<-function(miRNANames,version=NULL){
   if(is.null(version)){
     c_version <- checkMiRNAVersion(miRNANames,verbose = FALSE)
@@ -322,6 +351,8 @@ miRNA_PrecursorToMature<-function(miRNANames,version=NULL){
   target
 }
 
+#' Check miRNA Version
+#' @export
 checkMiRNAVersion <- function(miRNANames,verbose=TRUE){
   miRNANames <- as.character(miRNANames)
   miRNANames <- gsub(" ","",miRNANames)##Remove the possible space
@@ -351,6 +382,8 @@ checkMiRNAVersion <- function(miRNANames,verbose=TRUE){
   VER[ind]
 }
 
+#' Query Xeno-miRNA
+#' @export
 QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
     
   db.path <- paste0(db.path, ".sqlite");

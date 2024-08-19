@@ -2,28 +2,10 @@
 % Please edit documentation in R/MirFunUtils.R
 \name{CalculateMirTargetSet}
 \alias{CalculateMirTargetSet}
-\title{FUNCTION_TITLE}
+\title{Calculate miRNA Target Set}
 \usage{
 CalculateMirTargetSet(nms, operation)
 }
-\arguments{
-\item{nms}{PARAM_DESCRIPTION}
-
-\item{operation}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Calculate miRNA Target Set
 }

@@ -5,6 +5,11 @@
 ###################################################
 
 # new range [a, b]
+#' Rescale to New Range
+#' @param qvec Vector to be rescaled.
+#' @param a Lower bound.
+#' @param b Upper bound.
+#' @export
 rescale2NewRange <- function(qvec, a, b){
     q.min <- min(qvec);
     q.max <- max(qvec);
@@ -28,15 +33,25 @@ rescale2NewRange <- function(qvec, a, b){
 `%notin%` <- Negate(`%in%`);
 
 # normalize to zero mean and unit variance
+#' Auto Normalization
+#' @param x Variable to normalize.
+#' @export
 AutoNorm<-function(x){
     (x - mean(x))/sd(x, na.rm=T);
 }
 
+#' Log Normalization
+#' @param x Variable to normalize.
+#' @param min.val Min value.
+#' @export
 LogNorm<-function(x, min.val){
     log2((x + sqrt(x^2 + min.val^2))/2)
 }
 
 # #FFFFFF to rgb(1, 0, 0)
+#' Hex color to RGBA format
+#' @param cols Hexadecimal color code (e.g., "#FFFFFF").
+#' @export
 hex2rgba <- function(cols){
   return(apply(sapply(cols, col2rgb), 2, function(x){paste("rgba(", x[1], ",", x[2], ",", x[3], ",0.8)", sep="")}));
 }
@@ -44,6 +59,10 @@ hex2rgba <- function(cols){
 # re-arrange one vector elements according to another vector values
 # usually src is character vector to be arranged
 # target is numberic vector of same length
+#' Synchronize Two Vectors
+#' @param src.vec Source character vector to be arranged.
+#' @param tgt.vec Target numeric vector of the same length.
+#' @export
 sync2vecs <- function(src.vec, tgt.vec){
     if(length(unique(src.vec)) != length(unique(tgt.vec))){
         print("must be of the same unique length!");
@@ -57,6 +76,10 @@ sync2vecs <- function(src.vec, tgt.vec){
 }
 
 # col vec is for low high null
+#' Colors Based on Expression
+#' @param nd.vec Numeric vector containing values to be mapped to colors.
+#' @param col.vec Color vector.
+#' export
 getExpColors <- function(nd.vec, col.vec){
     nvec <- rep("", length(nd.vec));
     m.inx <- is.null(nd.vec) | is.na(nd.vec);
@@ -67,6 +90,9 @@ getExpColors <- function(nd.vec, col.vec){
     as.character(nvec);
 }
 
+#' Get Color Schema
+#' @param my.grps Groups.
+#' @export
 GetColorSchema <- function(my.grps){
     # test if total group number is over 9
      grp.num <- length(levels(my.grps));
@@ -88,6 +114,11 @@ GetColorSchema <- function(my.grps){
 }
 
 # borrowed from Hmisc
+#' Check/Convert Values to Numeric
+#' @param x Character vector to check/convert.
+#' @param what "test" (check if numeric) or "vector" (convert to numeric).
+#' @param extras Additional values to be treated as missing or empty.
+#' @export
 all.numeric <- function (x, what = c("test", "vector"), extras = c(".", "NA")){
     what <- match.arg(what)
     old <- options(warn = -1)
@@ -104,9 +135,10 @@ all.numeric <- function (x, what = c("test", "vector"), extras = c(".", "NA")){
     else x
 }
 
-# utils to remove from
-# within, leading and trailing spaces
-# remove /
+# utils to remove from within, leading and trailing spaces
+#' Clear String
+#' @param query Query.
+#' @export
 ClearStrings<-function(query){
     # remove leading and trailing space
     query<- sub("^[[:space:]]*(.*?)[[:space:]]*$", "\\1", query, perl=TRUE);
@@ -119,6 +151,8 @@ ClearStrings<-function(query){
 }
 
 # need to obtain the full path to convert (from imagemagik) for cropping images
+#' Get Bash Full Path
+#' @export
 GetBashFullPath<-function(){
     path <- system("which bash", intern=TRUE);
     if((length(path) == 0) && (typeof(path) == "character")){
@@ -129,6 +163,10 @@ GetBashFullPath<-function(){
 }
 
 # overwrite ave, => na.rm=T
+#' Average
+#' @param x Numeric vector to calculate mean.
+#' @param ... Optional grouping factors.
+#' @export
 myave <- function (x, ...) {
     n <- length(list(...))
     if (n) {
@@ -140,6 +178,9 @@ myave <- function (x, ...) {
 }
 
 # log scale ratio
+#' Calculate Pairwise Difference
+#' @param mat Numeric matrix.
+#' @export
 CalculatePairwiseDiff <- function(mat){
     f <- function(i, mat) {
        z <- mat[, i-1] - mat[, i:ncol(mat), drop = FALSE]
@@ -150,6 +191,10 @@ CalculatePairwiseDiff <- function(mat){
     round(res,5);
 }
 
+#' Get Extend Range
+#' @param vec Vector input.
+#' @param unit Unit to extend the range.
+#' @export
 GetExtendRange<-function(vec, unit=10){
     var.max <- max(vec);
     var.min <- min(vec);
@@ -158,6 +203,9 @@ GetExtendRange<-function(vec, unit=10){
 }
 
 # perform scale on row (scale is on column)
+#' Row Scale
+#' @param x Numeric matrix to standardize.
+#' @export
 RowScale <- function(x){
     x <- sweep(x, 1L, rowMeans(x, na.rm = T), check.margin = FALSE)
     sx <- apply(x, 1L, sd, na.rm = T)
@@ -165,9 +213,11 @@ RowScale <- function(x){
     x
 }
 
-# utils to remove from
-# within, leading and trailing spaces
-# remove /
+# utils to remove from within, leading and trailing spaces
+#' Clear Factor Strings
+#' @param cls.nm Character string to be prefixed.
+#' @param query Character vector of string to be cleaned.
+#' @export
 ClearFactorStrings<-function(cls.nm, query){
     # remove leading and trailing space
     query<- sub("^[[:space:]]*(.*?)[[:space:]]*$", "\\1", query, perl=TRUE);
@@ -220,6 +270,9 @@ ClearFactorStrings<-function(cls.nm, query){
 # read tab delimited file
 # stored in dataSet list object
 # can have many classes, stored in meta.info
+#' Read Tab Delimited Data
+#' @param dataName Data name.
+#' @export
 ReadTabData <- function(dataName) {
 
     msg <- NULL;
@@ -307,6 +360,13 @@ ReadTabData <- function(dataName) {
   return(dat);
 }
 
+#' Query miRNet DB
+#' @param db.path Path to database.
+#' @param q.vec Vector to query.
+#' @param table.nm Table name.
+#' @param col.nm Column names.
+#' @param db.nm Name of the database.
+#' @export
 Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase"){
 
   db.path <- paste0(db.path, ".sqlite");
@@ -495,6 +555,11 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
   return(mir.dic);
 }
 
+#' Query Transcription Factor
+#' @param table.nm Table name.
+#' @param q.vec Vector to query.
+#' @param col.nm Column names.
+#' @export
 QueryTFSQLite <- function(table.nm, q.vec, col.nm){
   require('RSQLite');
   db.path <- paste(sqlite.path, "tf2gene.sqlite", sep="");
@@ -514,10 +579,16 @@ QueryTFSQLite <- function(table.nm, q.vec, col.nm){
   return(.query.sqlite(tf.db, statement));
 }
 
+#' Clean Memory
+#' @export
 CleanMemory <- function() { 
     gc(); 
 }
 
+#' Get Unique Entries
+#' @param db.path Path to database.
+#' @param statement Statement.
+#' @export
 GetUniqueEntries <- function(db.path, statement){
   if(.on.public.web){
     mir.db <- dbConnect(SQLite(), db.path);
@@ -535,7 +606,8 @@ GetUniqueEntries <- function(db.path, statement){
     return (res);
 }
 
-
+#' Generate Breaks
+#' @export
 generate_breaks = function(x, n, center = F){
     if(center){
         m = max(abs(c(min(x, na.rm = T), max(x, na.rm = T))))
@@ -547,6 +619,11 @@ generate_breaks = function(x, n, center = F){
     return(res)
 }
 
+#' Compute Color Gradient
+#' @param nd.vec Numeric vector.
+#' @param background Background color.
+#' @param centered Logical.
+#' @export
 ComputeColorGradient <- function(nd.vec, background="black", centered){
     library("RColorBrewer");
     if(sum(nd.vec<0, na.rm=TRUE) > 0){
@@ -559,6 +636,10 @@ ComputeColorGradient <- function(nd.vec, background="black", centered){
     return(scale_vec_colours(nd.vec, col = color, breaks = breaks));
 }
 
+#' Get Color Gradient
+#' @param backgroun Background.
+#' @param center Logical
+#' @export
 GetColorGradient <- function(background, center){
     if(background == "black"){
         if(center){
@@ -575,10 +656,14 @@ GetColorGradient <- function(background, center){
     }
 }
 
+#' Scale Vector Colours
+#' @export
 scale_vec_colours = function(x, col = rainbow(10), breaks = NA){
     return(col[as.numeric(cut(x, breaks = breaks, include.lowest = T))])
 }
 
+#' Scale Matrix Colours
+#' @export
 scale_colours = function(mat, col = rainbow(10), breaks = NA){
     mat = as.matrix(mat)
     return(matrix(scale_vec_colours(as.vector(mat), col = col, breaks = breaks), nrow(mat), ncol(mat), dimnames = list(rownames(mat), colnames(mat))))
@@ -611,6 +696,8 @@ scale_colours = function(mat, col = rainbow(10), breaks = NA){
 }
 
 # shorthand
+#' Show Memory Use
+#' @export
 ShowMemoryUse <- function(..., n=30) {
     library(pryr);
     sink(); # make sure print to screen
@@ -633,6 +720,8 @@ ShowMemoryUse <- function(..., n=30) {
   return(res);
 }
 
+#' Query Protein-Protein Interaction
+#' @export
 QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
     require('RSQLite')
   db.path <- paste(sqlite.path, "ppi.sqlite", sep="");
@@ -672,12 +761,16 @@ QueryPpiSQLiteZero <- function(table.nm, q.vec, requireExp, min.score){
     return(ppi.res);
 }
 
+#' Capitalize First Letter
+#' @export
 simpleCap <- function(x) {
   s <- strsplit(x, " ")[[1]]
   paste(toupper(substring(s, 1,1)), substring(s, 2),
       sep="", collapse=" ")
 }
 
+#' Group Color Palette
+#' @export
 gg_color_hue <- function(grp.num, filenm=NULL) {
     grp.num <- as.numeric(grp.num)
     pal18 <- c("#3cb44b", "#f032e6", "#ffe119", "#e6194B", "#f58231", "#bfef45", "#fabebe", "#469990", "#e6beff", "#9A6324", "#800000", "#aaffc3", "#808000", "#ffd8b1", "#42d4f4","#000075", "#ff4500");

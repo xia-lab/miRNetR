@@ -2,28 +2,10 @@
 % Please edit documentation in R/MiscUtils.R
 \name{gg_color_hue}
 \alias{gg_color_hue}
-\title{FUNCTION_TITLE}
+\title{Group Color Palette}
 \usage{
 gg_color_hue(grp.num, filenm = NULL)
 }
-\arguments{
-\item{grp.num}{PARAM_DESCRIPTION}
-
-\item{filenm}{PARAM_DESCRIPTION, Default: NULL}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Group Color Palette
 }

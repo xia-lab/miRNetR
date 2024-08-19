@@ -2,32 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{UpdateXenoMirEntries}
 \alias{UpdateXenoMirEntries}
-\title{FUNCTION_TITLE}
+\title{Update Xeno miRNA Entries}
 \usage{
 UpdateXenoMirEntries(col.id, method, value, action)
 }
-\arguments{
-\item{col.id}{PARAM_DESCRIPTION}
-
-\item{method}{PARAM_DESCRIPTION}
-
-\item{value}{PARAM_DESCRIPTION}
-
-\item{action}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Update Xeno miRNA Entries
 }

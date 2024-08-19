@@ -2,23 +2,10 @@
 % Please edit documentation in R/utils_mir_target_enrich.R
 \name{LoadKEGGLib}
 \alias{LoadKEGGLib}
-\title{FUNCTION_TITLE}
+\title{Load KEGG Library}
 \usage{
 LoadKEGGLib()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Load KEGG Library
 }

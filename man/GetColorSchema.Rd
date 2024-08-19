@@ -2,26 +2,13 @@
 % Please edit documentation in R/MiscUtils.R
 \name{GetColorSchema}
 \alias{GetColorSchema}
-\title{FUNCTION_TITLE}
+\title{Get Color Schema}
 \usage{
 GetColorSchema(my.grps)
 }
 \arguments{
-\item{my.grps}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{my.grps}{Groups.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Color Schema
 }

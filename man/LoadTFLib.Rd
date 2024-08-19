@@ -2,23 +2,10 @@
 % Please edit documentation in R/utils_mir_target_enrich.R
 \name{LoadTFLib}
 \alias{LoadTFLib}
-\title{FUNCTION_TITLE}
+\title{Load Transcription Factor Library}
 \usage{
 LoadTFLib()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Load Transcription Factor Library
 }

@@ -2,36 +2,26 @@
 % Please edit documentation in R/ListUtils.R
 \name{SetupIndListData}
 \alias{SetupIndListData}
-\title{FUNCTION_TITLE}
+\title{Setup List Data}
 \usage{
 SetupIndListData(listInput, orgType, inputType, idType, tissue, target)
 }
 \arguments{
-\item{listInput}{PARAM_DESCRIPTION}
+\item{listInput}{List to query.}
 
-\item{orgType}{PARAM_DESCRIPTION}
+\item{orgType}{Organism type.}
 
-\item{inputType}{PARAM_DESCRIPTION}
+\item{inputType}{Input type.}
 
-\item{idType}{PARAM_DESCRIPTION}
+\item{idType}{ID type.}
 
-\item{tissue}{PARAM_DESCRIPTION}
+\item{tissue}{Tissue type.}
 
-\item{target}{PARAM_DESCRIPTION}
+\item{target}{Target.}
 }
 \value{
-OUTPUT_DESCRIPTION
+List data initialized.
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Setup List Data
 }

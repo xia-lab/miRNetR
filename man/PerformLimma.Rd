@@ -2,26 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{PerformLimma}
 \alias{PerformLimma}
-\title{FUNCTION_TITLE}
+\title{Perform limma}
 \usage{
 PerformLimma(target.grp)
 }
-\arguments{
-\item{target.grp}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Perform limma
 }

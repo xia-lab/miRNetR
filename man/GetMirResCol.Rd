@@ -2,28 +2,10 @@
 % Please edit documentation in R/DataUtils.R
 \name{GetMirResCol}
 \alias{GetMirResCol}
-\title{FUNCTION_TITLE}
+\title{Get Result Column}
 \usage{
 GetMirResCol(netType, colInx)
 }
-\arguments{
-\item{netType}{PARAM_DESCRIPTION}
-
-\item{colInx}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Result Column
 }
