@@ -2,30 +2,17 @@
 % Please edit documentation in R/MiscUtils.R
 \name{all.numeric}
 \alias{all.numeric}
-\title{FUNCTION_TITLE}
+\title{Check/Convert Values to Numeric}
 \usage{
 \method{all}{numeric}(x, what = c("test", "vector"), extras = c(".", "NA"))
 }
 \arguments{
-\item{x}{PARAM_DESCRIPTION}
+\item{x}{Character vector to check/convert.}
 
-\item{what}{PARAM_DESCRIPTION, Default: c("test", "vector")}
+\item{what}{"test" (check if numeric) or "vector" (convert to numeric).}
 
-\item{extras}{PARAM_DESCRIPTION, Default: c(".", "NA")}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{extras}{Additional values to be treated as missing or empty.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Check/Convert Values to Numeric
 }

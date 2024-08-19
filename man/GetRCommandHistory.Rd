@@ -6,9 +6,6 @@
 \usage{
 GetRCommandHistory()
 }
-\arguments{
-\item{mSetObj}{Input the name of the created mSetObj (see InitDataObjects)}
-}
 \description{
 Export R Command History
 }

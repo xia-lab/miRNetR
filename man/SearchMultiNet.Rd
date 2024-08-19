@@ -2,26 +2,13 @@
 % Please edit documentation in R/ListUtils.R
 \name{SearchMultiNet}
 \alias{SearchMultiNet}
-\title{FUNCTION_TITLE}
+\title{Search Multi-Network Data}
 \usage{
 SearchMultiNet(input.type)
 }
 \arguments{
-\item{input.type}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{input.type}{miRNA and target, e.g., mir2gene, mir2molecule, mir2disease.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Search Multi-Network Data
 }

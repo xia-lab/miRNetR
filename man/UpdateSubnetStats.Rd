@@ -2,23 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{UpdateSubnetStats}
 \alias{UpdateSubnetStats}
-\title{FUNCTION_TITLE}
+\title{Update Subnetwork Stats}
 \usage{
 UpdateSubnetStats()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Update Subnetwork Stats
 }

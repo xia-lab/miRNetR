@@ -2,32 +2,10 @@
 % Please edit documentation in R/DataUtils.R
 \name{UpdateMirEntries}
 \alias{UpdateMirEntries}
-\title{FUNCTION_TITLE}
+\title{Update miRNA Entries}
 \usage{
-UpdateMirEntries(col.id, method, value, action)
-}
-\arguments{
-\item{col.id}{PARAM_DESCRIPTION}
-
-\item{method}{PARAM_DESCRIPTION}
-
-\item{value}{PARAM_DESCRIPTION}
-
-\item{action}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+UpdateMirEntries(col.id, method, value, action, tblnm = "")
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Update miRNA Entries
 }

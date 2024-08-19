@@ -2,28 +2,15 @@
 % Please edit documentation in R/MiscUtils.R
 \name{GetUniqueEntries}
 \alias{GetUniqueEntries}
-\title{FUNCTION_TITLE}
+\title{Get Unique Entries}
 \usage{
 GetUniqueEntries(db.path, statement)
 }
 \arguments{
-\item{db.path}{PARAM_DESCRIPTION}
+\item{db.path}{Path to database.}
 
-\item{statement}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{statement}{Statement.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Unique Entries
 }

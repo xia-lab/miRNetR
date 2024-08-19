@@ -2,28 +2,10 @@
 % Please edit documentation in R/AnotUtils.R
 \name{doMirGeneAnnotation}
 \alias{doMirGeneAnnotation}
-\title{FUNCTION_TITLE}
+\title{Gene Annotation}
 \usage{
 doMirGeneAnnotation(id.vec, idType)
 }
-\arguments{
-\item{id.vec}{PARAM_DESCRIPTION}
-
-\item{idType}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Gene Annotation
 }

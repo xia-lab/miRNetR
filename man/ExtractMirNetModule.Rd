@@ -2,26 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{ExtractMirNetModule}
 \alias{ExtractMirNetModule}
-\title{FUNCTION_TITLE}
+\title{Extract miRNA Network Module}
 \usage{
 ExtractMirNetModule(nodeids)
 }
-\arguments{
-\item{nodeids}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Extract miRNA Network Module
 }

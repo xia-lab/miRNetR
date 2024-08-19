@@ -2,30 +2,17 @@
 % Please edit documentation in R/MiscUtils.R
 \name{QueryTFSQLite}
 \alias{QueryTFSQLite}
-\title{FUNCTION_TITLE}
+\title{Query Transcription Factor}
 \usage{
 QueryTFSQLite(table.nm, q.vec, col.nm)
 }
 \arguments{
-\item{table.nm}{PARAM_DESCRIPTION}
+\item{table.nm}{Table name.}
 
-\item{q.vec}{PARAM_DESCRIPTION}
+\item{q.vec}{Vector to query.}
 
-\item{col.nm}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{col.nm}{Column names.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Query Transcription Factor
 }

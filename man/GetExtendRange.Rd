@@ -2,28 +2,15 @@
 % Please edit documentation in R/MiscUtils.R
 \name{GetExtendRange}
 \alias{GetExtendRange}
-\title{FUNCTION_TITLE}
+\title{Get Extend Range}
 \usage{
 GetExtendRange(vec, unit = 10)
 }
 \arguments{
-\item{vec}{PARAM_DESCRIPTION}
+\item{vec}{Vector input.}
 
-\item{unit}{PARAM_DESCRIPTION, Default: 10}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{unit}{Unit to extend the range.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Extend Range
 }

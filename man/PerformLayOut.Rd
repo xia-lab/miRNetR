@@ -2,32 +2,19 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{PerformLayOut}
 \alias{PerformLayOut}
-\title{FUNCTION_TITLE}
+\title{Apply Graph Layout}
 \usage{
 PerformLayOut(g, layers, algo, focus = "")
 }
 \arguments{
-\item{g}{PARAM_DESCRIPTION}
+\item{g}{Graph object.}
 
-\item{layers}{PARAM_DESCRIPTION}
+\item{algo}{Layout algorithm: Default, FrR, circle, random, lgl, gopt, circular_tripartite, tripartite, concentric, backbone, mds.}
 
-\item{algo}{PARAM_DESCRIPTION}
+\item{focus}{Focus node.}
 
-\item{focus}{PARAM_DESCRIPTION, Default: ''}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{layer}{Optional: layer information.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Apply Graph Layout
 }

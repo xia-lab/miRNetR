@@ -2,34 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{QueryXenoMirSQLite}
 \alias{QueryXenoMirSQLite}
-\title{FUNCTION_TITLE}
+\title{Query Xeno-miRNA}
 \usage{
 QueryXenoMirSQLite(db.path, q.vec, table.nm, col.nm, source)
 }
-\arguments{
-\item{db.path}{PARAM_DESCRIPTION}
-
-\item{q.vec}{PARAM_DESCRIPTION}
-
-\item{table.nm}{PARAM_DESCRIPTION}
-
-\item{col.nm}{PARAM_DESCRIPTION}
-
-\item{source}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Query Xeno-miRNA
 }

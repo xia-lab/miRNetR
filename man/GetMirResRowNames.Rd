@@ -2,26 +2,10 @@
 % Please edit documentation in R/DataUtils.R
 \name{GetMirResRowNames}
 \alias{GetMirResRowNames}
-\title{FUNCTION_TITLE}
+\title{Get Result Row}
 \usage{
 GetMirResRowNames(netType)
 }
-\arguments{
-\item{netType}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Result Row
 }

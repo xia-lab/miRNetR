@@ -2,30 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{RemoveDuplicates}
 \alias{RemoveDuplicates}
-\title{FUNCTION_TITLE}
+\title{Remove Duplicates}
 \usage{
 RemoveDuplicates(data, lvlOpt, quiet = T)
 }
-\arguments{
-\item{data}{PARAM_DESCRIPTION}
-
-\item{lvlOpt}{PARAM_DESCRIPTION}
-
-\item{quiet}{PARAM_DESCRIPTION, Default: T}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Remove Duplicates
 }

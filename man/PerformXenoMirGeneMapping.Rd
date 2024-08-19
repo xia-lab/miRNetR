@@ -2,26 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{PerformXenoMirGeneMapping}
 \alias{PerformXenoMirGeneMapping}
-\title{FUNCTION_TITLE}
+\title{Xeno-miRNA Gene Target Mapping}
 \usage{
 PerformXenoMirGeneMapping(status)
 }
-\arguments{
-\item{status}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Xeno-miRNA Gene Target Mapping
 }

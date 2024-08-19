@@ -2,28 +2,10 @@
 % Please edit documentation in R/AnotUtils.R
 \name{doAnnotation}
 \alias{doAnnotation}
-\title{FUNCTION_TITLE}
+\title{Annotate}
 \usage{
 doAnnotation(id.vec, idType)
 }
-\arguments{
-\item{id.vec}{PARAM_DESCRIPTION}
-
-\item{idType}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Annotate
 }

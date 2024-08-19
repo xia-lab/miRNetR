@@ -8,6 +8,8 @@
 # stored in dataSet list object
 # can have many classes, stored in meta.info
 # type: array, count, qpcr
+#' Read Expression Data
+#' @export
 ReadTabExpressData <- function(dataName) {
 
     dataSet <- ReadTabData(dataName);
@@ -62,6 +64,8 @@ ReadTabExpressData <- function(dataName) {
     }
 }
 
+#' Setup miRNA Expression Data
+#' @export
 SetupMirExpressData <- function(){
     idType <- dataSet$id.current;
     mydata <- data.matrix(dataSet$sig.mat[,"max.logFC",drop=FALSE]);
@@ -81,15 +85,20 @@ SetupMirExpressData <- function(){
     }
 }
 
+#' Get class info
+#' @export
 GetClassInfo <- function(){
     return(levels(dataSet$cls));
 }
 
+#' Get annotated names
+#' @export
 GetAnotNames<-function(){
     return(rownames(dataSet$data.anot));
 }
 
-
+#' Peform data annotation
+#' @export
 PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
     data.org <<- dataSet$org <- org;
     dataSet$id.orig <- dataSet$id.current <- idType;
@@ -157,6 +166,8 @@ PerformDataAnnot<-function(org, idType, tissue, lvlOpt, matchMin=0.5){
 }
 
 # update result based on new cutoff
+#' Get significant genes
+#' @export
 GetSigGenes<-function(p.lvl, fc.lvl, direction, update=T){
 
     resTable <- readRDS("resTable");
@@ -239,6 +250,8 @@ GetSigGenes<-function(p.lvl, fc.lvl, direction, update=T){
 }
 
 # note, here also update data type array/count
+#' Peform array data normalization
+#' @export
 PerformArrayDataNormalization <- function(norm.opt){
 
     data <- dataSet$data.anot;
@@ -278,6 +291,8 @@ PerformArrayDataNormalization <- function(norm.opt){
     }
 }
 
+#' Perform limma
+#' @export
 PerformLimma<-function(target.grp){
 
     myargs <- list();
@@ -340,6 +355,9 @@ PerformLimma<-function(target.grp){
 ###########################
 ## for RNAseq data
 ##########################
+
+#' Perform count data normalization
+#' #' @export
 PerformCountDataNormalization <- function(norm.opt, disp.opt){
 
     msg <- NULL;
@@ -374,6 +392,8 @@ PerformCountDataNormalization <- function(norm.opt, disp.opt){
     }
 }
 
+#' Perform EdgeR
+#' @export
 PerformEdgeR<-function(target.grp){
     myargs <- list();
     dataSet$comparison <- target.grp;
@@ -423,6 +443,8 @@ PerformEdgeR<-function(target.grp){
 ## for QPCR data
 ##########################
 
+#' Perform qPCR data normalization
+#' @export
 PerformQpcrDataNormalization <- function(norm.opt = "quantile") {
     dataSet$norm.opt <- norm.opt;
     data <- dataSet$data.anot;
@@ -453,6 +475,8 @@ PerformQpcrDataNormalization <- function(norm.opt = "quantile") {
     }
 }
 
+#' Perform HTqPCR
+#' @export
 PerformHTqPCR<-function(target.grp, method){
     dataSet$comparison <- target.grp;
     if(method == "limma"){
@@ -494,6 +518,8 @@ PerformHTqPCR<-function(target.grp, method){
 }
 
 # utility method to get p values
+#' Get p-value from t-test
+#' @export
 GetTtestP <- function(my.dat, my.cls, grp1, grp2, paired=FALSE, equal.var=TRUE, nonpar=F){
 
     inx1 <- which(my.cls==grp1);
@@ -530,6 +556,8 @@ GetTtestP <- function(my.dat, my.cls, grp1, grp2, paired=FALSE, equal.var=TRUE, 
 }
 
 # utility method to calculate FC
+#' Get Fold Change
+#' @export
 GetFC <- function(my.dat, my.cls, grp1, grp2){
     m1 <- rowMeans(my.dat[, which(my.cls==grp1)]);
     m2 <- rowMeans(my.dat[, which(my.cls==grp2)]);
@@ -539,6 +567,8 @@ GetFC <- function(my.dat, my.cls, grp1, grp2){
     return(fc);
 }
 
+#' Plot Data Overview
+#' @export
 PlotDataOverview<-function(imgNm){
     dat <- dataSet$data.anot;
     library('lattice');
@@ -589,6 +619,8 @@ PlotDataOverview<-function(imgNm){
 }
 
 # given a data with duplicates, dups is the one with duplicates
+#' Remove Duplicates
+#' @export
 RemoveDuplicates <- function(data, lvlOpt, quiet=T){
 
     all.nms <- rownames(data);

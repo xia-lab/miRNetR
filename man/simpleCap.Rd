@@ -2,26 +2,10 @@
 % Please edit documentation in R/MiscUtils.R
 \name{simpleCap}
 \alias{simpleCap}
-\title{FUNCTION_TITLE}
+\title{Capitalize First Letter}
 \usage{
 simpleCap(x)
 }
-\arguments{
-\item{x}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Capitalize First Letter
 }

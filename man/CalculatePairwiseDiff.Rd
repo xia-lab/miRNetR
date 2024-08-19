@@ -2,26 +2,13 @@
 % Please edit documentation in R/MiscUtils.R
 \name{CalculatePairwiseDiff}
 \alias{CalculatePairwiseDiff}
-\title{FUNCTION_TITLE}
+\title{Calculate Pairwise Difference}
 \usage{
 CalculatePairwiseDiff(mat)
 }
 \arguments{
-\item{mat}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{mat}{Numeric matrix.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Calculate Pairwise Difference
 }

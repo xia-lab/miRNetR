@@ -2,26 +2,13 @@
 % Please edit documentation in R/ListUtils.R
 \name{GetUniqueMoleculeNames}
 \alias{GetUniqueMoleculeNames}
-\title{FUNCTION_TITLE}
+\title{Get Unique Molecule Names}
 \usage{
 GetUniqueMoleculeNames(orgType = "hsa")
 }
 \arguments{
-\item{orgType}{PARAM_DESCRIPTION, Default: 'hsa'}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{orgType}{Organism type.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Unique Molecule Names
 }

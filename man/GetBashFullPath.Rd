@@ -2,23 +2,10 @@
 % Please edit documentation in R/MiscUtils.R
 \name{GetBashFullPath}
 \alias{GetBashFullPath}
-\title{FUNCTION_TITLE}
+\title{Get Bash Full Path}
 \usage{
 GetBashFullPath()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Bash Full Path
 }

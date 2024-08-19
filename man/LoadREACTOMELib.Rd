@@ -2,23 +2,10 @@
 % Please edit documentation in R/utils_mir_target_enrich.R
 \name{LoadREACTOMELib}
 \alias{LoadREACTOMELib}
-\title{FUNCTION_TITLE}
+\title{Load Reactome Library}
 \usage{
 LoadREACTOMELib()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Load Reactome Library
 }

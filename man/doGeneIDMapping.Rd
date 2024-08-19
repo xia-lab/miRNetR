@@ -2,28 +2,10 @@
 % Please edit documentation in R/AnotUtils.R
 \name{doGeneIDMapping}
 \alias{doGeneIDMapping}
-\title{FUNCTION_TITLE}
+\title{Gene ID Mapping}
 \usage{
 doGeneIDMapping(q.vec, type)
 }
-\arguments{
-\item{q.vec}{PARAM_DESCRIPTION}
-
-\item{type}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Gene ID Mapping
 }

@@ -2,26 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{SetupSourceFromList}
 \alias{SetupSourceFromList}
-\title{FUNCTION_TITLE}
+\title{Set up source}
 \usage{
 SetupSourceFromList(source)
 }
-\arguments{
-\item{source}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Set up source
 }

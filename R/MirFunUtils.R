@@ -10,6 +10,8 @@
 # If users click more than once using the empirical approach
 # We can take advantage of the accumulating the permutation result to increase the significance
 
+#' Perform miRNA Target Enrichment Analysis
+#' @export
 PerformMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, IDs, algo, mode="serial"){
      if(!exists("my.mir.target.enrich")){ # public web on same user dir
         compiler::loadcmp("../../rscripts/miRNetR/R/utils_mir_target_enrich.Rc");    
@@ -17,6 +19,8 @@ PerformMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, IDs, 
     return(my.mir.target.enrich(adjust.type, fun.type, file.nm, IDs, algo, mode));
 }
 
+#' Perform miRNA Target Enrichment Analysis (API)
+#' @export
 PerformAPIMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, IDs, algo, mode = "parallel"){
   
   # send all objects needed for API
@@ -70,7 +74,8 @@ PerformAPIMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, ID
   return(1)
 }
 
-
+#' Calculate miRNA Target Set
+#' @export
 CalculateMirTargetSet <- function(nms, operation){
     nms <- strsplit(nms, ";")[[1]];
 

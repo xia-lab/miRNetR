@@ -2,28 +2,15 @@
 % Please edit documentation in R/MiscUtils.R
 \name{LogNorm}
 \alias{LogNorm}
-\title{FUNCTION_TITLE}
+\title{Log Normalization}
 \usage{
 LogNorm(x, min.val)
 }
 \arguments{
-\item{x}{PARAM_DESCRIPTION}
+\item{x}{Variable to normalize.}
 
-\item{min.val}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{min.val}{Min value.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Log Normalization
 }

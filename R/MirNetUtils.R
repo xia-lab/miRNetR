@@ -4,6 +4,8 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
+#' Create miRNA Network
+#' @export
 CreateMirNets <- function(net.type){
   library(igraph);
   dataSet$mirnet <<- net.type;
@@ -80,6 +82,8 @@ CreateMirNets <- function(net.type){
 }
 
 # decompose to individual connected subnetworks, discard very small ones (defined by minNodeNum)
+#' Decompose to Subnetworks
+#' @export
 DecomposeMirGraph <- function(net.type, gObj, minNodeNum = 2){
   comps <-decompose(gObj, min.vertices=minNodeNum);
   
@@ -148,6 +152,8 @@ DecomposeMirGraph <- function(net.type, gObj, minNodeNum = 2){
   return(sub.stats);
 }
 
+#' Reduce Edge Density
+#' @export
 ReduceEdgeDensity <- function(net.type, nd.type="all"){
   library(igraph);
   all.nms <- V(mir.graph)$name;
@@ -195,6 +201,8 @@ ReduceEdgeDensity <- function(net.type, nd.type="all"){
   }
 }
 
+#' Filter miRNA Network
+#' @export
 FilterMirNet <- function(net.type, nd.type, min.dgr, min.btw){
   library(igraph);
   all.nms <- V(mir.graph)$name;
@@ -234,6 +242,8 @@ FilterMirNet <- function(net.type, nd.type, min.dgr, min.btw){
   }
 }
 
+#' Filter miRNA Network by List
+#' @export
 FilterMirNetByList <- function(net.type, ids, id.type, remove){
   library(igraph);
   lines <- strsplit(ids, "\r|\n|\r\n")[[1]];
@@ -259,6 +269,8 @@ FilterMirNetByList <- function(net.type, ids, id.type, remove){
   }
 }
 
+#' Convert Igraph to JSON
+#' @export
 convertIgraph2JSON <- function(g, filenm){
   #g <<- g
   #save.image("net.RData");
@@ -493,11 +505,14 @@ convertIgraph2JSON <- function(g, filenm){
   }
 }
 
-
+#' Prepare Graph ML
+#' @export
 PrepareGraphML <- function(net.nm){
   write_graph(mir.nets[[net.nm]], file=paste(net.nm, ".graphml", sep=""), format="graphml");
 }
 
+#' Prepare CSV
+#' @export
 PrepareCSV <- function(table.nm){
   if(anal.type == "multilist" || anal.type == "snp2mir" || anal.type == "tf2genemir" || anal.type == "gene2tfmir"){
     fast.write.csv(dataSet[[table.nm]], file=paste(table.nm, ".csv", sep=""), row.names = FALSE);
@@ -506,6 +521,8 @@ PrepareCSV <- function(table.nm){
   }
 }
 
+#' Prepare miRNA Network
+#' @export
 PrepareMirNet <- function(mir.nm, file.nm){
   my.mirnet <- mir.nets[[mir.nm]];
   current.mirnet <<- my.mirnet;
@@ -517,6 +534,12 @@ PrepareMirNet <- function(mir.nm, file.nm){
   }
 }
 
+#' Apply Graph Layout
+#' @param g Graph object.
+#' @param layer Optional: layer information.
+#' @param algo Layout algorithm: Default, FrR, circle, random, lgl, gopt, circular_tripartite, tripartite, concentric, backbone, mds.
+#' @param focus Focus node.
+#' @export
 PerformLayOut <- function(g, layers, algo, focus=""){
   vc <- vcount(g);
   if(algo == "Default"){
@@ -583,6 +606,8 @@ PerformLayOut <- function(g, layers, algo, focus=""){
   pos.xy;
 }
 
+#' Update Network Layout
+#' @export
 UpdateNetworkLayout <- function(algo, filenm, focus){
   # get layers
   if(anal.type == "multilist" || anal.type == "snp2mir"){
@@ -614,10 +639,14 @@ UpdateNetworkLayout <- function(algo, filenm, focus){
   return(filenm);
 }
 
+#' Get Network Names
+#' @export
 GetNetNames <- function(){
   rownames(net.stats);
 }
 
+#' Get Table Names
+#' @export
 GetTableNames <- function(){
   if(anal.type == "multilist"|| anal.type == "gene" || anal.type == "qpcr"){
     res <- unique(dataSet$mirtable);
@@ -634,6 +663,8 @@ GetTableNames <- function(){
   return(res)
 }
 
+#' Get Seeds Column
+#' @export
 GetSeedsColumn <- function(){
   tbls = unique(dataSet$mirtable);
   vec = vector();
@@ -672,15 +703,20 @@ GetSeedsColumn <- function(){
   return(vec)
 }
 
-
+#' Get Network Stats
+#' @export
 GetNetStats <- function(){
   as.matrix(net.stats);
 }
 
+#' Get Network Names as String
+#' @export
 GetNetsNameString <- function(){
   paste(rownames(net.stats), collapse="||");
 }
 
+#' Get Minimally Connected Graphs
+#' @export
 GetMinConnectedGraphs <- function(net.type, max.len = 200){
   library(igraph);
   set.seed(8574);
@@ -738,6 +774,8 @@ GetMinConnectedGraphs <- function(net.type, max.len = 200){
   }
 }
 
+#' Update Subnetwork Stats
+#' @export
 UpdateSubnetStats <- function(){
   old.nms <- names(mir.nets);
   net.stats <- ComputeSubnetStats(mir.nets);
@@ -747,6 +785,8 @@ UpdateSubnetStats <- function(){
   net.stats <<- net.stats;
 }
 
+#' Compute Subnetwork Stats
+#' @export
 ComputeSubnetStats <- function(comps){
   
   net.stats <- as.data.frame(matrix(0, ncol = 3, nrow = length(comps)));
@@ -759,15 +799,21 @@ ComputeSubnetStats <- function(comps){
   return(net.stats);
 }
 
+#' Number of Queries
+#' @export
 GetQueryNum <-function(){
   return(dataSet$query.nums)
 }
 
+#' Number of Types
+#' @export
 GetTypeNum <-function(){
   return(dataSet$type.nums)
 }
 
 # return information based on node type
+#' Get Network Stats by Type
+#' @export
 GetNetStatByType <- function(g){
   nd.queries <- V(g)$name;
   uniq.ins <- unique(rownames(dataSet$mir.mapped));
@@ -840,6 +886,8 @@ GetNetStatByType <- function(g){
   return(my.stat);
 }
 
+#' Number of Unmapped
+#' @export
 GetUnmappedNum <- function(){
   library(igraph);
   totalOrig <- 0
@@ -858,6 +906,8 @@ GetUnmappedNum <- function(){
 }
 
 # from to should be valid nodeIDs
+#' Get Shortest Paths
+#' @export
 GetShortestPaths <- function(from, to){
   
   paths <- get.all.shortest.paths(current.mirnet, from, to)$res;
@@ -882,6 +932,8 @@ GetShortestPaths <- function(from, to){
   return(all.paths);
 }
 
+#' Extract miRNA Network Module
+#' @export
 ExtractMirNetModule<- function(nodeids){
   set.seed(8574);
   nodes <- strsplit(nodeids, ";")[[1]];
@@ -936,6 +988,8 @@ ExtractMirNetModule<- function(nodeids){
 
 
 # exclude nodes in current.net (networkview)
+#' Exlude Nodes
+#' @export
 ExcludeNodes <- function(nodeids, filenm){
   nodes2rm <- strsplit(nodeids, ";")[[1]];
   current.mirnet <- delete.vertices(current.mirnet, nodes2rm);
@@ -976,6 +1030,8 @@ ExcludeNodes <- function(nodeids, filenm){
   return(filenm);
 }
 
+#' Layout in Circles
+#' @export
 layout_in_circles <- function(g, group=1) {
   layout <- lapply(split(V(g), group), function(x) {
     layout_in_circle(induced_subgraph(g,x))
@@ -986,19 +1042,26 @@ layout_in_circles <- function(g, group=1) {
   x
 }
 
+#' Get Network Stats as Matrix
+#' @export
 GetNetStatMatrix <-function(){
   return(signif(as.matrix(res), 5));
 }
 
+#' Network Stats Column Names
+#' @export
 GetNetStatColNames <-function(){
   return(signif(as.matrix(res), 5));
 }
 
+#' Network Names
+#' @export
 GetNetNms <-function(){
   return(rownames(dataSet$resTable));
 }
 
-
+#' Compute Network based on Prize-collecting Steiner Forest Graph
+#' @export
 ComputePCSFNet <- function(){
   
   edg <- as.data.frame(as_edgelist(mir.graph));
@@ -1120,6 +1183,10 @@ Compute.SteinerForest <- function(ppi, terminals, w = 2, b = 1, mu = 0.0005, dum
 
 
 # support walktrap, infomap and lab propagation
+#' Find Communities
+#' @param method Method: walktrap, infomap, labelprop.
+#' @param use.weight Logical.
+#' @export
 FindCommunities <- function(method="walktrap", use.weight=FALSE){
 
   library(igraph)
@@ -1202,6 +1269,8 @@ FindCommunities <- function(method="walktrap", use.weight=FALSE){
   return(all.communities);
 }
 
+#' Get Network Topology
+#' @export
 GetNetworkTopology <- function(netnm){
   library(igraph)
   g <- mir.nets[[netnm]];
@@ -1215,7 +1284,8 @@ GetNetworkTopology <- function(netnm){
   return(propertiesVector);
 }
 
-
+#' Plot Degree Histogram
+#' @export
 PlotDegreeHistogram <- function(imgNm, netNm = "NA", dpi=72, format="png"){
   library(igraph)
   dpi<-as.numeric(dpi)
@@ -1245,6 +1315,8 @@ PlotDegreeHistogram <- function(imgNm, netNm = "NA", dpi=72, format="png"){
   dev.off();
 }
 
+#' Plot Betweenness Histogram
+#' @export
 PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
   library(igraph);
   dpi<-as.numeric(dpi)

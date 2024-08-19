@@ -2,30 +2,10 @@
 % Please edit documentation in R/MiscUtils.R
 \name{scale_colours}
 \alias{scale_colours}
-\title{FUNCTION_TITLE}
+\title{Scale Matrix Colours}
 \usage{
 scale_colours(mat, col = rainbow(10), breaks = NA)
 }
-\arguments{
-\item{mat}{PARAM_DESCRIPTION}
-
-\item{col}{PARAM_DESCRIPTION, Default: rainbow(10)}
-
-\item{breaks}{PARAM_DESCRIPTION, Default: NA}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Scale Matrix Colours
 }

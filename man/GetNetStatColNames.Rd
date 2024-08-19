@@ -2,23 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{GetNetStatColNames}
 \alias{GetNetStatColNames}
-\title{FUNCTION_TITLE}
+\title{Network Stats Column Names}
 \usage{
 GetNetStatColNames()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Network Stats Column Names
 }

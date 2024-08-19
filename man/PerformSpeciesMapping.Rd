@@ -2,26 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{PerformSpeciesMapping}
 \alias{PerformSpeciesMapping}
-\title{FUNCTION_TITLE}
+\title{Species Mapping}
 \usage{
 PerformSpeciesMapping(status)
 }
-\arguments{
-\item{status}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Species Mapping
 }

@@ -2,26 +2,13 @@
 % Please edit documentation in R/MiscUtils.R
 \name{ReadTabData}
 \alias{ReadTabData}
-\title{FUNCTION_TITLE}
+\title{Read Tab Delimited Data}
 \usage{
 ReadTabData(dataName)
 }
 \arguments{
-\item{dataName}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{dataName}{Data name.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Read Tab Delimited Data
 }

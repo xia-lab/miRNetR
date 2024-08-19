@@ -2,26 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{PerformArrayDataNormalization}
 \alias{PerformArrayDataNormalization}
-\title{FUNCTION_TITLE}
+\title{Peform array data normalization}
 \usage{
 PerformArrayDataNormalization(norm.opt)
 }
-\arguments{
-\item{norm.opt}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Peform array data normalization
 }

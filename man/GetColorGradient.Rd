@@ -2,28 +2,15 @@
 % Please edit documentation in R/MiscUtils.R
 \name{GetColorGradient}
 \alias{GetColorGradient}
-\title{FUNCTION_TITLE}
+\title{Get Color Gradient}
 \usage{
 GetColorGradient(background, center)
 }
 \arguments{
-\item{background}{PARAM_DESCRIPTION}
+\item{center}{Logical}
 
-\item{center}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{backgroun}{Background.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Color Gradient
 }

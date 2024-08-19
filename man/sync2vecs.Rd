@@ -2,28 +2,15 @@
 % Please edit documentation in R/MiscUtils.R
 \name{sync2vecs}
 \alias{sync2vecs}
-\title{FUNCTION_TITLE}
+\title{Synchronize Two Vectors}
 \usage{
 sync2vecs(src.vec, tgt.vec)
 }
 \arguments{
-\item{src.vec}{PARAM_DESCRIPTION}
+\item{src.vec}{Source character vector to be arranged.}
 
-\item{tgt.vec}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{tgt.vec}{Target numeric vector of the same length.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Synchronize Two Vectors
 }

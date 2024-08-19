@@ -2,28 +2,10 @@
 % Please edit documentation in R/DataUtils.R
 \name{Init.Data}
 \alias{Init.Data}
-\title{FUNCTION_TITLE}
+\title{Initiate Data}
 \usage{
-Init.Data(dataType, analType)
-}
-\arguments{
-\item{dataType}{PARAM_DESCRIPTION}
-
-\item{analType}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+Init.Data(dataType, analType, onWeb = T)
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Initiate Data
 }

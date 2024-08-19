@@ -2,30 +2,17 @@
 % Please edit documentation in R/MiscUtils.R
 \name{rescale2NewRange}
 \alias{rescale2NewRange}
-\title{FUNCTION_TITLE}
+\title{Rescale to New Range}
 \usage{
 rescale2NewRange(qvec, a, b)
 }
 \arguments{
-\item{qvec}{PARAM_DESCRIPTION}
+\item{qvec}{Vector to be rescaled.}
 
-\item{a}{PARAM_DESCRIPTION}
+\item{a}{Lower bound.}
 
-\item{b}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{b}{Upper bound.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Rescale to New Range
 }

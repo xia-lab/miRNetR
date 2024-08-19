@@ -2,30 +2,10 @@
 % Please edit documentation in R/MiscUtils.R
 \name{generate_breaks}
 \alias{generate_breaks}
-\title{FUNCTION_TITLE}
+\title{Generate Breaks}
 \usage{
 generate_breaks(x, n, center = F)
 }
-\arguments{
-\item{x}{PARAM_DESCRIPTION}
-
-\item{n}{PARAM_DESCRIPTION}
-
-\item{center}{PARAM_DESCRIPTION, Default: F}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Generate Breaks
 }

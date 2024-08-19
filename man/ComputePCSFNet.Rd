@@ -2,23 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{ComputePCSFNet}
 \alias{ComputePCSFNet}
-\title{FUNCTION_TITLE}
+\title{Compute Network based on Prize-collecting Steiner Forest Graph}
 \usage{
 ComputePCSFNet()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Compute Network based on Prize-collecting Steiner Forest Graph
 }

@@ -2,28 +2,10 @@
 % Please edit documentation in R/AnotUtils.R
 \name{queryGeneDB}
 \alias{queryGeneDB}
-\title{FUNCTION_TITLE}
+\title{Query Gene DB}
 \usage{
 queryGeneDB(table.nm, data.org)
 }
-\arguments{
-\item{table.nm}{PARAM_DESCRIPTION}
-
-\item{data.org}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Query Gene DB
 }

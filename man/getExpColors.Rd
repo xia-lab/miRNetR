@@ -2,28 +2,16 @@
 % Please edit documentation in R/MiscUtils.R
 \name{getExpColors}
 \alias{getExpColors}
-\title{FUNCTION_TITLE}
+\title{Colors Based on Expression}
 \usage{
 getExpColors(nd.vec, col.vec)
 }
 \arguments{
-\item{nd.vec}{PARAM_DESCRIPTION}
+\item{nd.vec}{Numeric vector containing values to be mapped to colors.}
 
-\item{col.vec}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{col.vec}{Color vector.
+export}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Colors Based on Expression
 }

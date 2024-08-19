@@ -2,23 +2,10 @@
 % Please edit documentation in R/AnotUtils.R
 \name{PerformMir2EpiMapping}
 \alias{PerformMir2EpiMapping}
-\title{FUNCTION_TITLE}
+\title{Perform Epigene Mapping}
 \usage{
 PerformMir2EpiMapping()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Perform Epigene Mapping
 }
