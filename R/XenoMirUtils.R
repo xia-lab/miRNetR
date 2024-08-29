@@ -191,6 +191,9 @@ PerformSpeciesMapping <- function(status){
        res$tarpmir <- round(res$tarpmir, 3);
        colnames(res) <- c("Source", "Xeno.species", "miRNA", "Accession", "Gene", "Entrez", "Reference", "Expression", "miRanda", "TarPmiR");
        mir.nms <- res[, "miRNA"];
+       gene.nms <- res[,"Gene"];
+       net.info$gene.nms <- gene.nms;
+       net.info <<-net.info;
        dataSet$seeds <- mir.nms;
        fast.write.csv(res, file="xeno_mirnet_target.csv", row.names=FALSE);
 
@@ -278,6 +281,8 @@ PerformXenoMirGeneMapping <- function(status){
         } else{
           dataSet$seeds <- gene.nms
         }
+        net.info$gene.nms <- gene.nms;
+        net.info <<-net.info;
         fast.write.csv(res, file="xeno_mirnet_target.csv", row.names=FALSE);
 
         #control if res is too big for view (table display and network visualization)
