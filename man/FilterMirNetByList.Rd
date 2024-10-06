@@ -2,32 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{FilterMirNetByList}
 \alias{FilterMirNetByList}
-\title{FUNCTION_TITLE}
+\title{Filter miRNA Network by List}
 \usage{
 FilterMirNetByList(net.type, ids, id.type, remove)
 }
-\arguments{
-\item{net.type}{PARAM_DESCRIPTION}
-
-\item{ids}{PARAM_DESCRIPTION}
-
-\item{id.type}{PARAM_DESCRIPTION}
-
-\item{remove}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Filter miRNA Network by List
 }

@@ -2,28 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{checkMiRNAVersion}
 \alias{checkMiRNAVersion}
-\title{FUNCTION_TITLE}
+\title{Check miRNA Version}
 \usage{
 checkMiRNAVersion(miRNANames, verbose = TRUE)
 }
-\arguments{
-\item{miRNANames}{PARAM_DESCRIPTION}
-
-\item{verbose}{PARAM_DESCRIPTION, Default: TRUE}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Check miRNA Version
 }

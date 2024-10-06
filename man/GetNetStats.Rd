@@ -2,23 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{GetNetStats}
 \alias{GetNetStats}
-\title{FUNCTION_TITLE}
+\title{Get Network Stats}
 \usage{
 GetNetStats()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Network Stats
 }

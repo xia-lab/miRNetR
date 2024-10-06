@@ -2,28 +2,10 @@
 % Please edit documentation in R/MiscUtils.R
 \name{ShowMemoryUse}
 \alias{ShowMemoryUse}
-\title{FUNCTION_TITLE}
+\title{Show Memory Use}
 \usage{
 ShowMemoryUse(..., n = 30)
 }
-\arguments{
-\item{...}{PARAM_DESCRIPTION}
-
-\item{n}{PARAM_DESCRIPTION, Default: 30}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Show Memory Use
 }

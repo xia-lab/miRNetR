@@ -2,26 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{GetUniqueSourceNames}
 \alias{GetUniqueSourceNames}
-\title{FUNCTION_TITLE}
+\title{Get Unique Source Names}
 \usage{
 GetUniqueSourceNames(orgType)
 }
-\arguments{
-\item{orgType}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Unique Source Names
 }

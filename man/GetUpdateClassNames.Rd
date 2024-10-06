@@ -2,28 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{GetUpdateClassNames}
 \alias{GetUpdateClassNames}
-\title{FUNCTION_TITLE}
+\title{Get Updated Class Names}
 \usage{
 GetUpdateClassNames(orgType, source)
 }
-\arguments{
-\item{orgType}{PARAM_DESCRIPTION}
-
-\item{source}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Updated Class Names
 }

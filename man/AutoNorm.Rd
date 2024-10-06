@@ -2,26 +2,13 @@
 % Please edit documentation in R/MiscUtils.R
 \name{AutoNorm}
 \alias{AutoNorm}
-\title{FUNCTION_TITLE}
+\title{Auto Normalization}
 \usage{
 AutoNorm(x)
 }
 \arguments{
-\item{x}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{x}{Variable to normalize.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Auto Normalization
 }

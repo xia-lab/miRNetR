@@ -2,23 +2,10 @@
 % Please edit documentation in R/ListUtils.R
 \name{SetCurrentDataMulti}
 \alias{SetCurrentDataMulti}
-\title{FUNCTION_TITLE}
+\title{Set Current Data Multi}
 \usage{
 SetCurrentDataMulti()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Set Current Data Multi
 }

@@ -131,7 +131,7 @@ my.snp.mir.mapping <- function(){
         tf.edge <- na.omit(data.frame(
           Name1=tf.res[, "Symbol"],
           ID1=tf.res[, "Entrez"],
-          Name2=tf.res[, "Name"], # Adjust if "Name" is not the correct column
+          Name2=tf.res[, "rsID"], # Adjust if "Name" is not the correct column
           ID2=tf.res[, "rsID"],
           tableType = "snp2tfbs",
           originalRowId = tf.res[, "OriginalRowId"],

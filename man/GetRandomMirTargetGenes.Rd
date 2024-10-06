@@ -2,28 +2,10 @@
 % Please edit documentation in R/utils_mir_target_enrich.R
 \name{GetRandomMirTargetGenes}
 \alias{GetRandomMirTargetGenes}
-\title{FUNCTION_TITLE}
+\title{Get Random miRNA Target Genes}
 \usage{
 GetRandomMirTargetGenes(qSize, perm.num)
 }
-\arguments{
-\item{qSize}{PARAM_DESCRIPTION}
-
-\item{perm.num}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Random miRNA Target Genes
 }

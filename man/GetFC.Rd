@@ -2,32 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{GetFC}
 \alias{GetFC}
-\title{FUNCTION_TITLE}
+\title{Get Fold Change}
 \usage{
 GetFC(my.dat, my.cls, grp1, grp2)
 }
-\arguments{
-\item{my.dat}{PARAM_DESCRIPTION}
-
-\item{my.cls}{PARAM_DESCRIPTION}
-
-\item{grp1}{PARAM_DESCRIPTION}
-
-\item{grp2}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Fold Change
 }

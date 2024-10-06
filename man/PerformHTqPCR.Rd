@@ -2,28 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{PerformHTqPCR}
 \alias{PerformHTqPCR}
-\title{FUNCTION_TITLE}
+\title{Perform HTqPCR}
 \usage{
 PerformHTqPCR(target.grp, method)
 }
-\arguments{
-\item{target.grp}{PARAM_DESCRIPTION}
-
-\item{method}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Perform HTqPCR
 }

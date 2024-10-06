@@ -2,23 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{GetTypeNum}
 \alias{GetTypeNum}
-\title{FUNCTION_TITLE}
+\title{Number of Types}
 \usage{
 GetTypeNum()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Number of Types
 }

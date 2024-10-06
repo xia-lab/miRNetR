@@ -2,30 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{DecomposeMirGraph}
 \alias{DecomposeMirGraph}
-\title{FUNCTION_TITLE}
+\title{Decompose to Subnetworks}
 \usage{
 DecomposeMirGraph(net.type, gObj, minNodeNum = 2)
 }
-\arguments{
-\item{net.type}{PARAM_DESCRIPTION}
-
-\item{gObj}{PARAM_DESCRIPTION}
-
-\item{minNodeNum}{PARAM_DESCRIPTION, Default: 2}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Decompose to Subnetworks
 }

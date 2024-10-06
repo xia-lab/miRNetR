@@ -2,28 +2,12 @@
 % Please edit documentation in R/ExprUtils.R
 \name{PerformCountDataNormalization}
 \alias{PerformCountDataNormalization}
-\title{FUNCTION_TITLE}
+\title{Perform count data normalization
+#' @export}
 \usage{
 PerformCountDataNormalization(norm.opt, disp.opt)
 }
-\arguments{
-\item{norm.opt}{PARAM_DESCRIPTION}
-
-\item{disp.opt}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Perform count data normalization
+#' @export
 }

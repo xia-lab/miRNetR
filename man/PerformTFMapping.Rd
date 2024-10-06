@@ -2,23 +2,10 @@
 % Please edit documentation in R/AnotUtils.R
 \name{PerformTFMapping}
 \alias{PerformTFMapping}
-\title{FUNCTION_TITLE}
+\title{Perform Transcription Factor Mapping}
 \usage{
 PerformTFMapping()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Perform Transcription Factor Mapping
 }

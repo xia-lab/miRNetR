@@ -2,28 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{layout_in_circles}
 \alias{layout_in_circles}
-\title{FUNCTION_TITLE}
+\title{Layout in Circles}
 \usage{
 layout_in_circles(g, group = 1)
 }
-\arguments{
-\item{g}{PARAM_DESCRIPTION}
-
-\item{group}{PARAM_DESCRIPTION, Default: 1}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Layout in Circles
 }

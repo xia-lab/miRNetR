@@ -2,28 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{ReduceEdgeDensity}
 \alias{ReduceEdgeDensity}
-\title{FUNCTION_TITLE}
+\title{Reduce Edge Density}
 \usage{
 ReduceEdgeDensity(net.type, nd.type = "all")
 }
-\arguments{
-\item{net.type}{PARAM_DESCRIPTION}
-
-\item{nd.type}{PARAM_DESCRIPTION, Default: 'all'}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Reduce Edge Density
 }

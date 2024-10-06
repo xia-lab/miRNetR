@@ -2,26 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{PerformEdgeR}
 \alias{PerformEdgeR}
-\title{FUNCTION_TITLE}
+\title{Perform EdgeR}
 \usage{
 PerformEdgeR(target.grp)
 }
-\arguments{
-\item{target.grp}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Perform EdgeR
 }

@@ -2,26 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{PlotDataOverview}
 \alias{PlotDataOverview}
-\title{FUNCTION_TITLE}
+\title{Plot Data Overview}
 \usage{
 PlotDataOverview(imgNm)
 }
-\arguments{
-\item{imgNm}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Plot Data Overview
 }

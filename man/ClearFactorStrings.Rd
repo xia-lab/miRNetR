@@ -2,28 +2,15 @@
 % Please edit documentation in R/MiscUtils.R
 \name{ClearFactorStrings}
 \alias{ClearFactorStrings}
-\title{FUNCTION_TITLE}
+\title{Clear Factor Strings}
 \usage{
 ClearFactorStrings(cls.nm, query)
 }
 \arguments{
-\item{cls.nm}{PARAM_DESCRIPTION}
+\item{cls.nm}{Character string to be prefixed.}
 
-\item{query}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{query}{Character vector of string to be cleaned.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Clear Factor Strings
 }

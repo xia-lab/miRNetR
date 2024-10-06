@@ -2,30 +2,17 @@
 % Please edit documentation in R/ListUtils.R
 \name{SetupItemFromPickList}
 \alias{SetupItemFromPickList}
-\title{FUNCTION_TITLE}
+\title{Setup Item From Picklist}
 \usage{
 SetupItemFromPickList(orgType = "hsa", tissue, idType)
 }
 \arguments{
-\item{orgType}{PARAM_DESCRIPTION, Default: 'hsa'}
+\item{orgType}{Organism type.}
 
-\item{tissue}{PARAM_DESCRIPTION}
+\item{tissue}{Tissue type.}
 
-\item{idType}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{idType}{ID type.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Setup Item From Picklist
 }

@@ -2,23 +2,10 @@
 % Please edit documentation in R/MiscUtils.R
 \name{CleanMemory}
 \alias{CleanMemory}
-\title{FUNCTION_TITLE}
+\title{Clean Memory}
 \usage{
 CleanMemory()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Clean Memory
 }

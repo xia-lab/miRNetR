@@ -2,7 +2,7 @@
 % Please edit documentation in R/MirFunUtils.R
 \name{PerformMirTargetEnrichAnalysis}
 \alias{PerformMirTargetEnrichAnalysis}
-\title{FUNCTION_TITLE}
+\title{Perform miRNA Target Enrichment Analysis}
 \usage{
 PerformMirTargetEnrichAnalysis(
   adjust.type,
@@ -13,32 +13,6 @@ PerformMirTargetEnrichAnalysis(
   mode = "serial"
 )
 }
-\arguments{
-\item{adjust.type}{PARAM_DESCRIPTION}
-
-\item{fun.type}{PARAM_DESCRIPTION}
-
-\item{file.nm}{PARAM_DESCRIPTION}
-
-\item{IDs}{PARAM_DESCRIPTION}
-
-\item{algo}{PARAM_DESCRIPTION}
-
-\item{mode}{PARAM_DESCRIPTION, Default: 'serial'}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Perform miRNA Target Enrichment Analysis
 }

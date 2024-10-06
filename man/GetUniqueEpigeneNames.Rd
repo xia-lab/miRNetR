@@ -2,26 +2,13 @@
 % Please edit documentation in R/ListUtils.R
 \name{GetUniqueEpigeneNames}
 \alias{GetUniqueEpigeneNames}
-\title{FUNCTION_TITLE}
+\title{Get Unique Epigene Names}
 \usage{
 GetUniqueEpigeneNames(orgType = "hsa")
 }
 \arguments{
-\item{orgType}{PARAM_DESCRIPTION, Default: 'hsa'}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{orgType}{Organism type.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Unique Epigene Names
 }

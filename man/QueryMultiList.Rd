@@ -2,23 +2,10 @@
 % Please edit documentation in R/ListUtils.R
 \name{QueryMultiList}
 \alias{QueryMultiList}
-\title{FUNCTION_TITLE}
+\title{Query Multi List}
 \usage{
 QueryMultiList()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Query Multi List
 }

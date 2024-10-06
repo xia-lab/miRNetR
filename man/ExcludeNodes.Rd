@@ -2,28 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{ExcludeNodes}
 \alias{ExcludeNodes}
-\title{FUNCTION_TITLE}
+\title{Exlude Nodes}
 \usage{
 ExcludeNodes(nodeids, filenm)
 }
-\arguments{
-\item{nodeids}{PARAM_DESCRIPTION}
-
-\item{filenm}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Exlude Nodes
 }

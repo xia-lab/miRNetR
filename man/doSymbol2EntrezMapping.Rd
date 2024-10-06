@@ -2,26 +2,10 @@
 % Please edit documentation in R/AnotUtils.R
 \name{doSymbol2EntrezMapping}
 \alias{doSymbol2EntrezMapping}
-\title{FUNCTION_TITLE}
+\title{Gene Symbol to Entrez ID}
 \usage{
 doSymbol2EntrezMapping(entrez.vec)
 }
-\arguments{
-\item{entrez.vec}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Gene Symbol to Entrez ID
 }

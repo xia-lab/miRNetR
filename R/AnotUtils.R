@@ -4,6 +4,8 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
+#' Perform miRNA Gene Mapping
+#' @export
 PerformMirGeneMapping <- function(input.type="none"){
     if(input.type %in% c("mir2gene_mirtarbase", "mir2gene_tarbase", "mir2gene_mirecords", "mir2gene_miranda")){
       db.type <- gsub("mir2gene_", "", input.type);
@@ -59,6 +61,8 @@ PerformMirGeneMapping <- function(input.type="none"){
     }
 }
 
+#' Perform Molecule Mapping
+#' @export
 PerformMolMapping <- function(){
   mir.mat <- dataSet$mir.orig;
 
@@ -109,6 +113,8 @@ PerformMolMapping <- function(){
   }
 }
 
+#' Perform Long Noncoding RNA Mapping
+#' @export
 PerformLncRNAMapping <- function(){
   orgType <- dataSet$org;
   if(orgType != "hsa" ){
@@ -168,6 +174,8 @@ PerformLncRNAMapping <- function(){
   }
 }
 
+#' Perform Circular RNA Mapping
+#' @export
 PerformCircRNAMapping <- function(){
   orgType <- dataSet$org;
   if(orgType != "hsa" ){
@@ -227,6 +235,8 @@ PerformCircRNAMapping <- function(){
   }
 }
 
+#' Perform Pseudogene Mapping
+#' @export
 PerformPseudoMapping <- function(){
   orgType <- dataSet$org;
   if(orgType != "hsa" ){
@@ -286,6 +296,8 @@ PerformPseudoMapping <- function(){
   }
 }
 
+#' Perform Small Untranslated RNA Mapping
+#' @export
 PerformSncRNAMapping <- function(){
   orgType <- dataSet$org;
   if(orgType != "hsa" ){
@@ -345,10 +357,12 @@ PerformSncRNAMapping <- function(){
   }
 }
 
+#' Perform Epigene Mapping
+#' @export
 PerformMir2EpiMapping <- function(){
   orgType <- dataSet$org;
   if(orgType %in% c("bta", "dme","gga","sma", "cel","dre","rno", "ssc") ){
-    curent.msg <<- "Only huamn and mouse support the epigene network."
+    curent.msg <<- "Only human and mouse are supported for epigene network."
     print(current.msg);
     return(0);
   }
@@ -404,9 +418,11 @@ PerformMir2EpiMapping <- function(){
   }
 }
 
+#' Perform Disease Mapping
+#' @export
 PerformDisMapping <- function(){
   if(dataSet$org != "hsa" ){
-    curent.msg <<- "Only huamn support the disease network."
+    curent.msg <<- "Only human is supported for disease network."
     print(current.msg);
     return(0);
   }
@@ -459,6 +475,8 @@ PerformDisMapping <- function(){
   }
 }
 
+#' Perform Transcription Factor Mapping
+#' @export
 PerformTFMapping <- function(){
   orgType <- dataSet$org;
   if(orgType %in% c("bta", "ssc","gga","dme", "sma") ){
@@ -518,6 +536,8 @@ PerformTFMapping <- function(){
   }
 }
 
+#' Perform SNP Mapping
+#' @export
 PerformSNPMirGeneMapping <- function(){
  if(!exists("my.snp.mir.mapping")){ # public web on same user dir
         compiler::loadcmp("../../rscripts/miRNetR/R/utils_mir_snp.Rc"); 
@@ -526,6 +546,8 @@ PerformSNPMirGeneMapping <- function(){
 }
 
 ### convert to gene symbols!!! not entrez
+#' Gene Annotation
+#' @export
 doMirGeneAnnotation <- function(id.vec, idType){
      feature.vec <- id.vec;
      if(idType %in% c("entrez", "symbol", "refseq", "genbank", "emblgene", "embltranscript", "orfid","mir_id","mir_acc")){
@@ -539,6 +561,8 @@ doMirGeneAnnotation <- function(id.vec, idType){
      return(anot.id);
 }
 
+#' Annotate
+#' @export
 doAnnotation <- function(id.vec, idType){
      feature.vec <- id.vec;
      if(idType %in% c("entrez", "symbol", "refseq", "genbank", "emblgene", "embltranscript", "orfid","mir_id","mir_acc")){
@@ -550,6 +574,8 @@ doAnnotation <- function(id.vec, idType){
      return(anot.id);
 }
 
+#' Perform Gene Annotation
+#' @export
 PerformGeneAnnotation <- function(){
     if(!exists("entrez.vec")){
         print("Could not find Entrez ID list!");
@@ -567,6 +593,8 @@ PerformGeneAnnotation <- function(){
 }
 
 # from probe ID to entrez ID
+#' Probe Mapping
+#' @export
 doProbeMapping <- function(probe.vec, platform){
     platform.path <- paste(lib.path,  data.org, "/", platform, ".csv", sep="");
     if(.on.public.web){
@@ -588,6 +616,8 @@ doProbeMapping <- function(probe.vec, platform){
 
 
 # mapping between genebank, refseq and entrez
+#' Gene ID Mapping
+#' @export
 doGeneIDMapping <- function(q.vec, type){
     require('RSQLite');
     db.path <- paste(sqlite.path, data.org, "_genes.sqlite", sep="");
@@ -654,6 +684,8 @@ doGeneIDMapping <- function(q.vec, type){
     return(entrezs);
 }
 
+#' Entrez ID to Gene Symbol
+#' @export
 doEntrez2SymbolMapping <- function(entrez.vec){
     gene.map <-  queryGeneDB("entrez", data.org);
     gene.map[] <- lapply(gene.map, as.character)
@@ -667,6 +699,8 @@ doEntrez2SymbolMapping <- function(entrez.vec){
     return(symbols);
 }
 
+#' Gene Symbol to Entrez ID
+#' @export
 doSymbol2EntrezMapping <- function(entrez.vec){
     gene.map <-  queryGeneDB("entrez", data.org);
     gene.map[] <- lapply(gene.map, as.character)
@@ -680,6 +714,8 @@ doSymbol2EntrezMapping <- function(entrez.vec){
     return(symbols);
 }
 
+#' Query Gene DB
+#' @export
 queryGeneDB <- function(table.nm, data.org){
     require('RSQLite')
     
@@ -697,7 +733,7 @@ queryGeneDB <- function(table.nm, data.org){
     }
     #conv.db <- dbConnect(SQLite(), paste(sqlite.path, data.org, "_genes.sqlite", sep=""));
     db.map <- dbReadTable(conv.db, table.nm)
-    dbDisconnect(conv.db); cleanMem();
+    dbDisconnect(conv.db); CleanMemory();
 
     return(db.map)
 }

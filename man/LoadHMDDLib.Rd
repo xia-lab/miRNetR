@@ -2,23 +2,10 @@
 % Please edit documentation in R/utils_mir_target_enrich.R
 \name{LoadHMDDLib}
 \alias{LoadHMDDLib}
-\title{FUNCTION_TITLE}
+\title{Load HMDD Library}
 \usage{
 LoadHMDDLib()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Load HMDD Library
 }

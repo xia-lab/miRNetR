@@ -2,28 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{GetMinConnectedGraphs}
 \alias{GetMinConnectedGraphs}
-\title{FUNCTION_TITLE}
+\title{Get Minimally Connected Graphs}
 \usage{
 GetMinConnectedGraphs(net.type, max.len = 200)
 }
-\arguments{
-\item{net.type}{PARAM_DESCRIPTION}
-
-\item{max.len}{PARAM_DESCRIPTION, Default: 200}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Get Minimally Connected Graphs
 }

@@ -2,28 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{convertIgraph2JSON}
 \alias{convertIgraph2JSON}
-\title{FUNCTION_TITLE}
+\title{Convert Igraph to JSON}
 \usage{
 convertIgraph2JSON(g, filenm)
 }
-\arguments{
-\item{g}{PARAM_DESCRIPTION}
-
-\item{filenm}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Convert Igraph to JSON
 }

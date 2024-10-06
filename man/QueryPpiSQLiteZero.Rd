@@ -2,32 +2,10 @@
 % Please edit documentation in R/MiscUtils.R
 \name{QueryPpiSQLiteZero}
 \alias{QueryPpiSQLiteZero}
-\title{FUNCTION_TITLE}
+\title{Query Protein-Protein Interaction}
 \usage{
 QueryPpiSQLiteZero(table.nm, q.vec, requireExp, min.score)
 }
-\arguments{
-\item{table.nm}{PARAM_DESCRIPTION}
-
-\item{q.vec}{PARAM_DESCRIPTION}
-
-\item{requireExp}{PARAM_DESCRIPTION}
-
-\item{min.score}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Query Protein-Protein Interaction
 }

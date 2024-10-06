@@ -2,34 +2,24 @@
 % Please edit documentation in R/ListUtils.R
 \name{SetupMirListData}
 \alias{SetupMirListData}
-\title{FUNCTION_TITLE}
+\title{Setup miRNA List Data}
 \usage{
-SetupMirListData(mirs, orgType, idType, tissue = "na", targetOpt = NULL)
+SetupMirListData(mirs, orgType, idType, tissue, targetOpt = NULL)
 }
 \arguments{
-\item{mirs}{PARAM_DESCRIPTION}
+\item{mirs}{A list of miRNAs.}
 
-\item{orgType}{PARAM_DESCRIPTION}
+\item{orgType}{Organism type.}
 
-\item{idType}{PARAM_DESCRIPTION}
+\item{idType}{miRNA ID type.}
 
-\item{tissue}{PARAM_DESCRIPTION}
+\item{tissue}{Tissue type.}
 
-\item{targetOpt}{PARAM_DESCRIPTION, Default: NULL}
+\item{targetOpt}{Target options (optional).}
 }
 \value{
-OUTPUT_DESCRIPTION
+miRNA list data initialized.
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Setup miRNA List Data
 }

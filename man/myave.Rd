@@ -2,28 +2,15 @@
 % Please edit documentation in R/MiscUtils.R
 \name{myave}
 \alias{myave}
-\title{FUNCTION_TITLE}
+\title{Average}
 \usage{
 myave(x, ...)
 }
 \arguments{
-\item{x}{PARAM_DESCRIPTION}
+\item{x}{Numeric vector to calculate mean.}
 
-\item{...}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{...}{Optional grouping factors.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Average
 }

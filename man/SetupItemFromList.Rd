@@ -2,28 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{SetupItemFromList}
 \alias{SetupItemFromList}
-\title{FUNCTION_TITLE}
+\title{Set up items}
 \usage{
 SetupItemFromList(orgType, species)
 }
-\arguments{
-\item{orgType}{PARAM_DESCRIPTION}
-
-\item{species}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Set up items
 }

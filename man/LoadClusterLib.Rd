@@ -2,23 +2,10 @@
 % Please edit documentation in R/utils_mir_target_enrich.R
 \name{LoadClusterLib}
 \alias{LoadClusterLib}
-\title{FUNCTION_TITLE}
+\title{Load Cluster Annotation Library}
 \usage{
 LoadClusterLib()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Load Cluster Annotation Library
 }

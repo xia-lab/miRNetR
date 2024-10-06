@@ -2,30 +2,10 @@
 % Please edit documentation in R/MiscUtils.R
 \name{scale_vec_colours}
 \alias{scale_vec_colours}
-\title{FUNCTION_TITLE}
+\title{Scale Vector Colours}
 \usage{
 scale_vec_colours(x, col = rainbow(10), breaks = NA)
 }
-\arguments{
-\item{x}{PARAM_DESCRIPTION}
-
-\item{col}{PARAM_DESCRIPTION, Default: rainbow(10)}
-
-\item{breaks}{PARAM_DESCRIPTION, Default: NA}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Scale Vector Colours
 }

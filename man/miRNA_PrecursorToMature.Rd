@@ -2,28 +2,10 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{miRNA_PrecursorToMature}
 \alias{miRNA_PrecursorToMature}
-\title{FUNCTION_TITLE}
+\title{miRNA Name Conversion From Precursor to Mature}
 \usage{
 miRNA_PrecursorToMature(miRNANames, version = NULL)
 }
-\arguments{
-\item{miRNANames}{PARAM_DESCRIPTION}
-
-\item{version}{PARAM_DESCRIPTION, Default: NULL}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+miRNA Name Conversion From Precursor to Mature
 }

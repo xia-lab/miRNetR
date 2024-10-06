@@ -2,23 +2,10 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{GetQueryNum}
 \alias{GetQueryNum}
-\title{FUNCTION_TITLE}
+\title{Number of Queries}
 \usage{
 GetQueryNum()
 }
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Number of Queries
 }

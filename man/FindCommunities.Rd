@@ -2,28 +2,15 @@
 % Please edit documentation in R/MirNetUtils.R
 \name{FindCommunities}
 \alias{FindCommunities}
-\title{FUNCTION_TITLE}
+\title{Find Communities}
 \usage{
 FindCommunities(method = "walktrap", use.weight = FALSE)
 }
 \arguments{
-\item{method}{PARAM_DESCRIPTION, Default: 'walktrap'}
+\item{method}{Method: walktrap, infomap, labelprop.}
 
-\item{use.weight}{PARAM_DESCRIPTION, Default: FALSE}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{use.weight}{Logical.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Find Communities
 }

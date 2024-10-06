@@ -2,26 +2,10 @@
 % Please edit documentation in R/ExprUtils.R
 \name{PerformQpcrDataNormalization}
 \alias{PerformQpcrDataNormalization}
-\title{FUNCTION_TITLE}
+\title{Perform qPCR data normalization}
 \usage{
 PerformQpcrDataNormalization(norm.opt = "quantile")
 }
-\arguments{
-\item{norm.opt}{PARAM_DESCRIPTION, Default: 'quantile'}
-}
-\value{
-OUTPUT_DESCRIPTION
-}
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Perform qPCR data normalization
 }

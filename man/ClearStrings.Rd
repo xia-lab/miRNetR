@@ -2,26 +2,13 @@
 % Please edit documentation in R/MiscUtils.R
 \name{ClearStrings}
 \alias{ClearStrings}
-\title{FUNCTION_TITLE}
+\title{Clear String}
 \usage{
 ClearStrings(query)
 }
 \arguments{
-\item{query}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{query}{Query.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Clear String
 }

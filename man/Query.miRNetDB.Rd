@@ -2,32 +2,21 @@
 % Please edit documentation in R/MiscUtils.R
 \name{Query.miRNetDB}
 \alias{Query.miRNetDB}
-\title{FUNCTION_TITLE}
+\title{Query miRNet DB}
 \usage{
 Query.miRNetDB(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase")
 }
 \arguments{
-\item{db.path}{PARAM_DESCRIPTION}
+\item{db.path}{Path to database.}
 
-\item{q.vec}{PARAM_DESCRIPTION}
+\item{q.vec}{Vector to query.}
 
-\item{table.nm}{PARAM_DESCRIPTION}
+\item{table.nm}{Table name.}
 
-\item{col.nm}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{col.nm}{Column names.}
+
+\item{db.nm}{Name of the database.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Query miRNet DB
 }

@@ -2,30 +2,17 @@
 % Please edit documentation in R/ListUtils.R
 \name{SetPpiDb}
 \alias{SetPpiDb}
-\title{FUNCTION_TITLE}
+\title{Set Protein-Protein Interaction Db}
 \usage{
 SetPpiDb(db, req, conf)
 }
 \arguments{
-\item{db}{PARAM_DESCRIPTION}
+\item{db}{Database name.}
 
-\item{req}{PARAM_DESCRIPTION}
+\item{req}{Logical.}
 
-\item{conf}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{conf}{Min score.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Set Protein-Protein Interaction Db
 }

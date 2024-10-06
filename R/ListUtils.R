@@ -4,6 +4,14 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
+#' Setup miRNA List Data
+#' @param mirs A list of miRNAs.
+#' @param orgType Organism type.
+#' @param idType miRNA ID type.
+#' @param tissue Tissue type.
+#' @param targetOpt Target options (optional).
+#' @return miRNA list data initialized.
+#' @export
 SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
 
     dataSet$listData <- TRUE;
@@ -38,6 +46,15 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
     }
 }
 
+#' Setup List Data
+#' @param listInput List to query.
+#' @param orgType Organism type.
+#' @param inputType Input type.
+#' @param idType ID type.
+#' @param tissue Tissue type.
+#' @param target Target.
+#' @return List data initialized.
+#' @export
 SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, target){
 
 print(paste0("================",  orgType));
@@ -67,6 +84,11 @@ print(paste0("================123",  orgType));
   }
 }
 
+#' Setup Item From Picklist
+#' @param orgType Organism type.
+#' @param tissue Tissue type.
+#' @param idType ID type.
+#' @export
 SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
     if(!exists("picklist.vec")){
         print("Could not find user entered disease list!");
@@ -88,24 +110,34 @@ SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
     return(nrow(mir.mat));
 }
 
+#' Get Unique Disease Names
+#' @export
 GetUniqueDiseaseNames <- function(){
     db.path <- paste(sqlite.path, "mir2disease.sqlite", sep="");
     statement <- "SELECT disease FROM disease";
     return(GetUniqueEntries(db.path, statement));
 }
 
+#' Get Unique Molecule Names
+#' @param orgType Organism type.
+#' @export
 GetUniqueMoleculeNames <- function(orgType="hsa"){
     db.path <- paste(sqlite.path, "mir2molecule.sqlite", sep="");
     statement <- paste("SELECT molecule FROM ",orgType, sep="");
     return(GetUniqueEntries(db.path, statement));
 }
 
+#' Get Unique Epigene Names
+#' @param orgType Organism type.
+#' @export
 GetUniqueEpigeneNames <- function(orgType="hsa"){
     db.path <- paste(sqlite.path, "mir2epi.sqlite", sep="");
     statement <- paste("SELECT epi_regulator FROM ",orgType, sep="");
     return(GetUniqueEntries(db.path, statement));
 }
 
+#' Set Current Data Multi
+#' @export
 SetCurrentDataMulti <- function(){
   dataSet$type <- nms.vec;
   dataSet <<- dataSet;
@@ -138,6 +170,8 @@ SetCurrentDataMulti <- function(){
 
 }
 
+#' Query Multi List
+#' @export
 QueryMultiList <- function(){
   .init.multilist();
   for(i in 1:length(dataSet$type)){
@@ -230,6 +264,8 @@ QueryMultiList <- function(){
   return(net.info)
 }
 
+#' Query Multi List miRNA
+#' @export
 QueryMultiListMir <- function(){
   .init.multilist();
   for(i in 1:length(dataSet$type)){
@@ -1310,7 +1346,7 @@ QueryMultiListMir <- function(){
 .searchMultiNet_epi2mir <- function(input.type){
     orgType <- dataSet$org;
     if(orgType %in% c("bta", "dme","gga","sma", "cel","dre","rno", "ssc") ){
-      curent.msg <<- "Only human and mouse support the epigene network."
+      curent.msg <<- "Only human and mouse are supported for epigene network."
       print(current.msg);
       return(0);
     }
@@ -1384,7 +1420,7 @@ QueryMultiListMir <- function(){
 
 .searchMultiNet_disease2mir <-function(input.type){
     if(dataSet$org != "hsa" ){
-      curent.msg <<- "Only huamn support the disease network."
+      curent.msg <<- "Only human is supported for disease network."
       print(current.msg);
       return(0);
     }
@@ -1518,6 +1554,9 @@ QueryMultiListMir <- function(){
     return(1);
 }
 
+#' Search Multi-Network Data
+#' @param input.type miRNA and target, e.g., mir2gene, mir2molecule, mir2disease.
+#' @export
 SearchMultiNet <- function(input.type){
 
   node.ids <- vector();
@@ -1554,6 +1593,11 @@ SearchMultiNet <- function(input.type){
   return(res);
 }
 
+#' Set Protein-Protein Interaction Db
+#' @param db Database name.
+#' @param req Logical.
+#' @param conf Min score.
+#' @export
 SetPpiDb  <- function(db, req, conf){
   dataSet$ppiOpts$db.name=db;
   if(req=="true"){

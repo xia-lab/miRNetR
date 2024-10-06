@@ -2,30 +2,17 @@
 % Please edit documentation in R/XenoMirUtils.R
 \name{SetupXenoMirListData}
 \alias{SetupXenoMirListData}
-\title{FUNCTION_TITLE}
+\title{Setup Xeno miRNA List}
 \usage{
 SetupXenoMirListData(mirs, orgType, idType)
 }
 \arguments{
-\item{mirs}{PARAM_DESCRIPTION}
+\item{mirs}{miRNAs.}
 
-\item{orgType}{PARAM_DESCRIPTION}
+\item{orgType}{Organism type.}
 
-\item{idType}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{idType}{ID type.}
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+Setup Xeno miRNA List
 }
