@@ -39,6 +39,8 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
 }
 
 SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, target){
+
+print(paste0("================",  orgType));
   data.org <<- dataSet$org <- orgType;
   dataSet$tissue <- tissue;
   current.msg <<- NULL;
@@ -58,6 +60,7 @@ SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, targ
   dataSet$target.types[[inputType]] <- target;
   dataSet <<- dataSet;
   if(.on.public.web){
+print(paste0("================123",  orgType));
     return (nrow(in.mat));
   }else{
     return (paste("A total of",  nrow(in.mat), "unique items were entered."))
