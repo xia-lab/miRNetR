@@ -35,7 +35,7 @@ PerformMirGeneMapping <- function(input.type="none"){
         dataSet$mir.res <- res;
 
         gene.nms <- res[,"Gene"];
-        net.info$gene.nms <- gene.nms;
+        net.info$gene.nms <- unique(c(net.info$gene.nms, gene.nms));
         net.info <<-net.info;
 
         # record the mapped queries and change to same IDs used in network
