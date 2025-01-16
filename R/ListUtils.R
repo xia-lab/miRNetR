@@ -228,136 +228,99 @@ QueryMultiList <- function(){
     return(current.msg);
   }
 }
+
 .set.net.names <- function(input.type){
+  # Check and merge gene names
+  if (grepl("gene", input.type)) {
+      if (is.null(net.info$gene.nms)) {
+          net.info$gene.nms <- gene.nms
+      } else {
+          net.info$gene.nms <- unique(c(net.info$gene.nms, gene.nms))
+      }
+  }
 
-<<<<<<< HEAD
-      if (grepl("gene", input.type)) {
-        net.info$gene.nms = gene.nms
+  # Check and merge lnc names
+  if (grepl("lnc", input.type)) {
+      if (is.null(net.info$lnc.nms)) {
+          net.info$lnc.nms <- lnc.nms
+      } else {
+          net.info$lnc.nms <- unique(c(net.info$lnc.nms, lnc.nms))
       }
-      if (grepl("lnc", input.type)) {
-        net.info$lnc.nms = lnc.nms
+  }
+
+  # Check and merge tf names
+  if (grepl("tf", input.type)) {
+      if (is.null(net.info$tf.nms)) {
+          net.info$tf.nms <- tf.nms
+      } else {
+          net.info$tf.nms <- unique(c(net.info$tf.nms, tf.nms))
       }
-      if (grepl("tf", input.type)) {
-        net.info$tf.nms = tf.nms
+  }
+
+  # Check and merge dis names
+  if (grepl("dis", input.type)) {
+      if (is.null(net.info$dis.nms)) {
+          net.info$dis.nms <- dis.nms
+      } else {
+          net.info$dis.nms <- unique(c(net.info$dis.nms, dis.nms))
       }
-      if (grepl("dis", input.type)) {
-        net.info$dis.nms = dis.nms
+  }
+
+  # Check and merge mol names
+  if (grepl("mol", input.type)) {
+      if (is.null(net.info$mol.nms)) {
+          net.info$mol.nms <- mol.nms
+      } else {
+          net.info$mol.nms <- unique(c(net.info$mol.nms, mol.nms))
       }
-      if (grepl("mol", input.type)) {
-        net.info$mol.nms = mol.nms
+  }
+
+  # Check and merge epi names
+  if (grepl("epi", input.type)) {
+      if (is.null(net.info$epi.nms)) {
+          net.info$epi.nms <- epi.nms
+      } else {
+          net.info$epi.nms <- unique(c(net.info$epi.nms, epi.nms))
       }
-      if (grepl("epi", input.type)) {
-        net.info$epi.nms = epi.nms
+  }
+
+  # Check and merge circ names
+  if (grepl("circ", input.type)) {
+      if (is.null(net.info$circ.nms)) {
+          net.info$circ.nms <- circ.nms
+      } else {
+          net.info$circ.nms <- unique(c(net.info$circ.nms, circ.nms))
       }
-      if (grepl("circ", input.type)) {
-        net.info$circ.nms = circ.nms
+  }
+
+  # Check and merge pseudo names
+  if (grepl("pseudo", input.type)) {
+      if (is.null(net.info$pseudo.nms)) {
+          net.info$pseudo.nms <- pseudo.nms
+      } else {
+          net.info$pseudo.nms <- unique(c(net.info$pseudo.nms, pseudo.nms))
       }
-      if (grepl("pseudo", input.type)) {
-        net.info$pseudo.nms = pseudo.nms
+  }
+
+  # Check and merge snc names
+  if (grepl("snc", input.type)) {
+      if (is.null(net.info$snc.nms)) {
+          net.info$snc.nms <- snc.nms
+      } else {
+          net.info$snc.nms <- unique(c(net.info$snc.nms, snc.nms))
       }
-      if (grepl("snc", input.type)) {
-        net.info$snc.nms = snc.nms
+  }
+
+  # Check and merge snp names (the specific case you mentioned)
+  if (grepl("snp", input.type)) {
+      if (is.null(net.info$snp.nms)) {
+          net.info$snp.nms <- snp.nms
+      } else {
+          net.info$snp.nms <- unique(c(net.info$snp.nms, snp.nms))
       }
-      if (grepl("snp", input.type)) {
-        net.info$snp.nms = snp.nms
-      }
-      if (grepl("protein", input.type)) {
-        net.info$protein.nms = c(protein1.nms, protein2.nms)
-      }
+  }
+
   return(net.info)
-=======
-    # Check and merge gene names
-    if (grepl("gene", input.type)) {
-        if (is.null(net.info$gene.nms)) {
-            net.info$gene.nms <- gene.nms
-        } else {
-            net.info$gene.nms <- unique(c(net.info$gene.nms, gene.nms))
-        }
-    }
-
-    # Check and merge lnc names
-    if (grepl("lnc", input.type)) {
-        if (is.null(net.info$lnc.nms)) {
-            net.info$lnc.nms <- lnc.nms
-        } else {
-            net.info$lnc.nms <- unique(c(net.info$lnc.nms, lnc.nms))
-        }
-    }
-
-    # Check and merge tf names
-    if (grepl("tf", input.type)) {
-        if (is.null(net.info$tf.nms)) {
-            net.info$tf.nms <- tf.nms
-        } else {
-            net.info$tf.nms <- unique(c(net.info$tf.nms, tf.nms))
-        }
-    }
-
-    # Check and merge dis names
-    if (grepl("dis", input.type)) {
-        if (is.null(net.info$dis.nms)) {
-            net.info$dis.nms <- dis.nms
-        } else {
-            net.info$dis.nms <- unique(c(net.info$dis.nms, dis.nms))
-        }
-    }
-
-    # Check and merge mol names
-    if (grepl("mol", input.type)) {
-        if (is.null(net.info$mol.nms)) {
-            net.info$mol.nms <- mol.nms
-        } else {
-            net.info$mol.nms <- unique(c(net.info$mol.nms, mol.nms))
-        }
-    }
-
-    # Check and merge epi names
-    if (grepl("epi", input.type)) {
-        if (is.null(net.info$epi.nms)) {
-            net.info$epi.nms <- epi.nms
-        } else {
-            net.info$epi.nms <- unique(c(net.info$epi.nms, epi.nms))
-        }
-    }
-
-    # Check and merge circ names
-    if (grepl("circ", input.type)) {
-        if (is.null(net.info$circ.nms)) {
-            net.info$circ.nms <- circ.nms
-        } else {
-            net.info$circ.nms <- unique(c(net.info$circ.nms, circ.nms))
-        }
-    }
-
-    # Check and merge pseudo names
-    if (grepl("pseudo", input.type)) {
-        if (is.null(net.info$pseudo.nms)) {
-            net.info$pseudo.nms <- pseudo.nms
-        } else {
-            net.info$pseudo.nms <- unique(c(net.info$pseudo.nms, pseudo.nms))
-        }
-    }
-
-    # Check and merge snc names
-    if (grepl("snc", input.type)) {
-        if (is.null(net.info$snc.nms)) {
-            net.info$snc.nms <- snc.nms
-        } else {
-            net.info$snc.nms <- unique(c(net.info$snc.nms, snc.nms))
-        }
-    }
-
-    # Check and merge snp names (the specific case you mentioned)
-    if (grepl("snp", input.type)) {
-        if (is.null(net.info$snp.nms)) {
-            net.info$snp.nms <- snp.nms
-        } else {
-            net.info$snp.nms <- unique(c(net.info$snp.nms, snp.nms))
-        }
-    }
-
-    return(net.info)
->>>>>>> 3ccae2892697625ebe4f8afc0a4f8dff59198e14
 }
 
 
