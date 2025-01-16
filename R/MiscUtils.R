@@ -478,10 +478,10 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
         target2=target2[match(miRNANames, target2$OriginalName),]
 
         #merge
-        mir.vec <- tolower(as.vector(target$TargetName));
-        mir.vec2 <- c(tolower(as.vector(target2$Mature1)),tolower(as.vector(target2$Mature2)));
-        mir.vec3 <- tolower(paste(target$OriginalName,"-3p",sep=""));
-        mir.vec4 <- tolower(paste(target$OriginalName,"-5p",sep=""));
+        mir.vec <- as.vector(target$TargetName);
+        mir.vec2 <- c(as.vector(target2$Mature1),as.vector(target2$Mature2));
+        mir.vec3 <- paste(target$OriginalName,"-3p",sep="");
+        mir.vec4 <- paste(target$OriginalName,"-5p",sep="");
         mir.vec <- na.omit(c(mir.vec, mir.vec2,mir.vec3,mir.vec4))
         mir.vec <- unique(unlist(strsplit(mir.vec, split="&")));
         query2 <- paste(shQuote(mir.vec), collapse=",");

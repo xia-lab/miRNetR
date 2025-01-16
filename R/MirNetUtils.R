@@ -31,7 +31,7 @@ CreateMirNets <- function(net.type){
     dups <- duplicated(nd.ids); #note using unique will lose the names attribute
     dataSet$node.anot <<- nd.ids[!dups];
     colnames(my.nodes) = c("from", "to", "direction");
-    mir.graph <-simplify( graph_from_data_frame(my.nodes, directed=FALSE, vertices=NULL), edge.attr.comb="first");
+    mir.graph <-simplify(graph_from_data_frame(my.nodes, directed=FALSE, vertices=NULL), edge.attr.comb="first");
   }else{
     if(data.type == "xeno.mir"){
       my.nodes <- dataSet$mir.res[, c("miRNA", "Gene")];
@@ -289,7 +289,7 @@ convertIgraph2JSON <- function(g, filenm){
   
   m <- as.matrix(my.nodes);
   layers = ceiling(match(V(g)$name, m)/nrow(m));
-  
+
   # setup shape (mir square, gene circle)
   shapes <- rep("circle", length(nms));
   
@@ -328,11 +328,11 @@ convertIgraph2JSON <- function(g, filenm){
     mir.inx <- nms %in% edge.mat[,2];
   }
   shapes[mir.inx] <- "square";
-  
+
   # update snp node size, shape and color
   snp.inx <- as.vector(sapply(nms, function(x) substr(x, 1, 2) == "rs"));
   shapes[snp.inx] <- "diamond";
-  
+
   #if(anal.type == "multilist"){
   # update disease node shape
   dis.inx <- nms %in% net.info$dis.nms;
@@ -345,6 +345,7 @@ convertIgraph2JSON <- function(g, filenm){
   snc.inx <- nms %in% net.info$snc.nms;
   mol.inx <- nms %in% net.info$mol.nms;
   gene.inx <- nms %in% net.info$gene.nms;
+  protein.inx <- nms %in% net.info$protein.nms;
   # extract other molecule index
   #}
   # slightly highlight mir node in general
@@ -367,7 +368,8 @@ convertIgraph2JSON <- function(g, filenm){
   node.types[mol.inx] <- paste("Compound", node.types[mol.inx]);
   node.types[epi.inx] <- paste("Epigenetic", node.types[epi.inx]);
   node.types[pseudo.inx] <- paste("Pseudogene", node.types[pseudo.inx]);
-  
+  node.types[protein.inx] <- paste("Protein", node.types[protein.inx]);
+
   n.types <- rep("", length(node.dgr));
   n.types[mir.inx] <- "miRNA";
   n.types[gene.inx] <- "Gene";
@@ -380,6 +382,7 @@ convertIgraph2JSON <- function(g, filenm){
   n.types[mol.inx] <- "Compound";
   n.types[epi.inx] <- "Epigenetic";
   n.types[pseudo.inx] <- "Pseudogene";
+  n.types[protein.inx] <- "Protein";
   
   node.types = trimws(node.types);
   node.types = gsub(" ", "_", node.types);
@@ -854,6 +857,9 @@ GetNetStatByType <- function(g){
       }else if(vec[i] == "gene"){
         nms = net.info$gene.nms
         lbl = "Gene";
+      }else if(vec[i] == "protein"){
+        nms = net.info$protein.nms
+        lbl = "Protein";
       }else if(vec[i] == "epi"){
         nms = net.info$epi.nms
         lbl = "Epigenetic modif.";

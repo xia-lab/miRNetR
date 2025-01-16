@@ -25,10 +25,10 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
     mir.vec <- mir.mat[,1];
 
     if(data.type=="xeno.mir" && idType == "mir_id"){
-        mir.vec <- gsub("mir", "miR", mir.vec);
+      mir.vec <- gsub("mir", "miR", mir.vec);
     }
     if(idType == "mir_id"){
-      rownames(mir.mat) <-  tolower(as.vector(mir.vec));
+      rownames(mir.mat) <- as.vector(mir.vec);
     }else{
       rownames(mir.mat) <-  mir.vec;
     }
@@ -257,6 +257,9 @@ QueryMultiList <- function(){
       }
       if (grepl("snp", input.type)) {
         net.info$snp.nms = snp.nms
+      }
+      if (grepl("protein", input.type)) {
+        net.info$protein.nms = c(protein1.nms, protein2.nms)
       }
   return(net.info)
 }
@@ -1523,11 +1526,13 @@ QueryMultiListMir <- function(){
 
       node.ids <- c(ID1=res[,"Symbol1"], ID2=res[,"Symbol2"]);
       node.nms <- c(Name1=res[,"ID1"], Name2=res[,"ID2"]);
+
       edgeu.res <<- rbind(edgeu.res, edge.res); #edgeu.res is an empty dataframe defined in QueryNet
       edgeu.res <<- edgeu.res[!duplicated(edgeu.res), ];
       nodeu.ids <<- c(nodeu.ids, node.ids);
       edgeNumU <<- c(edgeNumU, nrow(edge.res))
       nodeu.nms <<- c(nodeu.nms, node.nms);
+
       if(table.nm == "hsa_string"){
         res$Literature <- rep("25352553", nrow(res));
       }else if(table.nm == "hsa_innate"){
@@ -1539,6 +1544,9 @@ QueryMultiListMir <- function(){
       }
 
       na.res = rep("Not Applicable", nrow(res))
+      protein1.nms <<- res[,"Symbol1"];
+      protein2.nms <<- res[,"Symbol2"];
+
       res <- data.frame(ID=res[,"Symbol1"], Accession=res[,"ID1"], Target=res[,"Symbol2"], TargetID=res[,"ID2"], Experiment=na.res, Literature=res[,"Literature"], Tissue=na.res);
 
       mir.resu <<- rbind(mir.resu, res);
