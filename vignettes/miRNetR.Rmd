@@ -125,7 +125,7 @@ SetCurrentDataMulti()
 #### Step 4. Perform miRNAs to target genes mapping, 
 #### results are downloaded in your working directory ("mirnet_mir_target.csv" and "mir_tissue.csv")
 QueryMultiListMir()
-#> "Downloading mir2gene.sqlite from https://www.xialab.ca/resources/sqlite/mir2gene.sqlite"
+#> "Downloading mir2gene.sqlite from https://www.xialab.ca/rest/sqlite/mir2gene.sqlite"
 #> "A total of unqiue 1059 pairs of miRNA-gene targets were identified!"
 head(dataSet$mir.res, n = 3L)
 #>               ID    Accession Target TargetID           Experiment        Literature Tissue
@@ -269,7 +269,7 @@ SetCurrentDataMulti()
 #### Step 4. Perform target gene to miRNA mapping, 
 #### results are downloaded in your working directory ("mirnet_mir_target.csv")
 QueryMultiList()
-#> "Downloading mir2gene.sqlite from https://www.xialab.ca/resources/sqlite/mir2gene.sqlite"
+#> "Downloading mir2gene.sqlite from https://www.xialab.ca/rest/sqlite/mir2gene.sqlite"
 #> "A total of unqiue 292 pairs of miRNA-gene targets were identified!"
 
 head(dataSet$mir.res, n = 3L)

@@ -1106,8 +1106,14 @@ ComputePCSFNet <- function(){
 
 # Adapted from PCSF
 # https://github.com/IOR-Bioinformatics/PCSF
-Compute.SteinerForest <- function(ppi, terminals, w = 2, b = 1, mu = 0.0005, dummies){
-
+Compute.SteinerForest <- function(ppi, terminals, w = 2, b = 1, mu = 0.0005, dummies=NA){
+  ppi <<- ppi;
+  terminals <<- terminals;
+  w <<- w;
+  b <<- b;
+  mu <<- mu;
+  dummies <<- dummies;
+  save.image("stein.RData");
   # Gather the terminal genes to be analyzed, and their scores
   terminal_names <- names(terminals)
   terminal_values <- as.numeric(terminals)
@@ -1175,8 +1181,29 @@ Compute.SteinerForest <- function(ppi, terminals, w = 2, b = 1, mu = 0.0005, dum
     v <- data.frame(output[[4]], output[[5]], type)
     names(v) <- c("terminals", "prize", "type")
     subnet <- graph_from_data_frame(e,vertices=v,directed=F)
-    E(subnet)$weight <- as.numeric(output[[3]])
+    dummy_edges <- which(output[[1]] == "DUMMY" | output[[2]] == "DUMMY")
+
+    # Check if dummy edges exist
+    if (length(dummy_edges) > 0) {
+      # Remove the "DUMMY" edges from the edge lists (output[[1]], output[[2]]) and weights (output[[3]])
+      output[[1]] <- output[[1]][-dummy_edges]
+      output[[2]] <- output[[2]][-dummy_edges]
+      output[[3]] <- output[[3]][-dummy_edges]
+    }
+
+    # Now remove the "DUMMY" vertices from the subnet graph
     subnet <- delete_vertices(subnet, "DUMMY")
+
+    # Check the number of edges and length of weights
+    if(length(E(subnet)) == length(output[[3]])){
+      E(subnet)$weight <- as.numeric(output[[3]])
+    } else {
+      print(paste("Mismatch in edges and weights. Edges:", length(E(subnet)), "Weights:", length(output[[3]])))
+      # Optionally, trim the weight vector
+      output[[3]] <- output[[3]][1:length(E(subnet))]
+      E(subnet)$weight <- as.numeric(output[[3]])
+    }
+
     subnet <- delete_vertices(subnet, names(which(degree(subnet)==0)));
     return(subnet)
 
