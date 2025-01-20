@@ -57,7 +57,6 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
 #' @export
 SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, target){
 
-print(paste0("================",  orgType));
   data.org <<- dataSet$org <- orgType;
   dataSet$tissue <- tissue;
   current.msg <<- NULL;
@@ -77,7 +76,6 @@ print(paste0("================",  orgType));
   dataSet$target.types[[inputType]] <- target;
   dataSet <<- dataSet;
   if(.on.public.web){
-print(paste0("================123",  orgType));
     return (nrow(in.mat));
   }else{
     return (paste("A total of",  nrow(in.mat), "unique items were entered."))
@@ -874,11 +872,26 @@ QueryMultiListMir <- function(){
       print(current.msg);
       return(0);
     }
-
+    
     if (input.type == "mir2tf"){
       idType <- dataSet$mirnaType;
       mir.mat <- dataSet$mir.orig;
       mir.vec <- rownames(mir.mat);
+      
+      if (convtMat2pre == "TRUE"){
+        # Modify mir.vec before search if converting mature miR to precursor
+        conv_res <- convertMat2Pre(mir.vec, idType) 
+        matpre_conversion <- conv_res$mat
+        unmatched <- conv_res$vec
+        
+        if (idType == "mir_id"){
+          mir.vec <- unique(matpre_conversion[,"Precursor"])
+          unmatched <- gsub("-[35]p$", "", gsub("miR", "mir", unmatched))
+        } else if (idType == "mir_acc"){
+          mir.vec <- unique(matpre_conversion[,"Precursor_ACC"])
+        }
+        mir.vec <- c(mir.vec, unmatched)
+      }
     }else if(input.type == "gene2tf"){
       idType <- dataSet$id.types[["gene"]];
       mir.mat <- dataSet$data[["gene"]];
@@ -910,7 +923,6 @@ QueryMultiListMir <- function(){
       mir.dic <- QueryTFSQLite(table.nm, mir.vec, idType);
     }
 
-
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
       current.msg <<- "No hits found in the miRNA-TF database. Please check your input. ";
@@ -925,7 +937,22 @@ QueryMultiListMir <- function(){
         res <- mir.dic[ , c("mir_id","mir_acc","symbol","entrez", "action_type", "pmid", "tissue")];
         rownames(res) <- mir.dic$mirnet;
         current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-TF targets were identified!");
-
+        
+        if (input.type == "mir2tf" && convtMat2pre == "TRUE"){
+          # Revert pre-miR to queried mature-miR
+          query_mat <- matpre_conversion[matpre_conversion[, 5] == "mat", ]
+          matches <- NA
+          if (idType == "mir_id"){
+            matches <- match(res[,"mir_id"], query_mat[,"Precursor"])
+          }
+          if (idType == "mir_acc"){
+            matches <- match(res[,"mir_acc"], query_mat[,"Precursor_ACC"])
+          }
+          matches_idx <- !is.na(matches)
+          res[matches_idx, "mir_id"] <- query_mat[matches[matches_idx], "Mature"]
+          res[matches_idx, "mir_acc"] <- query_mat[matches[matches_idx], "Mature_ACC"]
+        }
+        
         # update the data
         gd.inx <- rownames(mir.mat) %in% unique(res[, idType]);
         mir.mat <- mir.mat[gd.inx,,drop=F];
@@ -1198,6 +1225,8 @@ QueryMultiListMir <- function(){
   } else {
     # map tf2mir
     idVec <- as.vector(unique(mir.dic[, c("tfid")]));
+    
+    
     mir.dic2 <- Query.miRNetDB(paste(sqlite.path, "mir2tf", sep=""), idVec, dataSet$org, "entrez");
 
     # gene2tf

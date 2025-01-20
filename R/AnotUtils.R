@@ -488,6 +488,20 @@ PerformTFMapping <- function(){
   mir.mat <- dataSet$mir.orig;
   idType <- dataSet$idType;
   mir.vec <- rownames(mir.mat);
+  
+  # Modify mir.vec before search if converting mature miR to precursor
+  conv_res <- convertMat2Pre(mir.vec, idType) 
+  matpre_conversion <- conv_res$mat
+  unmatched <- conv_res$vec
+  
+  if (idType == "mir_id"){
+    mir.vec <- unique(matpre_conversion[,"Precursor"])
+    unmatched <- gsub("-[35]p$", "", gsub("miR", "mir", unmatched))
+  } else if (idType == "mir_acc"){
+    mir.vec <- unique(matpre_conversion[,"Precursor_ACC"])
+  }
+  mir.vec <- c(mir.vec, unmatched)
+  
   mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2tf", sep=""), mir.vec, orgType, idType);
 
   hit.num <- nrow(mir.dic)
@@ -503,7 +517,19 @@ PerformTFMapping <- function(){
     res <- mir.dic[ , c("mir_id","mir_acc","symbol","entrez", "pmid", "tissue")];
     rownames(res) <- mir.dic$mirnet;
     current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-TF targets were identified!");
-
+    
+    # Revert pre-miR to queried mature-miR
+    query_mat <- matpre_conversion[matpre_conversion[, 5] == "mat", ]
+    matches <- NA
+    if (idType == "mir_id"){
+      matches <- match(res[,"mir_id"], query_mat[,"Precursor"])
+    }
+    if (idType == "mir_acc"){
+      matches_acc <- match(res[,"mir_acc"], query_mat[,"Precursor_ACC"])
+    }
+    res[matches[!is.na(matches)], "mir_id"] <- query_mat[!is.na(matches), "Mature"]
+    res[matches[!is.na(matches)], "mir_acc"] <- query_mat[!is.na(matches), "Mature_ACC"]
+    
     # update the data
     gd.inx <- rownames(mir.mat) %in% unique(res[, idType]);
     dataSet$mir.mapped <- mir.mat[gd.inx,,drop=F];
@@ -736,4 +762,83 @@ queryGeneDB <- function(table.nm, data.org){
     dbDisconnect(conv.db); CleanMemory();
 
     return(db.map)
+}
+
+
+# Convert mature miRNA to precursor miRNA if searching TF-mature miRNA
+#' Convert mature miR to precursor miR
+#' @export
+convertMat2Pre <- function(mir.vec, idType){
+  
+  if (any(grepl("miR", mir.vec)) || any(grepl("-[35]p$", mir.vec)) || any(grepl("MIMAT", mir.vec))) {
+    print("Converting mature microRNA to precursor microRNA ....");
+    if(.on.public.web){
+      load("../../data/libs/mbcdata.rda");
+    }else{
+      mbcdata.rda <- paste(lib.path, "/mbcdata.rda", sep="");
+      destfile <- paste("mbcdata.rda");
+      download.file(mbcdata.rda, destfile, mode = "wb");
+      load(destfile);
+    }
+    
+    ver_index <- "v22"
+    MiRNAs <- as.matrix(miRNA_data[[ver_index]])
+    MiRNAs <- rbind(MiRNAs[, c(1,2,5,6)], MiRNAs[, c(1,2,8,9)])
+    colnames(MiRNAs) <- c("Precursor_ACC", "Precursor", "Mature_ACC","Mature")
+
+    if (idType == "mir_id"){
+      SYM_ID <- match(tolower(mir.vec), tolower(SYM))
+      idx_unmatched <- is.na(SYM_ID)
+      unmatched <- mir.vec[idx_unmatched]
+      
+      # match to mature
+      mature <- MiRNAs[MiRNAs[,"Mature"] %in% SYM_ID, ]
+      mature <- cbind(mature, rep("mat", nrow(mature)))
+      colnames(mature)[5] <- "Q_type"
+      # match to precursor
+      precursor <- MiRNAs[MiRNAs[,"Precursor"] %in% SYM_ID, ]
+      precursor <- cbind(precursor, rep("pre", nrow(precursor)))
+      colnames(precursor)[5] <- "Q_type"
+      
+      df <- rbind(mature, precursor)
+      # Replace indices with mir_id and mir_acc
+      df[, 1] <- ACC[as.numeric(df[, 1])]
+      df[, 3] <- ACC[as.numeric(df[, 3])]
+      df[, 2] <- SYM[as.numeric(df[, 2])]
+      df[, 4] <- SYM[as.numeric(df[, 4])]
+      
+    } else if (idType == "mir_acc"){
+      ACC_ID <- match(mir.vec, ACC)
+      idx_unmatched <- is.na(ACC_ID)
+      unmatched <- mir.vec[idx_unmatched]
+      
+      # match to mature
+      mature <- MiRNAs[MiRNAs[,"Mature_ACC"] %in% ACC_ID, ]
+      mature <- cbind(mature, rep("mat", nrow(mature)))
+      colnames(mature)[5] <- "Q_type"
+      # match to precursor
+      precursor <- MiRNAs[MiRNAs[,"Precursor_ACC"] %in% ACC_ID, ]
+      precursor <- cbind(precursor, rep("pre", nrow(precursor)))
+      colnames(precursor)[5] <- "Q_type"
+      
+      df <- rbind(mature, precursor)
+      # Replace indices with mir_id and mir_acc
+      df[, 1] <- ACC[as.numeric(df[, 1])]
+      df[, 3] <- ACC[as.numeric(df[, 3])]
+      df[, 2] <- SYM[as.numeric(df[, 2])]
+      df[, 4] <- SYM[as.numeric(df[, 4])]
+    }
+    return(list(mat = df, vec = unmatched));
+  } else{
+    print("No mature miRNA detected in the query for conversion.");
+    return(1);
+  }
+}
+
+convtMatMir <- function(checkbox){
+  if (checkbox){
+    convtMat2pre <<- "TRUE"
+  } else {
+    convtMat2pre <<- "FALSE"
+  }
 }
