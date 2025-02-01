@@ -387,6 +387,7 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
   }else{
     statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query, ")", sep="");
   }
+print(statement);
   mir.dic <- .query.sqlite(mir.db, statement);
 
   #Check the matched miRNA from upload list to database
