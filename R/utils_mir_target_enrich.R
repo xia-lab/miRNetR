@@ -1,11 +1,11 @@
 
-my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode="serial"){
-  #adjust.type <<- adjust.type;
-  #fun.type <<- fun.type;
-  #file.nm <<- file.nm;
-  #IDs <<- IDs;
-  #algo <<- algo;
-  #save.image("enr.RData");
+my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode="serial", save.type="network"){
+  adjust.type <<- adjust.type;
+  fun.type <<- fun.type;
+  file.nm <<- file.nm;
+  IDs <<- IDs;
+  algo <<- algo;
+  save.image("enr.RData");
   
   require(igraph); # keep this here as it is needed for remote calls
   require('RSQLite');
@@ -273,9 +273,9 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
     print(current.msg);
     return(0);
   }else{
-    if(nrow(resTable)>100){
-      resTable <- resTable[c(1:100),]
-    }
+    #if(nrow(resTable)>100){
+    #  resTable <- resTable[c(1:100),]
+    #}
   }
   current.msg <<- "Functional enrichment analysis was completed";
   
@@ -312,9 +312,30 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
   # csv.nm <- paste(file.nm, ".csv", sep="");
   fast.write.csv(resTable, file="mirnet_enrichment.csv", row.names=F);
   
+  gene.vec <- current.universe;
+  sym.vec <- doEntrez2SymbolMapping(gene.vec);
+  gene.nms <- sym.vec;
+
+  current.geneset.symb <- lapply(current.geneset, 
+                       function(x) {
+                         gene.nms[gene.vec%in%unlist(x)];
+  }
+  );
+  path.ids <- as.vector(current.setids[fun.ids]);
+
+  resTable <- data.frame(Pathway=rownames(res.mat), IDs=path.ids, res.mat);
   infoSet <- readSet(infoSet, "infoSet"); 
-  infoSet$imgSet$enrTables$network <- resTable;
-  infoSet$imgSet$enrTablesInfo$network <- list(library=fun.type, algo=algo);
+  infoSet$imgSet$enrTables[[save.type]]$table <- resTable;
+  infoSet$imgSet$enrTables[[save.type]]$library <- fun.type
+  infoSet$imgSet$enrTables[[save.type]]$algo<-algo;
+
+  infoSet$imgSet$enrTables[[save.type]]$current.geneset <- current.geneset;
+  infoSet$imgSet$enrTables[[save.type]]$hits.query <- hits.query;
+  infoSet$imgSet$enrTables[[save.type]]$current.setids <- current.setids;
+  infoSet$imgSet$enrTables[[save.type]]$res.mat<- res.mat;
+  infoSet$imgSet$enrTables[[save.type]]$current.geneset.symb <- current.geneset.symb;
+
+
   saveSet(infoSet, "infoSet");
   
   if(.on.public.web){

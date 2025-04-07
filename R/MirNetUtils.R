@@ -529,6 +529,7 @@ PrepareCSV <- function(table.nm){
 PrepareMirNet <- function(mir.nm, file.nm){
   my.mirnet <- mir.nets[[mir.nm]];
   current.mirnet <<- my.mirnet;
+  current.mir.nm <<- mir.nm;
   convertIgraph2JSON(my.mirnet, file.nm);
   if(.on.public.web){
     return(1);
@@ -1299,8 +1300,55 @@ FindCommunities <- function(method="walktrap", use.weight=FALSE){
   all.communities <- paste(community.vec, collapse="||");
   colnames(gene.community) <- c("Id", "Label", "Module");
   fast.write.csv(gene.community, file="module_table.csv", row.names=F);
+  
+  df <- convertModuleToDF(all.communities);
+  df <- df[,-c(3,5)];
+  #record table for report
+  type = "module";
+
+  infoSet <- readSet(infoSet, "infoSet"); 
+  infoSet$imgSet$enrTables[[type]] <- list()
+  infoSet$imgSet$enrTables[[type]]$table <- df;
+
+  df1<- data.frame(Size=df$Size,Pval=df$P.value)
+  infoSet$imgSet$enrTables[[type]]$res.mat <- df1;
+  infoSet$imgSet$enrTables[[type]]$library <- "";
+  infoSet$imgSet$enrTables[[type]]$algo <- method;
+  saveSet(infoSet,"infoSet");
   return(all.communities);
 }
+
+
+convertModuleToDF <- function(dataString) {
+  # Split the string into lines based on the '||' separator
+  lines <- strsplit(dataString, "\\|\\|")[[1]]
+  
+  # Initialize an empty list to store each row's data
+  rows <- list()
+  
+  # Iterate over each line and split further by ';' to extract individual fields
+    i <- 1;
+  for (line in lines) {
+    parts <- strsplit(line, ";")[[1]]
+    if (length(parts) >= 4) {  # Ensure there are enough parts to form a complete row
+      # Extract and store the data for this row
+      rows[[length(rows) + 1]] <- list(
+        Module = paste0("Module ", i),
+        Size = parts[1],
+        Name = as.numeric(parts[2]),
+        `P-value` = as.numeric(parts[3]),
+        IDs = parts[4]
+      )
+    i = i +1;
+    }
+  }
+  
+  # Convert the list of rows into a dataframe
+  df <- do.call(rbind, lapply(rows, function(row) as.data.frame(row, stringsAsFactors = FALSE)))
+  # Column names are already set via the list names, so this line is actually redundant
+  return(df)
+}
+
 
 #' Get Network Topology
 #' @export
@@ -1346,6 +1394,10 @@ PlotDegreeHistogram <- function(imgNm, netNm = "NA", dpi=72, format="png"){
         theme(plot.title = element_text(hjust = 0.5))
     print(p)
   dev.off();
+
+  dataSet$imgSet$degreeHistogram <- list();
+  dataSet$imgSet$degreeHistogram$netName <- netNm;
+  dataSet <<- dataSet;
 }
 
 #' Plot Betweenness Histogram
@@ -1377,4 +1429,8 @@ PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
             theme(plot.title = element_text(hjust = 0.5))
         print(p)
     dev.off();
+
+  dataSet$imgSet$betwennessHistogram <- list();
+  dataSet$imgSet$betwennessHistogram$netName <- netNm;
+  dataSet <<- dataSet;
 }
