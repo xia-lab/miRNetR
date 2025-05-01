@@ -868,7 +868,7 @@ QueryMultiListMir <- function(){
 .searchMultiNet_tf2mir <- function(input.type){
     orgType <- dataSet$org;
     if(orgType %in% c("bta", "ssc","gga","dme", "sma") ){
-      curent.msg <<- "This organism is not supported for transcription factors network research."
+      current.msg <<- "This organism is not supported for transcription factors network research."
       print(current.msg);
       return(0);
     }
@@ -1653,7 +1653,7 @@ QueryMultiListMir <- function(){
 #' @param input.type miRNA and target, e.g., mir2gene, mir2molecule, mir2disease.
 #' @export
 SearchMultiNet <- function(input.type){
-
+cat("input.type ===> ", input.type, "\n")
   node.ids <- vector();
   res <- 0;
   if (input.type %in% c("gene2mir","mir2gene","snpmir2gene", "mir2gene_mirtarbase", "mir2gene_tarbase", "mir2gene_mirecords", "mir2gene_miranda")){
@@ -1683,8 +1683,9 @@ SearchMultiNet <- function(input.type){
   }else if(input.type  %in% c("circrna2mir" ,"mir2circrna", "circ2mir","mir2circ")){
     res <- .searchMultiNet_cir2mir(input.type);
   }
-
-  mir.nmsu <<- unique(c(mir.nmsu, mir.nms));
+  if(res !=0){
+    mir.nmsu <<- unique(c(mir.nmsu, mir.nms));
+  }
   return(res);
 }
 
