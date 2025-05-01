@@ -929,11 +929,32 @@ makeReadable <- function(str){
 
 CheckDetailsTablePerformed <-function(type){
   performed <- T;
+
+net.types <- c(
+  "snp2mir", "snp2mirbs", "gene2mir", "mir2gene", "mol2mir", "mir2mol",
+  "lnc2mir", "mir2lnc", "circ2mir", "mir2circ", "pseudo2mir", "mir2pseudo",
+  "snc2mir", "mir2snc", "mir2tf", "tf2mir", "tf2gene", "epi2mir", "mir2epi",
+  "dis2mir", "mir2dis", "protein2protein", "snp2tfbs", "gene2tf"
+)
+
+
   if(type == "node"){
     performed <- file.exists("node_table.csv");
   }else if(type %in% c( "network_enr", "regNetwork_enr", "gba_enr", "module_enr", "defaultEnr")){
     clean_type <- gsub("_enr", "", type);
     performed <- !is.null(infoSet$imgSet$enrTables[[clean_type]]);
+  } else if(type == "netBeans"){
+    performed <- exists('net.stats')
+  }else if(type == "resultBeans"){
+    GetTableNames();
+    infoSet <- readSet(infoSet, "infoSet");
+    performed <- !is.null(infoSet$paramSet$tableNames);
+  }else if(type %in% net.types){
+    if (anal.type == "multilist"  || anal.type == "snp2mir" || anal.type == "tf2genemir" || anal.type == "gene2tfmir") {
+      performed <- !is.null(dataSet[type][[1]]);
+    }  else{
+      performed <- !is.null(dataSet$mir.res);
+    }
   }
   print(paste("checkPerformed=", type, "====",performed));
 
@@ -1057,7 +1078,7 @@ GetSetIDLinks <- function(type=""){
   print("GetSetIDLinks");
   print(imgSet$enrTables[[type]]$library);
 
-    if(fun.type %in% c("go_bp", "go_mf", "go_cc")){
+    if(fun.type %in% c("go_bp", "go_mf", "go_cc", "bp", "mf", "cc")){
         annots <- paste("<a href='https://www.ebi.ac.uk/QuickGO/term/", ids, "' target='_blank'>", pathways, "</a>", sep="");
     }else if(fun.type %in% c("go_panthbp", "go_panthmf", "go_panthcc")){
         annots <- paste("<a href='https://www.pantherdb.org/panther/categoryList.do?searchType=basic&fieldName=all&organism=all&fieldValue=", ids, "&listType=5' target='_blank'>", pathways, "</a>", sep="");
