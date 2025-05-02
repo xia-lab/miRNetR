@@ -283,11 +283,11 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
   resTable <- cbind(resTable, FDR=adj.p);
   
   # write json
-  hit.num <- resTable[,4]; if(length(hit.num) ==1) { hit.num <- matrix(hit.num) };
+  hit.num <- paste0(resTable$Hits,"/",resTable$Total); if(length(hit.num) ==1) { hit.num <- matrix(hit.num) };
   fun.ids <- as.vector(resTable$Pathway)
   fun.anot <- hits.query[fun.ids];
   if(length(fun.ids) ==1) { fun.ids <- matrix(fun.ids) };
-  pval <- resTable[,5]; if(length(pval) ==1) { pval <- matrix(pval) };
+  pval <- resTable$Pval; if(length(pval) ==1) { pval <- matrix(pval) };
   if(algo == "emp"){
     hit.inx <- pval == 0;
     pval[hit.inx] <- paste("<", 1/perm.num);
