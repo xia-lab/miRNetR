@@ -925,3 +925,171 @@ makeReadable <- function(str){
                     "motif_set" = "Motif",
                  str)
 }
+
+
+CheckDetailsTablePerformed <-function(type){
+  performed <- T;
+
+net.types <- c(
+  "snp2mir", "snp2mirbs", "gene2mir", "mir2gene", "mol2mir", "mir2mol",
+  "lnc2mir", "mir2lnc", "circ2mir", "mir2circ", "pseudo2mir", "mir2pseudo",
+  "snc2mir", "mir2snc", "mir2tf", "tf2mir", "tf2gene", "epi2mir", "mir2epi",
+  "dis2mir", "mir2dis", "protein2protein", "snp2tfbs", "gene2tf"
+)
+
+
+  if(type == "node"){
+    performed <- file.exists("node_table.csv");
+  }else if(type %in% c( "network_enr", "regNetwork_enr", "gba_enr", "module_enr", "defaultEnr")){
+    clean_type <- gsub("_enr", "", type);
+    performed <- !is.null(infoSet$imgSet$enrTables[[clean_type]]);
+  } else if(type == "netBeans"){
+    performed <- exists('net.stats')
+  }else if(type == "resultBeans"){
+    GetTableNames();
+    infoSet <- readSet(infoSet, "infoSet");
+    performed <- !is.null(infoSet$paramSet$tableNames);
+  }else if(type %in% net.types){
+    if (anal.type == "multilist"  || anal.type == "snp2mir" || anal.type == "tf2genemir" || anal.type == "gene2tfmir") {
+      performed <- !is.null(dataSet[type][[1]]);
+    }  else{
+      performed <- !is.null(dataSet$mir.res);
+    }
+  }
+  print(paste("checkPerformed=", type, "====",performed));
+
+return(performed)
+}
+
+
+GetNodeMat <- function(){
+  if(is.null(dataSet$imgSet$node_table)){
+    df <- .readDataTable('node_table.csv')
+    df[,-c(1:2)] <- lapply(df[,-c(1:2)], function(col) as.numeric(as.character(col)))
+    dataSet$imgSet$node_table <<- df;
+  }
+  return(as.matrix(dataSet$imgSet$node_table[,-c(1:2)]))  # ensure matrix of numerics
+}
+
+GetNodeRowNames <- function(){
+  if(is.null(dataSet$imgSet$node_table)){
+  df <- .readDataTable('node_table.csv')
+    dataSet$imgSet$node_table <<- df;
+
+  }
+  dataSet$imgSet$node_table$Id;
+}
+
+GetNodeGeneSymbols <- function(){
+  if(is.null(dataSet$imgSet$node_table)){
+  df <- .readDataTable('node_table.csv')
+    dataSet$imgSet$node_table <<- df;
+
+  }
+  dataSet$imgSet$node_table$Label;
+}
+
+GetNodeColNames <- function(){
+  if(is.null(dataSet$imgSet$node_table)){
+  df <- .readDataTable('node_table.csv')
+    dataSet$imgSet$node_table <<- df;
+
+  }
+  return(colnames(dataSet$imgSet$node_table[,-c(1:2)]));
+
+}
+
+CleanNumber <-function(bdata){
+  if(sum(bdata==Inf)>0){
+    inx <- bdata == Inf;
+    bdata[inx] <- NA;
+    bdata[inx] <- 999999;
+  }
+  if(sum(bdata==-Inf)>0){
+    inx <- bdata == -Inf;
+    bdata[inx] <- NA;
+    bdata[inx] <- -999999;
+  }
+  bdata;
+}
+
+
+GetEnrResultMatrix <-function(type){
+  infoSet <- readSet(infoSet, "infoSet"); 
+
+  imgSet <- infoSet$imgSet;
+  res <- imgSet$enrTables[[type]]$res.mat
+  res <- suppressWarnings(apply(res, 2, as.numeric)); # force to be all numeric
+  return(signif(as.matrix(res), 5));
+}
+
+GetEnrResultColNames<-function(type){
+  infoSet <- readSet(infoSet, "infoSet"); 
+
+  imgSet <- infoSet$imgSet;
+  res <- imgSet$enrTables[[type]]$res.mat
+  colnames(res);
+}
+
+GetEnrResSetIDs<-function(type){
+  infoSet <- readSet(infoSet, "infoSet"); 
+
+  imgSet <- infoSet$imgSet; 
+  res <- imgSet$enrTables[[type]]$table;
+  return(res$IDs);
+}
+
+GetEnrResSetNames<-function(type){
+  infoSet <- readSet(infoSet, "infoSet"); 
+
+  imgSet <- infoSet$imgSet;  res <- imgSet$enrTables[[type]]$table;
+  if("Pathway" %in% colnames(res)){
+  return(res$Pathway);
+  }else if("Name" %in% colnames(res)){
+  return(res$Name);
+  }else{
+    return(res[,1]);
+  }
+
+}
+
+
+PerformDefaultEnrichment <- function(file.nm, fun.type, algo="ora"){
+  require("igraph");
+  net.nm <- names(mir.nets)[1];
+  my.ppi <- mir.nets[[net.nm]];
+  IDs <- V(my.ppi)$name;
+  names(IDs) <- IDs;
+  save.type <- "defaultEnr";
+  PerformMirTargetEnrichAnalysis("", fun.type, file.nm, IDs, algo, mode="serial",save.type);
+
+  return(1);
+}
+
+
+GetSetIDLinks <- function(type=""){
+  infoSet <- readSet(infoSet, "infoSet"); 
+
+  imgSet <- infoSet$imgSet;
+  fun.type <- imgSet$enrTables[[type]]$library;
+
+  ids <- imgSet$enrTables[[type]]$table$IDs
+  pathways <- imgSet$enrTables[[type]]$table$Pathway
+  print("GetSetIDLinks");
+  print(imgSet$enrTables[[type]]$library);
+
+    if(fun.type %in% c("go_bp", "go_mf", "go_cc", "bp", "mf", "cc")){
+        annots <- paste("<a href='https://www.ebi.ac.uk/QuickGO/term/", ids, "' target='_blank'>", pathways, "</a>", sep="");
+    }else if(fun.type %in% c("go_panthbp", "go_panthmf", "go_panthcc")){
+        annots <- paste("<a href='https://www.pantherdb.org/panther/categoryList.do?searchType=basic&fieldName=all&organism=all&fieldValue=", ids, "&listType=5' target='_blank'>", pathways, "</a>", sep="");
+    }else if(fun.type == "kegg"){
+        annots <- paste("<a href='https://www.genome.jp/dbget-bin/www_bget?pathway+", ids, "' target='_blank'>", pathways, "</a>", sep="");
+    }else if(fun.type == "reactome"){
+        annots <- paste("<a href='https://reactome.org/content/query?q=", ids, "' target='_blank'>", pathways, "</a>", sep="");
+    }else{
+        annots <- ids;
+    }
+  
+  print(head(annots));
+  return(annots);
+}
