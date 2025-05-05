@@ -5,7 +5,7 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
   file.nm <<- file.nm;
   IDs <<- IDs;
   algo <<- algo;
-  save.image("enr.RData");
+  #save.image("enr.RData");
   
   require(igraph); # keep this here as it is needed for remote calls
   require('RSQLite');

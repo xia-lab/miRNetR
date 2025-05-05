@@ -1114,7 +1114,7 @@ Compute.SteinerForest <- function(ppi, terminals, w = 2, b = 1, mu = 0.0005, dum
   b <<- b;
   mu <<- mu;
   dummies <<- dummies;
-  save.image("stein.RData");
+  #save.image("stein.RData");
   # Gather the terminal genes to be analyzed, and their scores
   terminal_names <- names(terminals)
   terminal_values <- as.numeric(terminals)
