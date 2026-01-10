@@ -942,8 +942,17 @@ net.types <- c(
   if(type == "node"){
     performed <- file.exists("node_table.csv");
   }else if(type %in% c( "network_enr", "regNetwork_enr", "gba_enr", "module_enr", "defaultEnr")){
-    clean_type <- gsub("_enr", "", type);
-    performed <- !is.null(infoSet$imgSet$enrTables[[clean_type]]);
+    infoSet <- readSet(infoSet, "infoSet");
+    clean_type <- gsub("_enr$", "", type);  # Use $ to match end of string
+    # For "defaultEnr", need to handle "Enr" suffix differently
+    if(type == "defaultEnr"){
+      clean_type <- "default";
+      # Check both "default" and "defaultEnr" keys for backwards compatibility
+      performed <- !is.null(infoSet$imgSet$enrTables[["default"]]) ||
+                   !is.null(infoSet$imgSet$enrTables[["defaultEnr"]]);
+    } else {
+      performed <- !is.null(infoSet$imgSet$enrTables[[clean_type]]);
+    }
   } else if(type == "netBeans"){
     performed <- exists('net.stats')
   }else if(type == "resultBeans"){
@@ -1016,34 +1025,59 @@ CleanNumber <-function(bdata){
 
 
 GetEnrResultMatrix <-function(type){
-  infoSet <- readSet(infoSet, "infoSet"); 
+  infoSet <- readSet(infoSet, "infoSet");
 
   imgSet <- infoSet$imgSet;
+  # Handle "defaultEnr" by trying both "default" and "defaultEnr" keys
+  if(type == "defaultEnr"){
+    if(!is.null(imgSet$enrTables[["default"]])){
+      type <- "default";
+    }
+  }
   res <- imgSet$enrTables[[type]]$res.mat
   res <- suppressWarnings(apply(res, 2, as.numeric)); # force to be all numeric
   return(signif(as.matrix(res), 5));
 }
 
 GetEnrResultColNames<-function(type){
-  infoSet <- readSet(infoSet, "infoSet"); 
+  infoSet <- readSet(infoSet, "infoSet");
 
   imgSet <- infoSet$imgSet;
+  # Handle "defaultEnr" by trying both "default" and "defaultEnr" keys
+  if(type == "defaultEnr"){
+    if(!is.null(imgSet$enrTables[["default"]])){
+      type <- "default";
+    }
+  }
   res <- imgSet$enrTables[[type]]$res.mat
   colnames(res);
 }
 
 GetEnrResSetIDs<-function(type){
-  infoSet <- readSet(infoSet, "infoSet"); 
+  infoSet <- readSet(infoSet, "infoSet");
 
-  imgSet <- infoSet$imgSet; 
+  imgSet <- infoSet$imgSet;
+  # Handle "defaultEnr" by trying both "default" and "defaultEnr" keys
+  if(type == "defaultEnr"){
+    if(!is.null(imgSet$enrTables[["default"]])){
+      type <- "default";
+    }
+  }
   res <- imgSet$enrTables[[type]]$table;
   return(res$IDs);
 }
 
 GetEnrResSetNames<-function(type){
-  infoSet <- readSet(infoSet, "infoSet"); 
+  infoSet <- readSet(infoSet, "infoSet");
 
-  imgSet <- infoSet$imgSet;  res <- imgSet$enrTables[[type]]$table;
+  imgSet <- infoSet$imgSet;
+  # Handle "defaultEnr" by trying both "default" and "defaultEnr" keys
+  if(type == "defaultEnr"){
+    if(!is.null(imgSet$enrTables[["default"]])){
+      type <- "default";
+    }
+  }
+  res <- imgSet$enrTables[[type]]$table;
   if("Pathway" %in% colnames(res)){
   return(res$Pathway);
   }else if("Name" %in% colnames(res)){
@@ -1061,7 +1095,7 @@ PerformDefaultEnrichment <- function(file.nm, fun.type, algo="ora"){
   my.ppi <- mir.nets[[net.nm]];
   IDs <- V(my.ppi)$name;
   names(IDs) <- IDs;
-  save.type <- "defaultEnr";
+  save.type <- "default";  # Changed from "defaultEnr" to "default" for consistency
   PerformMirTargetEnrichAnalysis("", fun.type, file.nm, IDs, algo, mode="serial",save.type);
 
   return(1);
@@ -1069,9 +1103,15 @@ PerformDefaultEnrichment <- function(file.nm, fun.type, algo="ora"){
 
 
 GetSetIDLinks <- function(type=""){
-  infoSet <- readSet(infoSet, "infoSet"); 
+  infoSet <- readSet(infoSet, "infoSet");
 
   imgSet <- infoSet$imgSet;
+  # Handle "defaultEnr" by trying both "default" and "defaultEnr" keys
+  if(type == "defaultEnr"){
+    if(!is.null(imgSet$enrTables[["default"]])){
+      type <- "default";
+    }
+  }
   fun.type <- imgSet$enrTables[[type]]$library;
 
   ids <- imgSet$enrTables[[type]]$table$IDs
