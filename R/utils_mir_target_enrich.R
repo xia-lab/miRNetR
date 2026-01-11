@@ -36,9 +36,30 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
   }
   
   mirnet.type <- dataSet$mirnet;
-  
+
+  # Validate current.mirnet is an igraph object
+  if(!exists("current.mirnet") || is.null(current.mirnet)){
+    current.msg <<- "Error: Network object not found. Please rebuild the network.";
+    print(current.msg);
+    return(0);
+  }
+
+  if(!inherits(current.mirnet, "igraph")){
+    current.msg <<- paste0("Error: Invalid network object (class: ", class(current.mirnet)[1], "). Please rebuild the network.");
+    print(current.msg);
+    return(0);
+  }
+
+  # Validate dataSet$mir.filtered exists and is a data frame
+  if(is.null(dataSet$mir.filtered) || !is.data.frame(dataSet$mir.filtered)){
+    current.msg <<- "Error: Filtered data not found. Please rebuild the network.";
+    print(current.msg);
+    return(0);
+  }
+
   # prepare query, current.mirnet may be subset of all networks
-  nodeList <- as_data_frame(current.mirnet, "vertices");
+  # CRITICAL: Use igraph:: namespace to avoid conflict with tibble::as_data_frame
+  nodeList <- igraph::as_data_frame(current.mirnet, "vertices");
   if(identical(colnames(dataSet$mir.filtered), c("Name1","ID1","Name2","ID2"))){
     colnames(dataSet$mir.filtered) = c("ID","Accession","Gene","Entrez")
   }
@@ -48,9 +69,9 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
       
       mir.query <- unique(dataSet$mir.filtered$miRNA[hit.inx]);
       my.data <- unique(dataSet$mir.filtered[hit.inx,c("Accession", "miRNA")]); # The original dataset contains miRNA Accession number, you can consider it as entrez id.
-      
-      ora.vec <- my.data[hit.inx,"Accession"];
-      sybls <- my.data[hit.inx,"miRNA"];
+
+      ora.vec <- my.data[,"Accession"];
+      sybls <- my.data[,"miRNA"];
       names(ora.vec) <- sybls;
     } else{
       colnms = colnames(dataSet$mir.filtered)
@@ -58,24 +79,24 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
         hit.inx <- dataSet$mir.filtered$Gene %in% nodeList[, 1];
         
         mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
-        
+
         my.data <- unique(dataSet$mir.filtered[hit.inx,c("Entrez", "Gene")]);
-        ora.vec <- my.data[hit.inx, "Entrez"];
-        sybls <- my.data[hit.inx, "Gene"];
+        ora.vec <- my.data[, "Entrez"];
+        sybls <- my.data[, "Gene"];
       }else if("Name2" %in% colnms){
         hit.inx <- dataSet$mir.filtered$Name2 %in% nodeList[, 1];
         mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
         my.data <- unique(dataSet$mir.filtered[hit.inx,c("ID2", "Name2")]);
-        ora.vec <- my.data[hit.inx, "ID2"];
-        sybls <- my.data[hit.inx, "Name2"];
+        ora.vec <- my.data[, "ID2"];
+        sybls <- my.data[, "Name2"];
         
       }else{
         hit.inx <- dataSet$mir.filtered$Target %in% nodeList[, 1];
         
         mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
         my.data <- unique(dataSet$mir.filtered[hit.inx,c("TargetID", "Target")]);
-        ora.vec <- my.data[hit.inx, "TargetID"];
-        sybls <- my.data[hit.inx, "Target"];
+        ora.vec <- my.data[, "TargetID"];
+        sybls <- my.data[, "Target"];
         
       }
       
@@ -102,29 +123,29 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
       hit.inx <- dataSet$mir.filtered$ID %in% nodeList[,1];
       mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
       my.data <- unique(dataSet$mir.filtered[hit.inx, c("Accession", "ID")]);# The original dataset contains miRNA Accession number, you can consider it as entrez id.
-      ora.vec <- my.data[hit.inx, "Accession"];
-      sybls <- my.data[hit.inx, "ID"];
+      ora.vec <- my.data[, "Accession"];
+      sybls <- my.data[, "ID"];
       names(ora.vec) <- sybls;
     } else if (tolower(fun.type) == 'hmdd'){
       hit.inx <- dataSet$mir.filtered$ID %in% nodeList[,1];
       mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
       my.data <- unique(dataSet$mir.filtered[hit.inx, c("Accession", "ID")]);# The original dataset contains miRNA Accession number, you can consider it as entrez id.
-      ora.vec <- my.data[hit.inx, "Accession"];
-      sybls <- my.data[hit.inx, "ID"];
+      ora.vec <- my.data[, "Accession"];
+      sybls <- my.data[, "ID"];
       names(ora.vec) <- sybls;
     } else if (tolower(fun.type) == 'cluster'){
       hit.inx <- dataSet$mir.filtered$ID %in% nodeList[,1];
       mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
       my.data <- unique(dataSet$mir.filtered[hit.inx, c("Accession", "ID")]);# The original dataset contains miRNA Accession number, you can consider it as entrez id.
-      ora.vec <- my.data[hit.inx, "Accession"];
-      sybls <- my.data[hit.inx, "ID"];
+      ora.vec <- my.data[, "Accession"];
+      sybls <- my.data[, "ID"];
       names(ora.vec) <- sybls;
     } else if (tolower(fun.type) == 'tf'){
       hit.inx <- dataSet$mir.filtered$ID %in% nodeList[,1];
       mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
       my.data <- unique(dataSet$mir.filtered[hit.inx, c("Accession", "ID")]);# The original dataset contains miRNA Accession number, you can consider it as entrez id.
-      ora.vec <- my.data[hit.inx, "Accession"];
-      sybls <- my.data[hit.inx, "ID"];
+      ora.vec <- my.data[, "Accession"];
+      sybls <- my.data[, "ID"];
       names(ora.vec) <- sybls;
     }else {
       colnms = colnames(dataSet$mir.filtered)
@@ -132,25 +153,25 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
         hit.inx <- dataSet$mir.filtered$Gene %in% nodeList[, 1];
         
         mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
-        
+
         my.data <- unique(dataSet$mir.filtered[hit.inx,c("Entrez", "Gene")]);
-        ora.vec <- my.data[hit.inx, "Entrez"];
-        sybls <- my.data[hit.inx, "Gene"];
+        ora.vec <- my.data[, "Entrez"];
+        sybls <- my.data[, "Gene"];
       }else if("Name2" %in% colnms){
         hit.inx <- dataSet$mir.filtered$Name2 %in% nodeList[, 1];
         
         mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
         my.data <- unique(dataSet$mir.filtered[hit.inx,c("ID2", "Name2")]);
-        ora.vec <- my.data[hit.inx, "ID2"];
-        sybls <- my.data[hit.inx, "Name2"];
+        ora.vec <- my.data[, "ID2"];
+        sybls <- my.data[, "Name2"];
         
       }else{
         hit.inx <- dataSet$mir.filtered$Target %in% nodeList[, 1];
         
         mir.query <- unique(dataSet$mir.filtered$ID[hit.inx]);
         my.data <- unique(dataSet$mir.filtered[hit.inx,c("TargetID", "Target")]);
-        ora.vec <- my.data[hit.inx, "TargetID"];
-        sybls <- my.data[hit.inx, "Target"];
+        ora.vec <- my.data[, "TargetID"];
+        sybls <- my.data[, "Target"];
         
       }
       
@@ -323,8 +344,19 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
   );
   path.ids <- as.vector(current.setids[fun.ids]);
 
-  resTable <- data.frame(Pathway=rownames(res.mat), IDs=path.ids, res.mat);
-  infoSet <- readSet(infoSet, "infoSet"); 
+  # Create resTable with all columns including FDR
+  resTable <- data.frame(
+    Pathway = rownames(res.mat),
+    IDs = path.ids,
+    Total = res.mat[, "Total"],
+    Expected = res.mat[, "Expected"],
+    Hits = res.mat[, "Hits"],
+    Pval = res.mat[, "Pval"],
+    FDR = adj.p,
+    stringsAsFactors = FALSE
+  );
+
+  infoSet <- readSet(infoSet, "infoSet");
   infoSet$imgSet$enrTables[[save.type]]$table <- resTable;
   infoSet$imgSet$enrTables[[save.type]]$library <- fun.type
   infoSet$imgSet$enrTables[[save.type]]$algo<-algo;
