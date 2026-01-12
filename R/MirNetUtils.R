@@ -758,12 +758,12 @@ GetMinConnectedGraphs <- function(net.type, max.len = 200){
   nodes2rm <- V(mir.graph)$name[-nds.inxs];
   g <- simplify(delete.vertices(mir.graph, nodes2rm));
   
-  nodeList <- as_data_frame(g, "vertices");
+  nodeList <- igraph::as_data_frame(g, "vertices");
   nodeList <- as.data.frame(nodeList[, 1]);
   colnames(nodeList) <- c("ID");
   fast.write.csv(nodeList, file="orig_node_list.csv", row.names=F);
   
-  edgeList <- as_data_frame(g, "edges");
+  edgeList <- igraph::as_data_frame(g, "edges");
   edgeList <- cbind(rownames(edgeList), edgeList);
   colnames(edgeList) <- c("Id", "Source", "Target");
   fast.write.csv(edgeList, file="orig_edge_list.csv", row.names=F);
@@ -966,7 +966,7 @@ ExtractMirNetModule<- function(nodeids){
     nodes2rm <- V(g)$name[-nds.inxs];
     g <- simplify(delete.vertices(g, nodes2rm));
   }
-  nodeList <- as_data_frame(g, "vertices");
+  nodeList <- igraph::as_data_frame(g, "vertices");
   if(nrow(nodeList) < 3){
     return ("NA");
   }
@@ -977,7 +977,7 @@ ExtractMirNetModule<- function(nodeids){
   ndFileNm = "mirnet_node_list.csv";
   fast.write.csv(nodeList, file=ndFileNm, row.names=F);
   
-  edgeList <- as_data_frame(g, "edges");
+  edgeList <- igraph::as_data_frame(g, "edges");
   edgeList <- cbind(rownames(edgeList), edgeList);
   colnames(edgeList) <- c("Id", "Source", "Target");
   edgFileNm = "mirnet_edge_list.csv";
@@ -1086,11 +1086,11 @@ ComputePCSFNet <- function(){
   names(expr.vec) <- rownames(dataSet$mir.mapped);
   g <- Compute.SteinerForest(ppi, expr.vec, w = 5, b = 100, mu = 0.0005);
 
-  nodeList <- as_data_frame(g, "vertices");
+  nodeList <- igraph::as_data_frame(g, "vertices");
   colnames(nodeList) <- c("Id", "Label");
   write.csv(nodeList, file="orig_node_list.csv", row.names=F, quote=F);
   
-  edgeList <- as_data_frame(g, "edges");
+  edgeList <- igraph::as_data_frame(g, "edges");
   edgeList <- cbind(rownames(edgeList), edgeList);
   colnames(edgeList) <- c("Id", "Source", "Target");
   write.csv(edgeList, file="orig_edge_list.csv", row.names=F, quote=F);

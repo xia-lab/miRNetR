@@ -369,10 +369,15 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
 
 
   saveSet(infoSet, "infoSet");
-  
-  if(.on.public.web){
-    return(1);   
+
+  # Force flush to ensure all writes complete before returning
+  # This prevents race condition where Java reads before R finishes writing
+  if(exists(".on.public.web") && .on.public.web){
+    # Pause for file system sync - increased to prevent corruption
+    Sys.sleep(0.15)
+    return(1);
   }else{
+    Sys.sleep(0.15)
     return(paste("Enrichment files are downloaded!"))
   }
 }

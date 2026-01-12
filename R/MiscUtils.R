@@ -1091,14 +1091,29 @@ GetEnrResSetNames<-function(type){
 
 PerformDefaultEnrichment <- function(file.nm, fun.type, algo="ora"){
   require("igraph");
+
+  # Validate inputs
+  if(!exists("mir.nets") || length(mir.nets) == 0){
+    print("Error: No network found for enrichment analysis");
+    return(0);
+  }
+
   net.nm <- names(mir.nets)[1];
   my.ppi <- mir.nets[[net.nm]];
+
+  if(is.null(my.ppi)){
+    print("Error: Network is NULL");
+    return(0);
+  }
+
   IDs <- V(my.ppi)$name;
   names(IDs) <- IDs;
   save.type <- "default";  # Changed from "defaultEnr" to "default" for consistency
-  PerformMirTargetEnrichAnalysis("", fun.type, file.nm, IDs, algo, mode="serial",save.type);
 
-  return(1);
+  # Capture and return the actual result from enrichment analysis
+  result <- PerformMirTargetEnrichAnalysis("", fun.type, file.nm, IDs, algo, mode="serial", save.type);
+
+  return(result);
 }
 
 
