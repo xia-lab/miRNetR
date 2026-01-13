@@ -1383,12 +1383,38 @@ PlotDegreeHistogram <- function(imgNm, netNm = "NA", dpi=72, format="png"){
   library(igraph)
   dpi<-as.numeric(dpi)
   #imgNm <- paste(imgNm, "dpi", dpi, ".", format, sep="");
-  Cairo(file=imgNm, width=400, height=400, type="png", bg="white");
+
+  tryCatch({
+    Cairo(file=imgNm, width=400, height=400, type="png", bg="white");
     library(ggplot2)
     if(netNm != "NA"){
         current.mirnet <-  mir.nets[[netNm]];
     }
-    G.degrees <- igraph::degree(current.mirnet)
+
+    # Check network size
+    n_nodes <- igraph::vcount(current.mirnet);
+    n_edges <- igraph::ecount(current.mirnet);
+    print(paste("PlotDegreeHistogram: Network has", n_nodes, "nodes and", n_edges, "edges"));
+
+    if(n_nodes > 10000) {
+      warning("PlotDegreeHistogram: Large network (", n_nodes, " nodes). Calculation may take time.");
+    }
+
+    # Calculate degree with timeout protection (120 seconds for large networks)
+    G.degrees <- tryCatch({
+      setTimeLimit(cpu = Inf, elapsed = 120, transient = TRUE);
+      result <- igraph::degree(current.mirnet);
+      print("PlotDegreeHistogram: Degree calculation completed");
+      result
+    }, error = function(e) {
+      if(grepl("reached elapsed time limit", e$message, ignore.case = TRUE)) {
+        stop("PlotDegreeHistogram: Degree calculation timed out after 120 seconds. Network may be too large.");
+      } else {
+        stop("PlotDegreeHistogram: Degree calculation failed: ", e$message);
+      }
+    }, finally = {
+      tryCatch(setTimeLimit(cpu = Inf, elapsed = Inf, transient = FALSE), error = function(e){});
+    });
 
     G.degree.histogram <- as.data.frame(table(G.degrees))
     G.degree.histogram[,1] <- as.numeric(G.degree.histogram[,1])
@@ -1405,11 +1431,17 @@ PlotDegreeHistogram <- function(imgNm, netNm = "NA", dpi=72, format="png"){
         theme_bw()  +
         theme(plot.title = element_text(hjust = 0.5))
     print(p)
-  dev.off();
+    dev.off();
 
-  dataSet$imgSet$degreeHistogram <- list();
-  dataSet$imgSet$degreeHistogram$netName <- netNm;
-  dataSet <<- dataSet;
+    dataSet$imgSet$degreeHistogram <- list();
+    dataSet$imgSet$degreeHistogram$netName <- netNm;
+    dataSet <<- dataSet;
+    return(1);  # Return success for Java
+  }, error = function(e) {
+    # Ensure device is closed on error
+    tryCatch(dev.off(), error = function(e){});
+    stop("PlotDegreeHistogram failed: ", e$message);
+  })
 }
 
 #' Plot Betweenness Histogram
@@ -1418,31 +1450,64 @@ PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
   library(igraph);
   dpi<-as.numeric(dpi)
   #imgNm <- paste(imgNm, "dpi", dpi, ".", format, sep="");
+
+  tryCatch({
     Cairo(file=imgNm, width=400, height=400, type="png", bg="white");
-        library(ggplot2)
-        if(netNm != "NA"){
-            current.mirnet <-  mir.nets[[netNm]];
-        }
-        G.degrees <- igraph::betweenness(current.mirnet)
+    library(ggplot2)
+    if(netNm != "NA"){
+        current.mirnet <-  mir.nets[[netNm]];
+    }
 
-        G.degree.histogram <- as.data.frame(table(G.degrees))
-        G.degree.histogram[,1] <- as.numeric(G.degree.histogram[,1])
+    # Check network size
+    n_nodes <- igraph::vcount(current.mirnet);
+    n_edges <- igraph::ecount(current.mirnet);
+    print(paste("PlotBetweennessHistogram: Network has", n_nodes, "nodes and", n_edges, "edges"));
 
-        p <- ggplot(G.degree.histogram, aes(x = G.degrees, y = Freq)) +
-            geom_point() +
-            scale_x_continuous("Betweenness\n(nodes with that amount of betweenness)",
-                               breaks = c(1, 3, 10, 30, 100, 300,1000,3000,10000,30000),
-                               trans = "log10") +
-            scale_y_continuous("Frequency\n(number of nodes)",
-                               breaks = c(1, 3, 10, 30, 100, 300, 1000),
-                               trans = "log10") +
-            ggtitle("Betweenness Distribution (log-log)") +
-            theme_bw()  +
-            theme(plot.title = element_text(hjust = 0.5))
-        print(p)
+    if(n_nodes > 10000) {
+      warning("PlotBetweennessHistogram: Large network (", n_nodes, " nodes). Calculation may take time.");
+    }
+
+    # Calculate betweenness with timeout protection (120 seconds for large networks)
+    # Betweenness is O(n*m) complexity, can be very slow on large networks
+    G.degrees <- tryCatch({
+      setTimeLimit(cpu = Inf, elapsed = 120, transient = TRUE);
+      result <- igraph::betweenness(current.mirnet);
+      print("PlotBetweennessHistogram: Betweenness calculation completed");
+      result
+    }, error = function(e) {
+      if(grepl("reached elapsed time limit", e$message, ignore.case = TRUE)) {
+        stop("PlotBetweennessHistogram: Betweenness calculation timed out after 120 seconds. Network may be too large.");
+      } else {
+        stop("PlotBetweennessHistogram: Betweenness calculation failed: ", e$message);
+      }
+    }, finally = {
+      tryCatch(setTimeLimit(cpu = Inf, elapsed = Inf, transient = FALSE), error = function(e){});
+    });
+
+    G.degree.histogram <- as.data.frame(table(G.degrees))
+    G.degree.histogram[,1] <- as.numeric(G.degree.histogram[,1])
+
+    p <- ggplot(G.degree.histogram, aes(x = G.degrees, y = Freq)) +
+        geom_point() +
+        scale_x_continuous("Betweenness\n(nodes with that amount of betweenness)",
+                           breaks = c(1, 3, 10, 30, 100, 300,1000,3000,10000,30000),
+                           trans = "log10") +
+        scale_y_continuous("Frequency\n(number of nodes)",
+                           breaks = c(1, 3, 10, 30, 100, 300, 1000),
+                           trans = "log10") +
+        ggtitle("Betweenness Distribution (log-log)") +
+        theme_bw()  +
+        theme(plot.title = element_text(hjust = 0.5))
+    print(p)
     dev.off();
 
-  dataSet$imgSet$betwennessHistogram <- list();
-  dataSet$imgSet$betwennessHistogram$netName <- netNm;
-  dataSet <<- dataSet;
+    dataSet$imgSet$betwennessHistogram <- list();
+    dataSet$imgSet$betwennessHistogram$netName <- netNm;
+    dataSet <<- dataSet;
+    return(1);  # Return success for Java
+  }, error = function(e) {
+    # Ensure device is closed on error
+    tryCatch(dev.off(), error = function(e){});
+    stop("PlotBetweennessHistogram failed: ", e$message);
+  })
 }
