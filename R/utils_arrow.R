@@ -1,5 +1,5 @@
 ##################################################
-## R script for miRNet Pro
+## R script for miRNet
 ## Description: Arrow utilities for zero-copy data exchange with Java
 ## Author: miRNet Team
 ## Part of the Rserve/qs to Apache Arrow migration

@@ -172,7 +172,7 @@ ReduceEdgeDensity <- function(net.type, nd.type="all"){
   paths.list <-list();
   # now calculate the shortest paths only between these densely connected nodes
   for(pos in 1:length(seed.vec)){
-    paths.list[[pos]] <- get.shortest.paths(mir.graph, seed.vec[pos], seed.vec[-pos])$vpath;
+    paths.list[[pos]] <- shortest_paths(mir.graph, seed.vec[pos], seed.vec[-pos])$vpath;
   }
   nds.inxs <- unique(unlist(paths.list));
   nodes2rm <- all.nms[-nds.inxs];
@@ -189,7 +189,7 @@ ReduceEdgeDensity <- function(net.type, nd.type="all"){
   }
   path.list <- NULL; gc();
   nodes2rm <- unique(nodes2rm);
-  mir.graph <- simplify(delete.vertices(mir.graph, nodes2rm));
+  mir.graph <- simplify(delete_vertices(mir.graph, nodes2rm));
   current.msg <<- paste("A total of", length(nodes2rm) , "was reduced.");
   substats <- DecomposeMirGraph(net.type, mir.graph, 2);
   if(!is.null(substats)){
@@ -231,7 +231,7 @@ FilterMirNet <- function(net.type, nd.type, min.dgr, min.btw){
   }
   
   nodes2rm <- unique(c(nodes2rm.dgr, nodes2rm.btw));
-  mir.graph <- simplify(delete.vertices(mir.graph, nodes2rm));
+  mir.graph <- simplify(delete_vertices(mir.graph, nodes2rm));
   current.msg <<- paste("A total of", length(nodes2rm) , "was reduced.");
   substats <- DecomposeMirGraph(net.type, mir.graph, 2);
   if(!is.null(substats)){
@@ -258,7 +258,7 @@ FilterMirNetByList <- function(net.type, ids, id.type, remove){
   }else{
     nodes2rm <- V(mir.graph)$name[!(V(mir.graph)$name %in% nodes2rm)];    # make sure they are in the igraph object
   }
-  mir.graph <- simplify(delete.vertices(mir.graph, nodes2rm));
+  mir.graph <- simplify(delete_vertices(mir.graph, nodes2rm));
   current.msg <<- paste("A total of", length(nodes2rm) , "was reduced.");
   substats <- DecomposeMirGraph(net.type, mir.graph, 2);
   if(!is.null(substats)){
@@ -548,11 +548,11 @@ PerformLayOut <- function(g, layers, algo, focus=""){
   vc <- vcount(g);
   if(algo == "Default"){
     if(vc > 3000) {
-      pos.xy <- layout.lgl(g, maxiter = 100);
+      pos.xy <- layout_with_lgl(g, maxiter = 100);
     }else if(vc < 150){
-      pos.xy <- layout.kamada.kawai(g);
+      pos.xy <- layout_with_kk(g);
     }else{
-      pos.xy <- layout.fruchterman.reingold(g);
+      pos.xy <- layout_with_fr(g);
     }
   }else if(algo == "FrR"){
     pos.xy <- layout_with_fr(g, area=34*vc^2);
@@ -733,7 +733,7 @@ GetMinConnectedGraphs <- function(net.type, max.len = 200){
   dgrs <- degree(mir.graph);
   keep.inx <- dgrs > 1 | (names(dgrs) %in% my.seeds);
   nodes2rm <- V(mir.graph)$name[!keep.inx];
-  mir.graph <-  simplify(delete.vertices(mir.graph, nodes2rm));
+  mir.graph <-  simplify(delete_vertices(mir.graph, nodes2rm));
   
   # need to restrict the operation b/c get.shortest.paths is very time consuming
   # for top max.len highest degrees
@@ -752,11 +752,11 @@ GetMinConnectedGraphs <- function(net.type, max.len = 200){
   # now calculate the shortest paths for
   # each seed vs. all other seeds (note, to remove pairs already calculated previously)
   for(pos in 1:sd.len){
-    paths.list[[pos]] <- get.shortest.paths(mir.graph, my.seeds[pos], dataSet$seeds[-(1:pos)])$vpath;
+    paths.list[[pos]] <- shortest_paths(mir.graph, my.seeds[pos], dataSet$seeds[-(1:pos)])$vpath;
   }
   nds.inxs <- unique(unlist(paths.list));
   nodes2rm <- V(mir.graph)$name[-nds.inxs];
-  g <- simplify(delete.vertices(mir.graph, nodes2rm));
+  g <- simplify(delete_vertices(mir.graph, nodes2rm));
   
   nodeList <- igraph::as_data_frame(g, "vertices");
   nodeList <- as.data.frame(nodeList[, 1]);
@@ -916,8 +916,8 @@ GetUnmappedNum <- function(){
 #' Get Shortest Paths
 #' @export
 GetShortestPaths <- function(from, to){
-  
-  paths <- get.all.shortest.paths(current.mirnet, from, to)$res;
+
+  paths <- all_shortest_paths(current.mirnet, from, to)$res;
   if(length(paths) == 0){
     return (paste("No connection between the two nodes!"));
   }
@@ -948,7 +948,7 @@ ExtractMirNetModule<- function(nodeids){
   
   # try to see if the nodes themselves are already connected
   hit.inx <- V(g)$name %in% nodes;
-  gObj <- induced.subgraph(g, V(g)$name[hit.inx]);
+  gObj <- induced_subgraph(g, V(g)$name[hit.inx]);
   
   # now find connected components
   comps <-decompose(gObj, min.vertices=1);
@@ -960,11 +960,11 @@ ExtractMirNetModule<- function(nodeids){
     paths.list <-list();
     sd.len <- length(nodes);
     for(pos in 1:sd.len){
-      paths.list[[pos]] <- get.shortest.paths(g, nodes[pos], nodes[-(1:pos)])$vpath;
+      paths.list[[pos]] <- shortest_paths(g, nodes[pos], nodes[-(1:pos)])$vpath;
     }
     nds.inxs <- unique(unlist(paths.list));
     nodes2rm <- V(g)$name[-nds.inxs];
-    g <- simplify(delete.vertices(g, nodes2rm));
+    g <- simplify(delete_vertices(g, nodes2rm));
   }
   nodeList <- igraph::as_data_frame(g, "vertices");
   if(nrow(nodeList) < 3){
@@ -999,11 +999,11 @@ ExtractMirNetModule<- function(nodeids){
 #' @export
 ExcludeNodes <- function(nodeids, filenm){
   nodes2rm <- strsplit(nodeids, ";")[[1]];
-  current.mirnet <- delete.vertices(current.mirnet, nodes2rm);
+  current.mirnet <- delete_vertices(current.mirnet, nodes2rm);
   
   # need to remove all orphan nodes
   bad.vs<-V(current.mirnet)$name[degree(current.mirnet) == 0];
-  current.mirnet <<- delete.vertices(current.mirnet, bad.vs);
+  current.mirnet <<- delete_vertices(current.mirnet, bad.vs);
   
   # return all those nodes that are removed
   nds2rm <- paste(c(bad.vs, nodes2rm), collapse="||");
@@ -1233,11 +1233,11 @@ FindCommunities <- function(method="walktrap", use.weight=FALSE){
   total.size <- length(V(g));
   
   if(method == "walktrap"){
-    fc <- walktrap.community(g);
+    fc <- cluster_walktrap(g);
   }else if(method == "infomap"){
-    fc <- infomap.community(g);
+    fc <- cluster_infomap(g);
   }else if(method == "labelprop"){
-    fc <- label.propagation.community(g);
+    fc <- cluster_label_prop(g);
   }else{
     print(paste("Unknown method:", method));
     return ("NA||Unknown method!");
@@ -1279,8 +1279,8 @@ FindCommunities <- function(method="walktrap", use.weight=FALSE){
     qnum.vec[rowcount] <- qnums;
 
     # calculate p values (comparing in- out- degrees)
-    #subgraph <- induced.subgraph(g, path.inx);
-    subgraph <- induced.subgraph(g, path.ids);
+    #subgraph <- induced_subgraph(g, path.inx);
+    subgraph <- induced_subgraph(g, path.ids);
     in.degrees <- degree(subgraph);
     #out.degrees <- degree(g, path.inx) - in.degrees;
     out.degrees <- degree(g, path.ids) - in.degrees;
