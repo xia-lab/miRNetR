@@ -142,7 +142,7 @@ read.sif <- function (sif.file, format = "graphNEL", directed = FALSE, header = 
       warning("NAs removed from network node list, ", sum(nas), " edges removed.")
     }
 
-    net <- graph.edgelist(as.matrix(net[, -2]), directed = directed)
+    net <- graph_from_edgelist(as.matrix(net[, -2]), directed = directed)
 
   } else if ( ncol(net) == 2 ) { # assume form: node1 node2
 
@@ -154,11 +154,11 @@ read.sif <- function (sif.file, format = "graphNEL", directed = FALSE, header = 
       warning("NAs removed from network node list, ", sum(nas), " edges removed.")
     }
 
-    net <- graph.edgelist(cbind(net[,1],net[,2]), directed = directed)
+    net <- graph_from_edgelist(cbind(net[,1],net[,2]), directed = directed)
   }
 
-  if (format == "graphNEL") { net <- igraph.to.graphNEL(net) }
-  # if (format == "igraph") { net <- igraph.from.graphNEL(igraph.to.graphNEL(net)) }
+  if (format == "graphNEL") { net <- as_graphnel(net) }
+  # if (format == "igraph") { net <- igraph.from.graphNEL(as_graphnel(net)) }
 
   net
 }
@@ -253,7 +253,7 @@ convertIgraph2JSONFromFile <- function(net.nm, filenm){
     node.colsw.exp <- rep("#c6c6c6",length(node.exp));
   }
 
-  node_attr = list.vertex.attributes(g);
+  node_attr = vertex_attr_names(g);
 
   attr=list();
   for(j in 1:length(node_attr)){
