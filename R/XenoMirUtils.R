@@ -139,7 +139,7 @@ SetupItemFromList <- function(orgType, species){
     mir.mat <- cbind(species, rep("*", length(species)));
     rownames(mir.mat) <- mir.mat[,1];
     mir.mat <- mir.mat[,-1, drop=F];
-    dataSet$org <- orgType;
+    data.org <<- dataSet$org <- orgType;
     dataSet$mir.orig <- dataSet$mir.mat <- mir.mat;
     dataSet$det <- species;
     dataSet$pre <- species;

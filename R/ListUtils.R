@@ -92,7 +92,7 @@ SetupItemFromPickList <- function(orgType="hsa", tissue, idType){
         print("Could not find user entered disease list!");
         return(0);
     }
-    dataSet$org <- orgType;
+    data.org <<- dataSet$org <- orgType;
     dataSet$tissue <- tissue;
     mir.mat <- .parsePickListItems(picklist.vec);
 
