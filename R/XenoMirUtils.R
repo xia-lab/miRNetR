@@ -187,7 +187,7 @@ PerformSpeciesMapping <- function(status){
        print(current.msg);
        return(0);
     } else {
-       current.msg <<- paste("A total of unqiue ", hit.num, " pairs of miRNA-gene targets were identified!");
+       current.msg <<- paste("A total of ", hit.num, " unique pairs of miRNA-gene targets were identified!");
        res$tarpmir <- round(res$tarpmir, 3);
        colnames(res) <- c("Source", "Xeno.species", "miRNA", "Accession", "Gene", "Entrez", "Reference", "Expression", "miRanda", "TarPmiR");
        mir.nms <- res[, "miRNA"];
