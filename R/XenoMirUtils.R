@@ -93,6 +93,18 @@ UpdateXenoMirEntries <- function(col.id, method, value, action) {
     }
 }
 
+#' Remove Xeno miRNA Entry
+#' @export
+RemoveXenoMirEntry <- function(row.id) {
+    inx <- which(rownames(dataSet$mir.res) == row.id);
+    if (length(inx) > 0) {
+        dataSet$mir.res <<- dataSet$mir.res[-inx, ];
+        fast.write.csv(dataSet$mir.res, file="xeno_mirnet_target.csv", row.names=FALSE);
+    }
+    dataSet <<- dataSet;
+    return(1);
+}
+
 #' Get Unique Source Names
 #' @export
 GetUniqueSourceNames <- function(orgType){
