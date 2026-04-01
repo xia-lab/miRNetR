@@ -396,12 +396,15 @@ convertIgraph2JSON <- function(g, filenm){
     #}
     }
   
-  node.cols[mir.inx] <- "#306EFF"; # dark blue
+  node.cols[mir.inx] <- "#306EFF"; # dark blue for white background
   # update mir node color
   topo.colsw <- node.cols;
-  colVec = unique(node.cols);
-  node.cols[mir.inx] <- "#98F5FF";
+  node.cols[mir.inx] <- "#98F5FF"; # cyan for dark background
   topo.colsb <- node.cols;
+  # Build colVec matching ntype order using dark background colors (default is dark bg)
+  colVec <- color.vec
+  mir.type.inx <- which(ntype == "miRNA")
+  if (length(mir.type.inx) > 0) colVec[mir.type.inx] <- "#98F5FF"
   
   freq = table(node.types)
   
@@ -538,6 +541,82 @@ PrepareMirNet <- function(mir.nm, file.nm){
   }
 }
 
+#' Build Large miRNA-Target Network (igraph isolation for >10K edges)
+#' @description On Pro, isolates igraph network construction in subprocess for large networks.
+#'   On Public, always uses direct igraph calls.
+#' @param mSetObj miRNet data object
+#' @param min.count Minimum interaction count
+#' @export
+BuildLargeMirNetwork <- function(mSetObj = NA, min.count = 1) {
+
+  mSetObj <- .get.mirnet.obj(mSetObj)
+  mir_res <- mSetObj$dataSet$mir.res
+  edge_count <- nrow(mir_res)
+
+  # Filter by count
+  if (min.count > 1) {
+    mir_res <- mir_res[mir_res$count >= min.count, ]
+  }
+
+  # --- leaf isolation: igraph network construction for large networks ---
+  if (edge_count >= 10000) {
+
+    params <- list(min.count = min.count)
+
+    isolated_func <- function(input_data) {
+      library(igraph)
+      mir_res <- input_data$data_obj$mir_res
+
+      net <- igraph::graph_from_data_frame(
+        d = mir_res[, c("miRNA", "target")],
+        directed = TRUE
+      )
+
+      net_stats <- list(
+        nodes = igraph::vcount(net),
+        edges = igraph::ecount(net),
+        density = igraph::edge_density(net),
+        components = igraph::components(net)$no
+      )
+
+      gc(verbose = FALSE, full = TRUE)
+      return(list(network = net, net.stats = net_stats))
+    }
+
+    result <- rsclient_isolated_exec(
+      func_body = isolated_func,
+      input_data = list(
+        data_obj = list(mir_res = mir_res),
+        params = params
+      ),
+      packages = c("igraph", "qs"),
+      timeout = 300,
+      output_type = "qs"
+    )
+    if (is.list(result) && isFALSE(result$success)) { AddErrMsg(result$message); return(0) }
+
+    mSetObj$dataSet$network <- result$network
+    mSetObj$dataSet$net.stats <- result$net.stats
+
+  } else {
+    # --- direct execution (small networks) ---
+    net <- igraph::graph_from_data_frame(
+      d = mir_res[, c("miRNA", "target")],
+      directed = TRUE
+    )
+
+    mSetObj$dataSet$network <- net
+    mSetObj$dataSet$net.stats <- list(
+      nodes = igraph::vcount(net),
+      edges = igraph::ecount(net),
+      density = igraph::edge_density(net),
+      components = igraph::components(net)$no
+    )
+  }
+
+  return(.set.mirnet.obj(mSetObj))
+}
+
 #' Apply Graph Layout
 #' @param g Graph object.
 #' @param layer Optional: layer information.
@@ -545,68 +624,162 @@ PrepareMirNet <- function(mir.nm, file.nm){
 #' @param focus Focus node.
 #' @export
 PerformLayOut <- function(g, layers, algo, focus=""){
-  vc <- vcount(g);
-  if(algo == "Default"){
-    if(vc > 3000) {
-      pos.xy <- layout_with_lgl(g, maxiter = 100);
-    }else if(vc < 150){
-      pos.xy <- layout_with_kk(g);
-    }else{
-      pos.xy <- layout_with_fr(g);
+  vc <- igraph::vcount(g);
+
+  # Algorithms that are always fast (no isolation needed)
+  fast_algos <- c("circle", "random");
+  # Algorithms that always need isolation (graphlayouts - heavy)
+  heavy_algos <- c("concentric", "backbone", "mds");
+
+  # Isolate heavy algos AND large graphs with non-fast algos
+  use_isolation <- algo %in% heavy_algos || (vc >= 500 && !(algo %in% fast_algos));
+
+  if (use_isolation) {
+    # --- leaf isolation: igraph/graphlayouts layout computation ---
+    params <- list(algo = algo, focus = focus)
+
+    isolated_func <- function(input_data) {
+      library(igraph)
+
+      g <- input_data$data_obj$g
+      params <- input_data$params
+      algo <- params$algo
+      focus <- params$focus
+      vc <- igraph::vcount(g)
+
+      if (algo == "Default") {
+        if (vc > 3000) {
+          pos.xy <- igraph::layout_with_lgl(g, maxiter = 100)
+        } else if (vc < 150) {
+          pos.xy <- igraph::layout_with_kk(g)
+        } else {
+          pos.xy <- igraph::layout_with_fr(g)
+        }
+      } else if (algo == "FrR") {
+        pos.xy <- igraph::layout_with_fr(g, area = 34 * vc^2)
+      } else if (algo == "lgl") {
+        pos.xy <- igraph::layout_with_lgl(g)
+      } else if (algo == "gopt") {
+        pos.xy <- igraph::layout_with_graphopt(g)
+      } else if (algo == "circular_tripartite") {
+        library(ggforce)
+        l <- igraph::layout_with_sugiyama(g, layers = igraph::V(g)$group * (vc / 3) + 30)
+        layout <- l$layout
+        radial <- ggforce::radial_trans(
+          r.range = rev(range(layout[, 2])),
+          a.range = range(layout[, 1]),
+          offset = 0
+        )
+        coords <- radial$transform(layout[, 2], layout[, 1])
+        layout[, 1] <- coords$x
+        layout[, 2] <- coords$y
+        pos.xy <- layout
+      } else if (algo == "tripartite") {
+        l <- igraph::layout_with_sugiyama(g, layers = igraph::V(g)$layers * (vc / 4))
+        pos.xy <- -l$layout[, 2:1]
+      } else if (algo == "concentric") {
+        library(graphlayouts)
+        if (focus == "") {
+          inx <- 1
+        } else {
+          inx <- which(igraph::V(g)$name == focus)
+        }
+        coords <- graphlayouts::layout_with_focus(g, inx)
+        pos.xy <- coords$xy
+      } else if (algo == "backbone") {
+        library(graphlayouts)
+        if (length(igraph::V(g)$name) < 2000) {
+          pos.xy <- graphlayouts::layout_with_stress(g)
+        } else {
+          pos.xy <- graphlayouts::layout_with_sparse_stress(g, pivots = 100)
+        }
+      } else if (algo == "mds") {
+        library(graphlayouts)
+        coords <- graphlayouts::layout_with_pmds(g, length(igraph::V(g)$name) / 10)
+        pos.xy <- coords / 100
+        rownames(pos.xy) <- NULL
+      } else {
+        pos.xy <- igraph::layout_with_fr(g)
+      }
+
+      gc(verbose = FALSE, full = TRUE)
+      return(pos.xy)
     }
-  }else if(algo == "FrR"){
-    pos.xy <- layout_with_fr(g, area=34*vc^2);
-  }else if(algo == "circle"){
-    pos.xy <- layout_in_circle(g);
-  }else if(algo == "random"){
-    pos.xy <- layout_randomly (g);
-  }else if(algo == "lgl"){
-    pos.xy <- layout_with_lgl(g);
-  }else if(algo == "gopt"){
-    pos.xy <- layout_with_graphopt(g)
-  }else if(algo == "circular_tripartite"){
-    library(ggforce)
-    l <- layout_with_sugiyama(g, layers = V(g)$group*(vc/3) +30)
-    layout <- l$layout
-    
-    radial <- radial_trans(
-      r.range = rev(range(layout[,2])),
-      a.range = range(layout[,1]),
-      offset = 0
+
+    pos.xy <- rsclient_isolated_exec(
+      func_body = isolated_func,
+      input_data = list(
+        data_obj = list(g = g),
+        params = params
+      ),
+      packages = c("igraph", "graphlayouts", "ggforce", "qs"),
+      timeout = 300,
+      output_type = "qs"
     )
-    coords <- radial$transform(layout[,2], layout[,1])
-    layout[,1] <- coords$x
-    layout[,2] <- coords$y
-    pos.xy= layout
-  }else if(algo == "tripartite"){
-    l <- layout_with_sugiyama(g, layers = V(g)$layers*(vc/4))
-    pos.xy <- -l$layout[,2:1]
-  }else if(algo == "concentric"){
-    library(graphlayouts)
-    # the fist element in the list for concentric is the central node.
-    if(focus==""){
-      inx=1;
+    if (is.list(pos.xy) && isFALSE(pos.xy$success)) { AddErrMsg(pos.xy$message); return(0) }
+
+  } else {
+    # --- direct execution (fast path) ---
+    if(algo == "Default"){
+      if(vc > 3000) {
+        pos.xy <- igraph::layout_with_lgl(g, maxiter = 100);
+      }else if(vc < 150){
+        pos.xy <- igraph::layout_with_kk(g);
+      }else{
+        pos.xy <- igraph::layout_with_fr(g);
+      }
+    }else if(algo == "FrR"){
+      pos.xy <- igraph::layout_with_fr(g, area=34*vc^2);
+    }else if(algo == "circle"){
+      pos.xy <- igraph::layout_in_circle(g);
+    }else if(algo == "random"){
+      pos.xy <- igraph::layout_randomly(g);
+    }else if(algo == "lgl"){
+      pos.xy <- igraph::layout_with_lgl(g);
+    }else if(algo == "gopt"){
+      pos.xy <- igraph::layout_with_graphopt(g);
+    }else if(algo == "circular_tripartite"){
+      library(ggforce);
+      l <- igraph::layout_with_sugiyama(g, layers = igraph::V(g)$group*(vc/3) +30);
+      layout <- l$layout;
+      radial <- ggforce::radial_trans(
+        r.range = rev(range(layout[,2])),
+        a.range = range(layout[,1]),
+        offset = 0
+      );
+      coords <- radial$transform(layout[,2], layout[,1]);
+      layout[,1] <- coords$x;
+      layout[,2] <- coords$y;
+      pos.xy <- layout;
+    }else if(algo == "tripartite"){
+      l <- igraph::layout_with_sugiyama(g, layers = igraph::V(g)$layers*(vc/4));
+      pos.xy <- -l$layout[,2:1];
+    }else if(algo == "concentric"){
+      library(graphlayouts);
+      if(focus==""){
+        inx=1;
+      }else{
+        inx = which(igraph::V(g)$name == focus);
+      }
+      coords <- graphlayouts::layout_with_focus(g,inx);
+      pos.xy <- coords$xy;
+    }else if(algo == "backbone"){
+      library(graphlayouts);
+      if(length(igraph::V(g)$name)<2000){
+        pos.xy <- graphlayouts::layout_with_stress(g);
+      }else{
+        pos.xy <- graphlayouts::layout_with_sparse_stress(g,pivots=100);
+      }
+    }else if(algo == "mds"){
+      library(graphlayouts);
+      coords <- graphlayouts::layout_with_pmds(g,length(igraph::V(g)$name)/10);
+      pos.xy <- coords/100;
+      rownames(pos.xy) <- NULL;
     }else{
-      inx = which(V(g)$name == focus)
+      pos.xy <- igraph::layout_with_fr(g);
     }
-    coords <- layout_with_focus(g,inx)
-    pos.xy <- coords$xy
-  }else if(algo == "backbone"){
-    library(graphlayouts)
-    if(length(V(g)$name)<2000){
-      coords = layout_with_stress(g)
-      pos.xy = coords
-    }else{
-      coords = layout_with_sparse_stress(g,pivots=100)
-      pos.xy = coords
-    }
-    
-  }else if(algo == "mds"){
-    library(graphlayouts)
-    coords = layout_with_pmds(g,length(V(g)$name)/10)
-    pos.xy = coords/100
-    rownames(pos.xy) = NULL
   }
+
   pos.xy;
 }
 

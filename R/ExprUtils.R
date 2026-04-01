@@ -297,7 +297,7 @@ PerformArrayDataNormalization <- function(norm.opt){
 PerformLimma<-function(target.grp){
 
     myargs <- list();
-    cls <- dataSet$cls; 
+    cls <- dataSet$cls;
     dataSet$comparison <- target.grp;
     design <- model.matrix(~ 0 + cls) # no intercept
     colnames(design) <- levels(cls);
@@ -306,41 +306,72 @@ PerformLimma<-function(target.grp){
     myargs[[1]] <- paste(grp.nms, collapse="-");
     filename = paste("SigGene_", paste(grp.nms, collapse="_vs_"), sep="");
 
-    library(limma);
-    myargs[["levels"]] <- design;
-    contrast.matrix <- do.call(makeContrasts, myargs);
+    # --- leaf isolation: limma DE analysis ---
+    params <- list(target.grp = target.grp)
 
-    fit = lmFit(dataSet$data.norm, design);
+    isolated_func <- function(input_data) {
+      library(limma)
+      cls <- input_data$data_obj$cls
+      data.norm <- input_data$data_obj$data.norm
+      design <- input_data$data_obj$design
+      params <- input_data$params
+      target.grp <- params$target.grp
 
-    # sanity check
-    if(!is.fullrank(design)){
-        current.msg <<- paste("This metadata combination is not full rank! Please use other combination."); 
-        return(0);
+      myargs <- list()
+      grp.nms <- strsplit(target.grp, " vs. ")[[1]]
+      myargs[[1]] <- paste(grp.nms, collapse = "-")
+      myargs[["levels"]] <- design
+      contrast.matrix <- do.call(limma::makeContrasts, myargs)
+
+      fit <- limma::lmFit(data.norm, design)
+
+      if (!limma::is.fullrank(design)) {
+        stop("This metadata combination is not full rank! Please use other combination.")
+      }
+
+      df.residual <- fit$df.residual
+      if (all(df.residual == 0)) {
+        stop("There is not enough replicates in each group (no residual degrees of freedom)!")
+      }
+
+      fit2 <- limma::contrasts.fit(fit, contrast.matrix)
+      fit2 <- limma::eBayes(fit2)
+      topFeatures <- limma::topTable(fit2, number = Inf, adjust.method = "fdr")
+
+      hit.inx <- which(colnames(topFeatures) == "AveExpr")
+      maxFC.inx <- hit.inx - 1
+      logfc.mat <- topFeatures[, 1:maxFC.inx, drop = FALSE]
+
+      pos.vec <- max.col(abs(logfc.mat), ties.method = "first")
+      pos.mat <- cbind(1:length(pos.vec), pos.vec)
+      max.logFC <- logfc.mat[pos.mat]
+
+      topFeatures <- cbind(topFeatures, max.logFC = max.logFC)
+      gc(verbose = FALSE, full = TRUE)
+      return(topFeatures)
     }
 
-    df.residual <- fit$df.residual;
-    if (all(df.residual == 0)){
-        current.msg <<- paste("There is not enough replicates in each group (no residual degrees of freedom)!"); 
-        return(0);
-    }
-    fit2 <- contrasts.fit(fit, contrast.matrix);
-    fit2 <- eBayes(fit2);
-    topFeatures <- topTable(fit2, number=Inf, adjust.method="fdr");
+    topFeatures <- tryCatch({
+      rsclient_isolated_exec(
+        func_body = isolated_func,
+        input_data = list(
+          data_obj = list(cls = cls, data.norm = dataSet$data.norm, design = design),
+          params = params
+        ),
+        packages = c("limma", "qs"),
+        timeout = 300,
+        output_type = "qs"
+      )
+    }, error = function(e) {
+      if (grepl("not full rank|no residual", e$message)) {
+        current.msg <<- e$message
+        return(NULL)
+      }
+      stop(e$message)
+    })
 
-    # add a common column for FC selection
-    # this is to prevent no logFC for multi grps or for counts data
-
-    hit.inx <- which(colnames(topFeatures) == "AveExpr");
-    maxFC.inx <- hit.inx - 1; # not sure if this is also true for edgeR
-    logfc.mat <- topFeatures[,1:maxFC.inx, drop=F];
-
-    # extract the max FC together with direction
-    # OPTIMIZED: Use vectorized max.col instead of apply (2-3x faster)
-    pos.vec <- max.col(abs(logfc.mat), ties.method = "first");
-    pos.mat <- cbind(1:length(pos.vec), pos.vec);
-    max.logFC <- logfc.mat[pos.mat]; 
-
-    topFeatures <- cbind(topFeatures, max.logFC = max.logFC);
+    if (is.list(topFeatures) && isFALSE(topFeatures$success)) { AddErrMsg(topFeatures$message); return(0) }
+    if (is.null(topFeatures)) return(0)
 
     dataSet$filename <- filename;
     dataSet$norm.opt <- "limma";
@@ -363,25 +394,53 @@ PerformLimma<-function(target.grp){
 PerformCountDataNormalization <- function(norm.opt, disp.opt){
 
     msg <- NULL;
-    cls <- dataSet$cls; 
+    cls <- dataSet$cls;
     design <- model.matrix(~ 0 + cls) # no intercept
     colnames(design) <- levels(cls);
 
-    library(edgeR);
-    y <- DGEList(counts=dataSet$data.anot, group=dataSet$cls);
-    if(norm.opt=="tmm"){
-        y <- calcNormFactors(y)
-    }else{
-        msg <-"No log normalization was performed.";
-        print(msg);
+    # --- leaf isolation: edgeR normalization ---
+    isolated_func <- function(input_data) {
+      library(edgeR)
+      data.anot <- input_data$data_obj$data.anot
+      cls <- input_data$data_obj$cls
+      design <- input_data$data_obj$design
+      norm.opt <- input_data$params$norm.opt
+      disp.opt <- input_data$params$disp.opt
+
+      y <- edgeR::DGEList(counts = data.anot, group = cls)
+      msg <- NULL
+      if (norm.opt == "tmm") {
+        y <- edgeR::calcNormFactors(y)
+      } else {
+        msg <- "No log normalization was performed."
+      }
+
+      y <- edgeR::estimateGLMCommonDisp(y, design, verbose = FALSE)
+
+      if (disp.opt == "tagwise") {
+        y <- edgeR::estimateGLMTrendedDisp(y, design)
+        y <- edgeR::estimateGLMTagwiseDisp(y, design, trend = TRUE)
+      }
+      gc(verbose = FALSE, full = TRUE)
+      return(list(y = y, msg = msg))
     }
 
-    y <- estimateGLMCommonDisp(y, design, verbose=FALSE);
+    result <- rsclient_isolated_exec(
+      func_body = isolated_func,
+      input_data = list(
+        data_obj = list(data.anot = dataSet$data.anot, cls = dataSet$cls, design = design),
+        params = list(norm.opt = norm.opt, disp.opt = disp.opt)
+      ),
+      packages = c("edgeR", "qs"),
+      timeout = 300,
+      output_type = "qs"
+    )
+    if (is.list(result) && isFALSE(result$success)) { AddErrMsg(result$message); return(0) }
 
-    if(disp.opt=="tagwise"){
-        y <- estimateGLMTrendedDisp(y, design);
-        y <- estimateGLMTagwiseDisp(y, design, trend=TRUE);
-    }
+    y <- result$y
+    msg <- result$msg
+    if (!is.null(msg)) print(msg)
+
     saveRDS(y, file="edger.y");
     dataSet$design <- design;
     current.msg <<- msg;
@@ -403,33 +462,58 @@ PerformEdgeR<-function(target.grp){
     myargs[[1]] <- paste(grp.nms, collapse="-");
     filename = paste("SigGene_", paste(grp.nms, collapse="_vs_"), sep="");
 
-    myargs[["levels"]] <- dataSet$design;
-    contrast.matrix <- do.call(makeContrasts, myargs);
-
     edger.y <- readRDS("edger.y");
-    fit <- glmFit(edger.y, dataSet$design);
-    lrt <- glmLRT(fit, contrast=contrast.matrix);
-    topFeatures<-topTags(lrt,n=Inf)$table;
 
-    # need to change the FDR to adj.P.Val same as limma
-    nms <- colnames(topFeatures);
-    nms[which(nms == 'FDR')] <- 'adj.P.Val';
-    colnames(topFeatures) <- nms; 
+    # --- leaf isolation: edgeR DE analysis ---
+    params <- list(target.grp = target.grp)
 
-    # add a common column for FC selection
-    # this is to prevent no logFC for multi grps or for counts data
+    isolated_func <- function(input_data) {
+      library(edgeR)
+      library(limma)
 
-    hit.inx <- which(colnames(topFeatures) == "logCPM");
-    maxFC.inx <- hit.inx - 1; # not sure if this is also true for edgeR
-    logfc.mat <- topFeatures[,1:maxFC.inx, drop=F];
+      design <- input_data$data_obj$design
+      edger.y <- input_data$data_obj$edger.y
+      params <- input_data$params
+      target.grp <- params$target.grp
 
-    # extract the max FC together with direction
-    # OPTIMIZED: Use vectorized max.col instead of apply (2-3x faster)
-    pos.vec <- max.col(abs(logfc.mat), ties.method = "first");
-    pos.mat <- cbind(1:length(pos.vec), pos.vec);
-    max.logFC <- logfc.mat[pos.mat]; 
+      myargs <- list()
+      grp.nms <- strsplit(target.grp, " vs. ")[[1]]
+      myargs[[1]] <- paste(grp.nms, collapse = "-")
+      myargs[["levels"]] <- design
+      contrast.matrix <- do.call(limma::makeContrasts, myargs)
 
-    topFeatures <- cbind(topFeatures, max.logFC = max.logFC);
+      fit <- edgeR::glmFit(edger.y, design)
+      lrt <- edgeR::glmLRT(fit, contrast = contrast.matrix)
+      topFeatures <- edgeR::topTags(lrt, n = Inf)$table
+
+      nms <- colnames(topFeatures)
+      nms[which(nms == 'FDR')] <- 'adj.P.Val'
+      colnames(topFeatures) <- nms
+
+      hit.inx <- which(colnames(topFeatures) == "logCPM")
+      maxFC.inx <- hit.inx - 1
+      logfc.mat <- topFeatures[, 1:maxFC.inx, drop = FALSE]
+
+      pos.vec <- max.col(abs(logfc.mat), ties.method = "first")
+      pos.mat <- cbind(1:length(pos.vec), pos.vec)
+      max.logFC <- logfc.mat[pos.mat]
+
+      topFeatures <- cbind(topFeatures, max.logFC = max.logFC)
+      gc(verbose = FALSE, full = TRUE)
+      return(topFeatures)
+    }
+
+    topFeatures <- rsclient_isolated_exec(
+      func_body = isolated_func,
+      input_data = list(
+        data_obj = list(design = dataSet$design, edger.y = edger.y),
+        params = params
+      ),
+      packages = c("edgeR", "limma", "qs"),
+      timeout = 300,
+      output_type = "qs"
+    )
+    if (is.list(topFeatures) && isFALSE(topFeatures$success)) { AddErrMsg(topFeatures$message); return(0) }
 
     dataSet$filename <- filename;
     dataSet$de.method <- "EdgeR";

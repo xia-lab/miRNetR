@@ -225,9 +225,9 @@ PrepareJsonFromR <- function(fileNm, type, jsonString, dataSetString){
 saveSet <- function(obj=NA, set="", output=1){
 
   if(globalConfig$anal.mode == "api"){
-    qs:::qsave(obj, paste0(set, ".qs"));
+    qs::qsave(obj, paste0(set, ".qs"));
     # CRITICAL: Prevent race condition - allow file system to sync before Java reads
-    Sys.sleep(0.15);
+    Sys.sleep(0.05);
   }else{
     if(set == ""){
       set <- obj$objName;
@@ -263,7 +263,7 @@ readSet <- function(obj=NA, set=""){
     if(path != ""){
       obj <- load_qs(paste0(path, set, ".qs"));
     }else{
-      obj <- qs:::qread(paste0(set, ".qs"));
+      obj <- qs::qread(paste0(set, ".qs"));
     }
   }
   return(obj);
