@@ -343,7 +343,7 @@ miRNA_PrecursorToMature<-function(miRNANames,version=NULL){
   }
   ver_index=match(tolower(c_version),VER)
   if (is.na(ver_index))
-    stop("It is a wrong version name, Please check it")
+    { AddErrMsg("It is a wrong version name, Please check it"); return(0); }
   VMAP <- miRNA_data[[ver_index]][,c(2,6,9)]
   VMAP[,1] <- SYM[VMAP[,1]]
   VMAP[,2] <- SYM[VMAP[,2]]

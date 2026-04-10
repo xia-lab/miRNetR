@@ -326,12 +326,12 @@ PerformLimma<-function(target.grp){
       fit <- limma::lmFit(data.norm, design)
 
       if (!limma::is.fullrank(design)) {
-        stop("This metadata combination is not full rank! Please use other combination.")
+        AddErrMsg("This metadata combination is not full rank! Please use other combination."); return(0);
       }
 
       df.residual <- fit$df.residual
       if (all(df.residual == 0)) {
-        stop("There is not enough replicates in each group (no residual degrees of freedom)!")
+        AddErrMsg("There is not enough replicates in each group (no residual degrees of freedom)!"); return(0);
       }
 
       fit2 <- limma::contrasts.fit(fit, contrast.matrix)

@@ -13,9 +13,6 @@
 #' Perform miRNA Target Enrichment Analysis
 #' @export
 PerformMirTargetEnrichAnalysis <- function(adjust.type, fun.type, file.nm, IDs, algo, mode="serial", save.type="network"){
-     if(!exists("my.mir.target.enrich")){
-        compiler::loadcmp("../../rscripts/miRNetR/R/utils_mir_target_enrich.Rc");    
-    }
     return(my.mir.target.enrich(adjust.type, fun.type, file.nm, IDs, algo, mode, save.type));
 }
 

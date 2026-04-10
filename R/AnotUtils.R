@@ -565,9 +565,6 @@ PerformTFMapping <- function(){
 #' Perform SNP Mapping
 #' @export
 PerformSNPMirGeneMapping <- function(){
- if(!exists("my.snp.mir.mapping")){
-        compiler::loadcmp("../../rscripts/miRNetR/R/utils_mir_snp.Rc"); 
-  }
   return(my.snp.mir.mapping());
 }
 
