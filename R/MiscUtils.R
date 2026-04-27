@@ -1076,6 +1076,30 @@ GetEnrResultMatrix <-function(type){
   return(signif(as.matrix(res), 5));
 }
 
+# Returns 2-string array (setName, semicolon-joined HTML-formatted gene
+# symbols with hits in red) for EnrResBean.getCurrentPathSet UI panel.
+# Mirrors ExpressAnalystR/ProteoAnalystR GetHTMLPathSet, adapted to
+# miRNetR's infoSet readSet/saveSet storage pattern.
+GetHTMLPathSet <- function(type, setNm){
+  infoSet <- readSet(infoSet, "infoSet");
+  imgSet <- infoSet$imgSet;
+  if(type == "defaultEnr" && !is.null(imgSet$enrTables[["default"]])){
+    type <- "default";
+  }
+  current.geneset <- imgSet$enrTables[[type]]$current.geneset.symb;
+  hits.query      <- imgSet$enrTables[[type]]$hits.query;
+  set <- current.geneset[[setNm]];
+  if(is.null(set)) return(cbind(setNm, ""));
+
+  red.inx <- which(set %in% hits.query[[setNm]]);
+  nms <- doEntrez2SymbolMapping(set);
+  if(length(red.inx) > 0){
+    nms[red.inx] <- paste("<font color=\"red\">", "<b>", nms[red.inx],
+                          "</b>", "</font>", sep="");
+  }
+  return(cbind(setNm, paste(unique(nms), collapse="; ")));
+}
+
 GetEnrResultColNames<-function(type){
   infoSet <- readSet(infoSet, "infoSet");
 
