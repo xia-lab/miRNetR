@@ -268,16 +268,31 @@ ClearFactorStrings<-function(cls.nm, query){
   }else{
     lines <- my.input;
   }
-    my.lists <- strsplit(lines, "\\s+");
-    my.mat <- do.call(rbind, my.lists);
-    if(dim(my.mat)[2] == 1){ # add *
-        my.mat <- cbind(my.mat, rep("*", nrow(my.mat)));
-    }else if(dim(my.mat)[2] > 2){
-        my.mat <- my.mat[,1:2];
-        current.msg <- "More than two columns found in the list. Only first two columns will be used.";
-        print(currret.msg);
+  lines <- lines[nchar(trimws(lines)) > 0];
+  # Accept comma as separator (same as gene/protein list parsers) so CSV-style
+  # input ("hsa-miR-21-5p,2.84") is tokenised correctly instead of becoming
+  # a single garbage token that fails all DB lookups.
+  my.lists <- strsplit(lines, "[,[:space:]]+");
+  my.mat <- do.call(rbind, my.lists);
+  # Strip header row: if row 1 col 2 is non-numeric it is a column label row
+  # (e.g. "miRNA,LogFC"); if single-column, check for common header keywords.
+  if (nrow(my.mat) > 1) {
+    if (ncol(my.mat) >= 2 && suppressWarnings(is.na(as.numeric(my.mat[1, 2])))) {
+      my.mat <- my.mat[-1, , drop = FALSE];
+    } else if (ncol(my.mat) == 1 &&
+               tolower(my.mat[1, 1]) %in%
+                 c("mirna", "mirnas", "gene", "genes", "id", "ids", "name", "names")) {
+      my.mat <- my.mat[-1, , drop = FALSE];
     }
-    return(my.mat);
+  }
+  if(dim(my.mat)[2] == 1){ # add *
+      my.mat <- cbind(my.mat, rep("*", nrow(my.mat)));
+  }else if(dim(my.mat)[2] > 2){
+      my.mat <- my.mat[,1:2];
+      current.msg <- "More than two columns found in the list. Only first two columns will be used.";
+      print(current.msg);
+  }
+  return(my.mat);
 }
 
 .parsePickListItems <- function(my.vec){
