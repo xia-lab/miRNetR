@@ -1186,8 +1186,14 @@ PerformDefaultEnrichment <- function(file.nm, fun.type, algo="ora"){
   names(IDs) <- IDs;
   save.type <- "default";  # Changed from "defaultEnr" to "default" for consistency
 
+  if (!exists(".mir_diag")) .mir_diag <- function(...) try(cat(sprintf("[MIR-DIAG %s] %s\n", format(Sys.time(), "%H:%M:%S"), paste0(...)), file = file.path(getwd(), "mirnet_diag.log"), append = TRUE), silent = TRUE)
+  .mir_diag("PerformDefaultEnrichment ENTER: fun.type=", fun.type, " algo=", algo, " nIDs=", length(IDs))
   # Capture and return the actual result from enrichment analysis
-  result <- PerformMirTargetEnrichAnalysis("", fun.type, file.nm, IDs, algo, mode="serial", save.type);
+  result <- tryCatch(
+    PerformMirTargetEnrichAnalysis("", fun.type, file.nm, IDs, algo, mode="serial", save.type),
+    error = function(e) { .mir_diag("PerformDefaultEnrichment ERROR: ", conditionMessage(e)); stop(e) }
+  );
+  .mir_diag("PerformDefaultEnrichment DONE ok")
 
   return(result);
 }

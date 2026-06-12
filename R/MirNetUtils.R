@@ -8,6 +8,11 @@
 #' @export
 CreateMirNets <- function(net.type){
   library(igraph);
+  if (!exists(".mir_diag")) .mir_diag <- function(...) try(cat(sprintf("[MIR-DIAG %s] %s\n", format(Sys.time(), "%H:%M:%S"), paste0(...)), file = file.path(getwd(), "mirnet_diag.log"), append = TRUE), silent = TRUE)
+  .mir_diag("CreateMirNets ENTER: pid=", Sys.getpid(), " wd=", getwd(), " net.type=", net.type,
+            " has.mir.res=", !is.null(dataSet$mir.res),
+            " mir.res.rows=", if (is.null(dataSet$mir.res)) "NULL" else nrow(dataSet$mir.res),
+            " has.mir.mapped=", !is.null(dataSet$mir.mapped));
   dataSet$mirnet <<- net.type;
   if(net.type == "multilist" || net.type == "snp2mir2gene" || net.type == "snp2mir2dis" || net.type == "snp2mir2mol" || net.type == "snp2mir2lnc" || net.type == "snp2mir2tf"){
     require('igraph');
@@ -85,10 +90,13 @@ CreateMirNets <- function(net.type){
 #' Decompose to Subnetworks
 #' @export
 DecomposeMirGraph <- function(net.type, gObj, minNodeNum = 2){
+  if (!exists(".mir_diag")) .mir_diag <- function(...) try(cat(sprintf("[MIR-DIAG %s] %s\n", format(Sys.time(), "%H:%M:%S"), paste0(...)), file = file.path(getwd(), "mirnet_diag.log"), append = TRUE), silent = TRUE)
   comps <-decompose(gObj, min.vertices=minNodeNum);
-  
+  .mir_diag("DecomposeMirGraph: decompose -> ", length(comps), " components (minNodeNum=", minNodeNum, ")");
+
   if(length(comps) == 0){
     current.msg <<- paste("No connected nodes found after this filtering!");
+    .mir_diag("DecomposeMirGraph RETURN NULL: no components >= minNodeNum");
     return(NULL);
   }
   
@@ -133,6 +141,7 @@ DecomposeMirGraph <- function(net.type, gObj, minNodeNum = 2){
   
   # now save the components
   mir.nets <<- comps;
+  .mir_diag("DecomposeMirGraph: mir.nets <<- assigned, length=", length(comps), " names=", paste(names(comps), collapse=","));
   net.stats <<- net.stats[,-1];  # remove the first name col
   
   # update the mir.res edge table
@@ -530,10 +539,22 @@ PrepareCSV <- function(table.nm){
 #' Prepare miRNA Network
 #' @export
 PrepareMirNet <- function(mir.nm, file.nm){
+  if (!exists(".mir_diag")) .mir_diag <- function(...) try(cat(sprintf("[MIR-DIAG %s] %s\n", format(Sys.time(), "%H:%M:%S"), paste0(...)), file = file.path(getwd(), "mirnet_diag.log"), append = TRUE), silent = TRUE)
+  .mir_diag("PrepareMirNet ENTER: pid=", Sys.getpid(), " wd=", getwd(),
+            " exists.mir.nets=", exists("mir.nets"),
+            " mir.nets.len=", if (exists("mir.nets")) length(mir.nets) else "NA",
+            " exists.dataSet=", exists("dataSet"), " mir.nm=", mir.nm);
   my.mirnet <- mir.nets[[mir.nm]];
   current.mirnet <<- my.mirnet;
   current.mir.nm <<- mir.nm;
-  convertIgraph2JSON(my.mirnet, file.nm);
+  tryCatch(
+    convertIgraph2JSON(my.mirnet, file.nm),
+    error = function(e) {
+      .mir_diag("PrepareMirNet ERROR in convertIgraph2JSON: ", conditionMessage(e));
+      stop(e);
+    }
+  );
+  .mir_diag("PrepareMirNet DONE ok");
   if(.on.public.web){
     return(1);
   }else{

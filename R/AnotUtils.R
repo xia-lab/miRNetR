@@ -4,6 +4,11 @@
 ## Author: Jeff Xia, jeff.xia@mcgill.ca
 ###################################################
 
+# [MIR-DIAG] temporary diagnostic logger — appends to mirnet_diag.log in the
+# R working dir (== user homeDir). Safe to remove once the network-build
+# failure is pinpointed.
+.mir_diag <- function(...) try(cat(sprintf("[MIR-DIAG %s] %s\n", format(Sys.time(), "%H:%M:%S"), paste0(...)), file = file.path(getwd(), "mirnet_diag.log"), append = TRUE), silent = TRUE)
+
 #' Perform miRNA Gene Mapping
 #' @export
 PerformMirGeneMapping <- function(input.type="none"){
@@ -14,9 +19,14 @@ PerformMirGeneMapping <- function(input.type="none"){
     }
     mir.mat <- dataSet$mir.orig;
 
+    .mir_diag("PerformMirGeneMapping ENTER: input.type=", input.type, " db.type=", db.type,
+              " sqlite.path=", sqlite.path, " mir2geneDB.exists=", file.exists(paste0(sqlite.path, "mir2gene")),
+              " nInput=", nrow(mir.mat), " org=", dataSet$org, " idType=", dataSet$idType);
+
     mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), rownames(mir.mat), dataSet$org, dataSet$idType, db.type);
 
     hit.num <- nrow(mir.dic);
+    .mir_diag("PerformMirGeneMapping: Query.miRNetDB returned hit.num=", hit.num);
     if (hit.num == 0){
         if(dataSet$tissue == "na") {
             current.msg <<- "No hits found in the database. Please check your input.";
@@ -24,6 +34,7 @@ PerformMirGeneMapping <- function(input.type="none"){
             current.msg <<- "No hits found in the database. The miRNA list has not been annotated by this tissue type. Please try NOT to specify the tissue.";
         }
         print(current.msg);
+        .mir_diag("PerformMirGeneMapping RETURN 0 (no hits): ", current.msg);
         return(0);
     } else {
         current.msg <<- paste("A total of unqiue", hit.num, "pairs of miRNA-gene targets were identified!");
@@ -53,6 +64,8 @@ PerformMirGeneMapping <- function(input.type="none"){
         dataSet$mir2gene <- res
         dataSet$mirtarget <- "gene";
         dataSet <<- dataSet;
+        .mir_diag("PerformMirGeneMapping RETURN 1 (OK): mir.res rows=", nrow(res),
+                  " mir.mapped rows=", nrow(mir.mat), " seeds=", length(dataSet$seeds));
         if(.on.public.web){
           return(1);
         }else{
