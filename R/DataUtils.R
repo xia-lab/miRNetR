@@ -48,7 +48,9 @@ Init.Data<-function(dataType, analType, onWeb=T){
     lib.path <<- "https://www.mirnet.ca/resources/data/libs/";     
   }
   
-  if(file.exists("/home/glassfish/sqlite/")){ #public server
+  if(nzchar(Sys.getenv("OMICS_LIB_DIR", "")) && dir.exists(Sys.getenv("OMICS_LIB_DIR", ""))){  # Docker shared library mount (OMICS_LIB_DIR)
+    sqlite.path <<- paste0(sub("/+$", "", Sys.getenv("OMICS_LIB_DIR", "")), "/");
+  }else if(file.exists("/home/glassfish/sqlite/")){ #public server
     sqlite.path <<- "/home/glassfish/sqlite/";
   }else if(file.exists("/Users/xialab/Dropbox/sqlite/")){# xia local
     sqlite.path <<- "/Users/xialab/Dropbox/sqlite/";
