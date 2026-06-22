@@ -276,10 +276,29 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
     #fdr.pvals <- p.adjust(raw.pvals, "fdr");
     res.mat[,4] <- raw.pvals;
   }
-  
-  res.mat <- res.mat[hit.num>0,,drop = F];
-  hits.query <- hits.query[hit.num>0];
-  
+
+  # FDR over ALL tested gene sets, computed BEFORE the display filter below, so
+  # the multiple-testing denominator is unchanged (mirrors ea/pa, where the
+  # >=3-hit filter is applied after p.adjust). Looked up per displayed pathway
+  # where the FDR column is attached further down.
+  fdr.all <- p.adjust(res.mat[,4], "fdr");
+  names(fdr.all) <- rownames(res.mat);
+
+  # Drop pathways with too few query hits. Threshold mirrors the
+  # RIDGE_MIN_HITS=3L convention so the exported enrichment table/json show the
+  # same pathway set as the gene/protein-list ORA. Applied AFTER the p-value
+  # computation above, so the test itself is unchanged. Guard against emptying
+  # the result (fall back to hits>0) so the step does not blow up / blank.
+  min.hits <- 3L;
+  keep.inx <- hit.num >= min.hits;
+  if(sum(keep.inx) == 0){
+    message("[performEnrichAnalysis] no pathway has >= ", min.hits,
+            " query hits; keeping all pathways with >=1 hit.");
+    keep.inx <- hit.num > 0;
+  }
+  res.mat <- res.mat[keep.inx,,drop = F];
+  hits.query <- hits.query[keep.inx];
+
   if(nrow(res.mat)> 1){
     # order by p value
     ord.inx<-order(res.mat[,4]);
@@ -300,7 +319,7 @@ my.mir.target.enrich <- function(adjust.type, fun.type, file.nm, IDs, algo, mode
   }
   current.msg <<- "Functional enrichment analysis was completed";
   
-  adj.p <- signif(p.adjust(resTable[,5], "fdr"),3);
+  adj.p <- signif(unname(fdr.all[as.character(resTable$Pathway)]), 3);
   resTable <- cbind(resTable, FDR=adj.p);
   
   # write json

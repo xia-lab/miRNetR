@@ -1613,6 +1613,12 @@ PlotDegreeHistogram <- function(imgNm, netNm = "NA", dpi=72, format="png"){
     G.degree.histogram <- as.data.frame(table(G.degrees))
     G.degree.histogram[,1] <- as.numeric(G.degree.histogram[,1])
 
+    # Method-standard: persist the figure's underlying data (degree -> frequency)
+    # so the AI "Refine" control can re-plot from data and users can regenerate
+    # the figure in any tool. Guarded for the public package; helper lives in
+    # wf_method.R.
+    if (exists("WfSaveFigureData")) tryCatch(WfSaveFigureData("degree_distribution", G.degree.histogram), error = function(e) NULL)
+
     p <- ggplot(G.degree.histogram, aes(x = G.degrees, y = Freq)) +
         geom_point() +
         scale_x_continuous("Degree\n(nodes containing that amount of connections)",
@@ -1680,6 +1686,12 @@ PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
 
     G.degree.histogram <- as.data.frame(table(G.degrees))
     G.degree.histogram[,1] <- as.numeric(G.degree.histogram[,1])
+
+    # Method-standard: persist the figure's underlying data (betweenness -> freq)
+    # so the AI "Refine" control can re-plot from data and users can regenerate
+    # the figure in any tool. Guarded for the public package; helper lives in
+    # wf_method.R.
+    if (exists("WfSaveFigureData")) tryCatch(WfSaveFigureData("betweenness_distribution", G.degree.histogram), error = function(e) NULL)
 
     p <- ggplot(G.degree.histogram, aes(x = G.degrees, y = Freq)) +
         geom_point() +
