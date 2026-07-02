@@ -1288,7 +1288,14 @@ ComputePCSFNet <- function(){
   edgeList <- cbind(rownames(edgeList), edgeList);
   colnames(edgeList) <- c("Id", "Source", "Target");
   write.csv(edgeList, file="orig_edge_list.csv", row.names=F, quote=F);
-  
+
+  # Document the reduction step (mirrors the minimum-connected-network current.msg
+  # above) so the UI and report record that PCSF was applied, with its parameters and
+  # resulting network size.
+  current.msg <<- paste0("The network was reduced using the Prize-Collecting Steiner Forest (PCSF) ",
+                         "algorithm (parameters w = 5, b = 100, mu = 0.0005), producing ",
+                         nrow(nodeList), " nodes and ", nrow(edgeList), " edges.");
+
   path.list <- NULL;
   substats <- DecomposeMirGraph(dataSet$mirnet, g);
   if(!is.null(substats)){
@@ -1667,16 +1674,23 @@ PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
       warning("PlotBetweennessHistogram: Large network (", n_nodes, " nodes). Calculation may take time.");
     }
 
-    # Calculate betweenness with timeout protection (120 seconds for large networks)
-    # Betweenness is O(n*m) complexity, can be very slow on large networks
+    # Calculate betweenness with timeout protection (120 seconds for large networks).
+    # Exact betweenness is O(n*m) and times out on large networks, producing no figure.
+    # For large networks use a shortest-path-length cutoff (approximate betweenness) so the
+    # distribution figure is still produced quickly; cutoff = -1 keeps it exact for small
+    # networks.
+    bet_cutoff <- if (n_nodes > 8000) 3 else if (n_nodes > 2000) 5 else -1;
     G.degrees <- tryCatch({
       setTimeLimit(cpu = Inf, elapsed = 120, transient = TRUE);
-      result <- igraph::betweenness(current.mirnet);
+      result <- igraph::betweenness(current.mirnet, cutoff = bet_cutoff);
       print("PlotBetweennessHistogram: Betweenness calculation completed");
       result
     }, error = function(e) {
       if(grepl("reached elapsed time limit", e$message, ignore.case = TRUE)) {
-        stop("PlotBetweennessHistogram: Betweenness calculation timed out after 120 seconds. Network may be too large.");
+        # Timed out even with the cutoff — retry with a very short path cutoff so the
+        # figure is still produced rather than failing with no output.
+        tryCatch(setTimeLimit(cpu = Inf, elapsed = Inf, transient = FALSE), error = function(e){});
+        igraph::betweenness(current.mirnet, cutoff = 2);
       } else {
         stop("PlotBetweennessHistogram: Betweenness calculation failed: ", e$message);
       }
