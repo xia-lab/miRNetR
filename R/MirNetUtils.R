@@ -1670,8 +1670,19 @@ PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
     n_edges <- igraph::ecount(current.mirnet);
     print(paste("PlotBetweennessHistogram: Network has", n_nodes, "nodes and", n_edges, "edges"));
 
-    if(n_nodes > 10000) {
-      warning("PlotBetweennessHistogram: Large network (", n_nodes, " nodes). Calculation may take time.");
+    if(n_nodes > 8000) {
+      # Betweenness centrality is O(n*m) and is not tractable on a network this large
+      # (typical of an un-pruned result); skip the computation rather than time out /
+      # fail, leaving a short note in the figure so the slot is still filled.
+      graphics::plot.new();
+      graphics::text(0.5, 0.56, "Betweenness distribution not computed", cex = 1.1, font = 2);
+      graphics::text(0.5, 0.40, paste0("network too large (", n_nodes, " nodes) for betweenness centrality"),
+                     cex = 0.85, col = "grey40");
+      dev.off();
+      dataSet$imgSet$betwennessHistogram <- list();
+      dataSet$imgSet$betwennessHistogram$netName <- netNm;
+      dataSet <<- dataSet;
+      return(1);
     }
 
     # Calculate betweenness with timeout protection (120 seconds for large networks).
@@ -1689,8 +1700,11 @@ PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
       if(grepl("reached elapsed time limit", e$message, ignore.case = TRUE)) {
         # Timed out even with the cutoff — retry with a very short path cutoff so the
         # figure is still produced rather than failing with no output.
-        tryCatch(setTimeLimit(cpu = Inf, elapsed = Inf, transient = FALSE), error = function(e){});
-        igraph::betweenness(current.mirnet, cutoff = 2);
+        # Keep the retry time-limited (not unbounded) with the shortest cutoff so a very
+        # large network cannot hang the step; a second timeout falls through to the error
+        # handler, which draws a placeholder figure instead of failing.
+        setTimeLimit(cpu = Inf, elapsed = 60, transient = TRUE);
+        igraph::betweenness(current.mirnet, cutoff = 1);
       } else {
         stop("PlotBetweennessHistogram: Betweenness calculation failed: ", e$message);
       }
@@ -1726,8 +1740,16 @@ PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
     dataSet <<- dataSet;
     return(1);  # Return success for Java
   }, error = function(e) {
-    # Ensure device is closed on error
     tryCatch(dev.off(), error = function(e){});
-    stop("PlotBetweennessHistogram failed: ", e$message);
+    # Any residual failure (e.g. a timeout in the 2000-8000 node range) still leaves the
+    # figure slot filled with a note rather than failing the whole step with no output.
+    tryCatch({
+      Cairo(file = imgNm, width = 400, height = 400, type = "png", bg = "white");
+      graphics::plot.new();
+      graphics::text(0.5, 0.56, "Betweenness distribution unavailable", cex = 1.1, font = 2);
+      graphics::text(0.5, 0.40, "betweenness centrality could not be computed", cex = 0.85, col = "grey40");
+      dev.off();
+    }, error = function(e2) { tryCatch(dev.off(), error = function(e){}) });
+    return(1);
   })
 }

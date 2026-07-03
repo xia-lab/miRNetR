@@ -53,9 +53,10 @@ SetupMirListData <- function(mirs, orgType, idType, tissue, targetOpt=NULL){
 #' @param idType ID type.
 #' @param tissue Tissue type.
 #' @param target Target.
+#' @param geneMirDb Gene-miRNA source database (empty = unset).
 #' @return List data initialized.
 #' @export
-SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, target){
+SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, target, geneMirDb = ""){
 
   data.org <<- dataSet$org <- orgType;
   dataSet$tissue <- tissue;
@@ -74,6 +75,7 @@ SetupIndListData <- function(listInput, orgType, inputType, idType, tissue, targ
   dataSet$data[[inputType]] <- in.mat;
   dataSet$id.types[[inputType]] <- idType;
   dataSet$target.types[[inputType]] <- target;
+  if (nzchar(geneMirDb)) dataSet$gene.mir.db <- geneMirDb;
   dataSet <<- dataSet;
   if(.on.public.web){
     return (nrow(in.mat));
@@ -398,7 +400,11 @@ QueryMultiListMir <- function(){
         idType <- dataSet$id.types[["gene"]];
         mir.mat <- dataSet$data[["gene"]];
         idVec <- rownames(mir.mat);
-        db.type <- "";
+        # gene->miRNA source database: filter to one validated source when set
+        # (whitelisted); empty (unset) keeps the prior no-filter behaviour.
+        db.type <- if (!is.null(dataSet$gene.mir.db) &&
+                       dataSet$gene.mir.db %in% c("mirtarbase","tarbase","mirecords"))
+                     dataSet$gene.mir.db else "";
         orgType <- dataSet$org;
       }else{
         idType <- dataSet$mirnaType;
@@ -408,7 +414,7 @@ QueryMultiListMir <- function(){
         orgType <- dataSet$org;
       }
     }
-    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), idVec, orgType, idType, db.type);
+    mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), idVec, orgType, idType, db.type, gene.db = db.type);
 
     hit.num <- nrow(mir.dic)
     if (hit.num == 0 && dataSet$tissue == "na") {
