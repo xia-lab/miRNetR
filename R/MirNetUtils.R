@@ -857,6 +857,22 @@ GetTableNames <- function(){
   }
   infoSet <- readSet(infoSet, "infoSet");
   infoSet$paramSet$tableNames <- res;
+  # Record the source-DB code used per interaction table so the report can show it. The
+  # configurable miRNA<->gene / gene<->TF interactions carry the selected DB in the workflow
+  # globals; unset (e.g. public web) leaves "" and the report omits it.
+  .ov_db_code <- function(nm){
+    if (exists(nm, envir = .GlobalEnv)) {
+      v <- get(nm, envir = .GlobalEnv);
+      if (is.character(v) && length(v) == 1L && nzchar(v)) return(v);
+    }
+    ""
+  }
+  infoSet$paramSet$tableDbs <- vapply(as.character(res), function(t){
+    if (grepl("gene2tf|tf2gene", t)) return(.ov_db_code(".OmicsVerse.tfDb"));
+    if (grepl("gene2mir", t))        return(.ov_db_code(".OmicsVerse.geneMirDb"));
+    if (grepl("mir2gene", t) || identical(t, "gene")) return(.ov_db_code(".OmicsVerse.mirTargetDb"));
+    ""
+  }, character(1));
   saveSet(infoSet, "infoSet");
   return(res)
 }
