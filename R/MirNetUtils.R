@@ -1602,7 +1602,7 @@ PlotDegreeHistogram <- function(imgNm, netNm = "NA", dpi=72, format="png"){
   #imgNm <- paste(imgNm, "dpi", dpi, ".", format, sep="");
 
   tryCatch({
-    Cairo(file=imgNm, width=400, height=400, type="png", bg="white");
+    Cairo(file=imgNm, unit="in", width=7, height=6, dpi=150, type="png", bg="white");
     library(ggplot2)
     if(netNm != "NA"){
         current.mirnet <-  mir.nets[[netNm]];
@@ -1675,7 +1675,7 @@ PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
   #imgNm <- paste(imgNm, "dpi", dpi, ".", format, sep="");
 
   tryCatch({
-    Cairo(file=imgNm, width=400, height=400, type="png", bg="white");
+    Cairo(file=imgNm, unit="in", width=7, height=6, dpi=150, type="png", bg="white");
     library(ggplot2)
     if(netNm != "NA"){
         current.mirnet <-  mir.nets[[netNm]];
