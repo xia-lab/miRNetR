@@ -40,6 +40,9 @@ Init.Data<-function(dataType, analType, onWeb=T){
   module.count <<- 0;
   
   #api.base <<- "132.216.38.6:8987"
+  # NOTE: kept as http:// — api.xialab.ca currently serves no valid TLS cert
+  # (hostname mismatch), so https:// would fail cert verification and break this
+  # API. TODO(distribution): move to a durable https host (registry.omicsverse.com/R2).
   api.base <<- "http://api.xialab.ca"
   
   if(.on.public.web){
