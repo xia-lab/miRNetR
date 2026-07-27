@@ -868,9 +868,9 @@ GetTableNames <- function(){
     ""
   }
   infoSet$paramSet$tableDbs <- vapply(as.character(res), function(t){
-    if (grepl("gene2tf|tf2gene", t)) return(.ov_db_code(".OmicsVerse.tfDb"));
-    if (grepl("gene2mir", t))        return(.ov_db_code(".OmicsVerse.geneMirDb"));
-    if (grepl("mir2gene", t) || identical(t, "gene")) return(.ov_db_code(".OmicsVerse.mirTargetDb"));
+    if (grepl("gene2tf|tf2gene", t)) return(.ov_db_code(".ov.tfDb"));
+    if (grepl("gene2mir", t))        return(.ov_db_code(".ov.geneMirDb"));
+    if (grepl("mir2gene", t) || identical(t, "gene")) return(.ov_db_code(".ov.mirTargetDb"));
     ""
   }, character(1));
   saveSet(infoSet, "infoSet");

@@ -380,11 +380,11 @@ QueryMultiListMir <- function(){
       mir.mat <- dataSet$mir.orig;
       idVec <- rownames(mir.mat);
       # Honor the selected miRNA-target database when one is set as a global
-      # (.OmicsVerse.mirTargetDb: gene=miRTarBase default / gene_tarbase / gene_mirecords).
+      # (.ov.mirTargetDb: gene=miRTarBase default / gene_tarbase / gene_mirecords).
       # When unset, keep the historical miRTarBase default (I/O-compatible).
       db.type <- "mirtarbase";
-      if (exists(".OmicsVerse.mirTargetDb", envir = .GlobalEnv)) {
-        .ov.mtd <- get(".OmicsVerse.mirTargetDb", envir = .GlobalEnv);
+      if (exists(".ov.mirTargetDb", envir = .GlobalEnv)) {
+        .ov.mtd <- get(".ov.mirTargetDb", envir = .GlobalEnv);
         if (is.character(.ov.mtd) && length(.ov.mtd) == 1L && nzchar(.ov.mtd))
           db.type <- if (.ov.mtd == "gene") "mirtarbase" else sub("^gene_", "", .ov.mtd);
       }
@@ -408,11 +408,11 @@ QueryMultiListMir <- function(){
         idType <- dataSet$id.types[["gene"]];
         mir.mat <- dataSet$data[["gene"]];
         idVec <- rownames(mir.mat);
-        # gene->miRNA source database: prefer the .OmicsVerse.geneMirDb global when set, else the
+        # gene->miRNA source database: prefer the .ov.geneMirDb global when set, else the
         # dataSet field; empty (unset) keeps the prior no-filter behaviour (I/O-compatible).
         db.type <- "";
-        if (exists(".OmicsVerse.geneMirDb", envir = .GlobalEnv)) {
-          .ov.gmd <- get(".OmicsVerse.geneMirDb", envir = .GlobalEnv);
+        if (exists(".ov.geneMirDb", envir = .GlobalEnv)) {
+          .ov.gmd <- get(".ov.geneMirDb", envir = .GlobalEnv);
           if (is.character(.ov.gmd) && length(.ov.gmd) == 1L && .ov.gmd %in% c("mirtarbase","tarbase","mirecords")) db.type <- .ov.gmd;
         }
         if (!nzchar(db.type) && !is.null(dataSet$gene.mir.db) &&
@@ -932,11 +932,11 @@ QueryMultiListMir <- function(){
       mir.dic <- Query.miRNetDB(paste(sqlite.path, "mir2tf", sep=""), mir.vec, orgType, idType);
     }else{
       if(input.type == "gene2tf"){
-        # gene->TF source database: prefer the .OmicsVerse.tfDb global when set, else the load-time
+        # gene->TF source database: prefer the .ov.tfDb global when set, else the load-time
         # field (I/O-compatible: unset keeps the historical TRRUST default set at load).
         targetType <- dataSet$target.types[["gene"]];
-        if (exists(".OmicsVerse.tfDb", envir = .GlobalEnv)) {
-          .ov.tf <- get(".OmicsVerse.tfDb", envir = .GlobalEnv);
+        if (exists(".ov.tfDb", envir = .GlobalEnv)) {
+          .ov.tf <- get(".ov.tfDb", envir = .GlobalEnv);
           if (is.character(.ov.tf) && length(.ov.tf) == 1L && .ov.tf %in% c("trrust","regnetwork","encode","jaspar","chea")) targetType <- .ov.tf;
         }
       }else{
