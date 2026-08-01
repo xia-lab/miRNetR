@@ -437,7 +437,7 @@ print(statement);
       print("Converting ids for different miRBase versions ....");
       notMatch <- gsub("mir", "miR", notMatch);
       if(.on.public.web){
-        load("../../data/libs/mbcdata.rda");
+        load(paste0(.ov_lib_root(), "libs/mbcdata.rda"));
       }else{
         mbcdata.rda <- paste(lib.path, "/mbcdata.rda", sep="");
         destfile <- paste("mbcdata.rda");

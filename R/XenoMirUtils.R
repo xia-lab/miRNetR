@@ -108,7 +108,7 @@ RemoveXenoMirEntry <- function(row.id) {
 #' Get Unique Source Names
 #' @export
 GetUniqueSourceNames <- function(orgType){
-    db.path <- paste("../../data/libs/xenomir.hosts.json");
+    db.path <- paste(paste0(.ov_lib_root(), "libs/xenomir.hosts.json"));
     library("RJSONIO");
     browse <- fromJSON(db.path);
     browse <<- browse;
@@ -432,7 +432,7 @@ QueryXenoMirSQLite <- function(db.path, q.vec, table.nm, col.nm, source){
         mir.lib <- as.vector(unique(mir.dic$exo_mirna));
         notMatch <- setdiff(q.vec, mir.lib);
         if (length(notMatch) > 0){ # Converting miRBase version and mature id.
-          load("../../data/libs/mbcdata.rda");
+          load(paste0(.ov_lib_root(), "libs/mbcdata.rda"));
           miRNANames <- gsub(" ","", as.character(notMatch));
           targetVersion <- "v21";
           ver_index <- match(tolower(targetVersion), VER)

@@ -783,7 +783,7 @@ convertMat2Pre <- function(mir.vec, idType){
   if (any(grepl("miR", mir.vec)) || any(grepl("-[35]p$", mir.vec)) || any(grepl("MIMAT", mir.vec))) {
     print("Converting mature microRNA to precursor microRNA ....");
     if(.on.public.web){
-      load("../../data/libs/mbcdata.rda");
+      load(paste0(.ov_lib_root(), "libs/mbcdata.rda"));
     }else{
       mbcdata.rda <- paste(lib.path, "/mbcdata.rda", sep="");
       destfile <- paste("mbcdata.rda");

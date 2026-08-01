@@ -1,3 +1,11 @@
+
+# Reference libraries live in one shared directory when running inside the host
+# app (which sets on.ov = TRUE); standalone use keeps the package-local layout.
+.ov_lib_root <- function() {
+  if (isTRUE(tryCatch(get("on.ov", envir = globalenv()), error = function(e) FALSE)))
+    "../../../../resources/data/" else "../../data/"
+}
+
 ##################################################
 ## R script for miRNet
 ## Description: Data/resource management functions
@@ -46,7 +54,7 @@ Init.Data<-function(dataType, analType, onWeb=T){
   api.base <<- "http://api.xialab.ca"
   
   if(.on.public.web){
-    lib.path <<- "../../data/libs/";
+    lib.path <<- paste0(.ov_lib_root(), "libs/");
   }else{
     lib.path <<- "https://www.mirnet.ca/resources/data/libs/";     
   }
