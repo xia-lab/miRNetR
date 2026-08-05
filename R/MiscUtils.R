@@ -416,6 +416,26 @@ Query.miRNetDB <- function(db.path, q.vec, table.nm, col.nm, db.nm = "mirtarbase
     }
     mir.db <- dbConnect(SQLite(), db.name);
   }
+  # Normalise the ID-type token to a real column name. Detection reports miRNA ids as
+  # "mirbase"/"mimat", but the tables store them as mir_id (mature name, e.g.
+  # mmu-miR-188-5p) and mir_acc (MIMAT accession). Passing the detection token straight
+  # through produced "SELECT * FROM mmu WHERE mirbase IN (...)" and the query died with
+  # "no such column: mirbase", which left the caller with an empty result, no network
+  # and a cascade of "object 'mir.nets' not found". Mapping here covers every caller
+  # rather than each one separately.
+  col.alias <- c(mirbase = "mir_id", mirbase_id = "mir_id", mir_name = "mir_id",
+                 mimat = "mir_acc", mirbase_acc = "mir_acc");
+  if (!is.null(col.nm) && length(col.nm) == 1L && tolower(col.nm) %in% names(col.alias)) {
+    col.nm <- unname(col.alias[[tolower(col.nm)]]);
+  }
+  # Fail loudly and usefully if the column still is not in the table: an unknown column
+  # otherwise surfaces four steps later as a missing-object error.
+  tbl.cols <- tryCatch(dbListFields(mir.db, table.nm), error = function(e) character(0));
+  if (length(tbl.cols) && !(col.nm %in% tbl.cols)) {
+    dbDisconnect(mir.db);
+    stop("Query.miRNetDB: '", col.nm, "' is not a column of table '", table.nm,
+         "'. Available: ", paste(tbl.cols, collapse = ", "));
+  }
   query <- paste (shQuote(q.vec),collapse=",");
   if(grepl("mir2gene", db.path) && col.nm %in% c("mir_id", "mir_acc") ){
     statement <- paste("SELECT * FROM ", table.nm, " WHERE ", col.nm," IN (", query, ")"," AND ", db.nm," == 1 ", sep="");
