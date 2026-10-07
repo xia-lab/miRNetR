@@ -657,6 +657,7 @@ doProbeMapping <- function(probe.vec, platform){
 doGeneIDMapping <- function(q.vec, type){
     require('RSQLite');
     db.path <- paste(sqlite.path, data.org, "_genes.sqlite", sep="");
+    if (exists("ov_require_ref_sqlite", mode = "function")) ov_require_ref_sqlite(db.path);
     if(.on.public.web){
         mir.db <- dbConnect(SQLite(), db.path);
     }else{
@@ -756,6 +757,7 @@ queryGeneDB <- function(table.nm, data.org){
     require('RSQLite')
     
     db.path <- paste(sqlite.path, data.org, "_genes.sqlite", sep="")
+    if (exists("ov_require_ref_sqlite", mode = "function")) ov_require_ref_sqlite(db.path);
     if(.on.public.web){
       conv.db <- dbConnect(SQLite(), db.path);
     }else{
