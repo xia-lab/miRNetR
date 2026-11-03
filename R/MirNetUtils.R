@@ -1611,7 +1611,8 @@ GetNetworkTopology <- function(netnm){
 DrawDegreeHistogram <- function(pd, imgNm, dpi = 72, format = "png") {
   require("Cairo"); require("ggplot2")
   dpi <- as.numeric(dpi)
-  fileNm <- imgNm
+  # the page passes a file name ("degree_distribution_0.png"); a redraw from saved data passes its stem ("degree_distribution_0")
+  fileNm <- if (grepl("\\.(png|pdf|svg|jpe?g|tiff?)$", imgNm, ignore.case = TRUE)) imgNm else paste0(imgNm, ".", format)
   Cairo(file = fileNm, unit = "in", width = 7, height = 6, dpi = 150, type = "png", bg = "white")
   p <- ggplot(pd, aes(x = G.degrees, y = Freq)) +
     geom_point() +
@@ -1634,7 +1635,8 @@ DrawDegreeHistogram <- function(pd, imgNm, dpi = 72, format = "png") {
 DrawBetweennessHistogram <- function(pd, imgNm, dpi = 72, format = "png") {
   require("Cairo"); require("ggplot2")
   dpi <- as.numeric(dpi)
-  fileNm <- imgNm
+  # the page passes a file name ("degree_distribution_0.png"); a redraw from saved data passes its stem ("degree_distribution_0")
+  fileNm <- if (grepl("\\.(png|pdf|svg|jpe?g|tiff?)$", imgNm, ignore.case = TRUE)) imgNm else paste0(imgNm, ".", format)
   Cairo(file = fileNm, unit = "in", width = 7, height = 6, dpi = 150, type = "png", bg = "white")
   p <- ggplot(pd, aes(x = G.degrees, y = Freq)) +
     geom_point() +
