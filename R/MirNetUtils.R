@@ -1596,14 +1596,68 @@ GetNetworkTopology <- function(netnm){
 
 #' Plot Degree Histogram
 #' @export
+# Offers the data a figure is drawn from to whoever asked to keep it. A consumer that sets
+# options(ov.plot_data_hook = function(img, data, draw, args) ...) receives the figure's stem,
+# the data its Draw<X>() function reads, that function's name and the arguments it takes
+# after the data. Nothing set: nothing happens. Base R only - the package names nothing outside itself.
+.ov_plot_data <- function(img, data, draw, args = list()) {
+  h <- getOption("ov.plot_data_hook")
+  if (is.function(h)) tryCatch(h(img, data, draw, args), error = function(e) NULL)
+  invisible(NULL)
+}
+
+# Draws the degree distribution from pd = data.frame(G.degrees = <degree>, Freq = <number of nodes>), saved by
+# .ov_plot_data, so a figure refine can redraw it from that data alone.
+DrawDegreeHistogram <- function(pd, imgNm, dpi = 72, format = "png") {
+  require("Cairo"); require("ggplot2")
+  dpi <- as.numeric(dpi)
+  fileNm <- imgNm
+  Cairo(file = fileNm, unit = "in", width = 7, height = 6, dpi = 150, type = "png", bg = "white")
+  p <- ggplot(pd, aes(x = G.degrees, y = Freq)) +
+    geom_point() +
+    scale_x_continuous("Degree\n(nodes containing that amount of connections)",
+                       breaks = c(1, 3, 10, 30, 100, 300),
+                       trans = "log10") +
+    scale_y_continuous("Frequency\n(number of nodes)",
+                       breaks = c(1, 3, 10, 30, 100, 300, 1000),
+                       trans = "log10") +
+    ggtitle("Degree Distribution (log-log)") +
+    theme_bw()  +
+    theme(plot.title = element_text(hjust = 0.5))
+  print(p)
+  dev.off()
+  invisible(fileNm)
+}
+
+# Draws the betweenness distribution from pd = data.frame(G.degrees = <betweenness>, Freq = <number of nodes>), saved by
+# .ov_plot_data, so a figure refine can redraw it from that data alone.
+DrawBetweennessHistogram <- function(pd, imgNm, dpi = 72, format = "png") {
+  require("Cairo"); require("ggplot2")
+  dpi <- as.numeric(dpi)
+  fileNm <- imgNm
+  Cairo(file = fileNm, unit = "in", width = 7, height = 6, dpi = 150, type = "png", bg = "white")
+  p <- ggplot(pd, aes(x = G.degrees, y = Freq)) +
+    geom_point() +
+    scale_x_continuous("Betweenness\n(nodes with that amount of betweenness)",
+                       breaks = c(1, 3, 10, 30, 100, 300,1000,3000,10000,30000),
+                       trans = "log10") +
+    scale_y_continuous("Frequency\n(number of nodes)",
+                       breaks = c(1, 3, 10, 30, 100, 300, 1000),
+                       trans = "log10") +
+    ggtitle("Betweenness Distribution (log-log)") +
+    theme_bw()  +
+    theme(plot.title = element_text(hjust = 0.5))
+  print(p)
+  dev.off()
+  invisible(fileNm)
+}
+
 PlotDegreeHistogram <- function(imgNm, netNm = "NA", dpi=72, format="png"){
   library(igraph)
   dpi<-as.numeric(dpi)
   #imgNm <- paste(imgNm, "dpi", dpi, ".", format, sep="");
 
   tryCatch({
-    Cairo(file=imgNm, unit="in", width=7, height=6, dpi=150, type="png", bg="white");
-    library(ggplot2)
     if(netNm != "NA"){
         current.mirnet <-  mir.nets[[netNm]];
     }
@@ -1642,19 +1696,8 @@ PlotDegreeHistogram <- function(imgNm, netNm = "NA", dpi=72, format="png"){
     # wf_method.R.
     if (exists("WfSaveFigureData")) tryCatch(WfSaveFigureData("degree_distribution", G.degree.histogram), error = function(e) NULL)
 
-    p <- ggplot(G.degree.histogram, aes(x = G.degrees, y = Freq)) +
-        geom_point() +
-        scale_x_continuous("Degree\n(nodes containing that amount of connections)",
-                           breaks = c(1, 3, 10, 30, 100, 300),
-                           trans = "log10") +
-        scale_y_continuous("Frequency\n(number of nodes)",
-                           breaks = c(1, 3, 10, 30, 100, 300, 1000),
-                           trans = "log10") +
-        ggtitle("Degree Distribution (log-log)") +
-        theme_bw()  +
-        theme(plot.title = element_text(hjust = 0.5))
-    print(p)
-    dev.off();
+    .ov_plot_data(imgNm, G.degree.histogram, "DrawDegreeHistogram", list(dpi = dpi, format = format));
+    DrawDegreeHistogram(G.degree.histogram, imgNm, dpi, format);
 
     dataSet$imgSet$degreeHistogram <- list();
     dataSet$imgSet$degreeHistogram$netName <- netNm;
@@ -1675,8 +1718,6 @@ PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
   #imgNm <- paste(imgNm, "dpi", dpi, ".", format, sep="");
 
   tryCatch({
-    Cairo(file=imgNm, unit="in", width=7, height=6, dpi=150, type="png", bg="white");
-    library(ggplot2)
     if(netNm != "NA"){
         current.mirnet <-  mir.nets[[netNm]];
     }
@@ -1690,6 +1731,7 @@ PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
       # Betweenness centrality is O(n*m) and is not tractable on a network this large
       # (typical of an un-pruned result); skip the computation rather than time out /
       # fail, leaving a short note in the figure so the slot is still filled.
+      Cairo(file=imgNm, unit="in", width=7, height=6, dpi=150, type="png", bg="white");
       graphics::plot.new();
       graphics::text(0.5, 0.56, "Betweenness distribution not computed", cex = 1.1, font = 2);
       graphics::text(0.5, 0.40, paste0("network too large (", n_nodes, " nodes) for betweenness centrality"),
@@ -1737,19 +1779,8 @@ PlotBetweennessHistogram <- function(imgNm, netNm = "NA",dpi=72, format="png"){
     # wf_method.R.
     if (exists("WfSaveFigureData")) tryCatch(WfSaveFigureData("betweenness_distribution", G.degree.histogram), error = function(e) NULL)
 
-    p <- ggplot(G.degree.histogram, aes(x = G.degrees, y = Freq)) +
-        geom_point() +
-        scale_x_continuous("Betweenness\n(nodes with that amount of betweenness)",
-                           breaks = c(1, 3, 10, 30, 100, 300,1000,3000,10000,30000),
-                           trans = "log10") +
-        scale_y_continuous("Frequency\n(number of nodes)",
-                           breaks = c(1, 3, 10, 30, 100, 300, 1000),
-                           trans = "log10") +
-        ggtitle("Betweenness Distribution (log-log)") +
-        theme_bw()  +
-        theme(plot.title = element_text(hjust = 0.5))
-    print(p)
-    dev.off();
+    .ov_plot_data(imgNm, G.degree.histogram, "DrawBetweennessHistogram", list(dpi = dpi, format = format));
+    DrawBetweennessHistogram(G.degree.histogram, imgNm, dpi, format);
 
     dataSet$imgSet$betwennessHistogram <- list();
     dataSet$imgSet$betwennessHistogram$netName <- netNm;
