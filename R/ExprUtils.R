@@ -40,7 +40,7 @@ ReadTabExpressData <- function(dataName) {
 
     if(nrow(int.mat) > 2000){
         filter.val <- filter.val[good.inx2];
-        rk <- rank(-filter.val, ties.method='random');
+        rk <- rank(-filter.val, ties.method = "first");
 
         var.num <- nrow(int.mat);
         kept.num <- 0.95*var.num;
