@@ -22,7 +22,8 @@ Imports:
     limma,
     edgeR,
     HTqPCR,
-    genefilter
+    genefilter,
+    qs2
 Suggests: 
     knitr,
     rmarkdown,

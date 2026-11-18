@@ -358,7 +358,7 @@ PerformLimma<-function(target.grp){
           data_obj = list(cls = cls, data.norm = dataSet$data.norm, design = design),
           params = params
         ),
-        packages = c("limma", "qs"),
+        packages = c("limma", "qs2"),
         timeout = 300,
         output_type = "qs"
       )
@@ -431,7 +431,7 @@ PerformCountDataNormalization <- function(norm.opt, disp.opt){
         data_obj = list(data.anot = dataSet$data.anot, cls = dataSet$cls, design = design),
         params = list(norm.opt = norm.opt, disp.opt = disp.opt)
       ),
-      packages = c("edgeR", "qs"),
+      packages = c("edgeR", "qs2"),
       timeout = 300,
       output_type = "qs"
     )
@@ -509,7 +509,7 @@ PerformEdgeR<-function(target.grp){
         data_obj = list(design = dataSet$design, edger.y = edger.y),
         params = params
       ),
-      packages = c("edgeR", "limma", "qs"),
+      packages = c("edgeR", "limma", "qs2"),
       timeout = 300,
       output_type = "qs"
     )

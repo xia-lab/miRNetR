@@ -610,7 +610,7 @@ BuildLargeMirNetwork <- function(mSetObj = NA, min.count = 1) {
         data_obj = list(mir_res = mir_res),
         params = params
       ),
-      packages = c("igraph", "qs"),
+      packages = c("igraph", "qs2"),
       timeout = 300,
       output_type = "qs"
     )
@@ -733,7 +733,7 @@ PerformLayOut <- function(g, layers, algo, focus=""){
         data_obj = list(g = g),
         params = params
       ),
-      packages = c("igraph", "graphlayouts", "ggforce", "qs"),
+      packages = c("igraph", "graphlayouts", "ggforce", "qs2"),
       timeout = 300,
       output_type = "qs"
     )
