@@ -110,20 +110,26 @@ my.snp.mir.mapping <- function(){
         res <- na.omit(tf.dic[, c("chr_pos", "rsid", "entrez", "symbol", "name")]);
         res$Literature <- rep("27899579", nrow(res));
         res$Database <- rep("SNP2TFBS", nrow(res));
-        res$tableType <- "snp2tfbs"; # Add tableType
-        res$originalRowId <- 1:nrow(res); # Assuming row order as original ID
+        # a list whose SNPs sit in no transcription-factor binding site gives no rows here, and every column below follows the row count (a single
+        # value or 1:nrow() on no rows stopped the whole mapping: "replacement has 1 row, data has 0")
+        res$tableType <- rep("snp2tfbs", nrow(res)); # Add tableType
+        res$originalRowId <- seq_len(nrow(res)); # Assuming row order as original ID
         colnames(res) <- c("CHR_POS", "rsID", "Entrez", "Symbol", "Name", "Literature", "Database", "TableType", "OriginalRowId");
         tf.vec = res["Entrez"]
         tf.res = res
 
-        tf.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), tf.vec, dataSet$org, "entrez");
-        tf.dic <- na.omit(tf.dic)
-
-        res <- tf.dic[, c("mir_id", "mir_acc", "symbol", "entrez", "experiment", "pmid", "tissue")];
+        if (nrow(tf.res) > 0) {
+          tf.dic <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), tf.vec, dataSet$org, "entrez");
+          tf.dic <- na.omit(tf.dic)
+          res <- tf.dic[, c("mir_id", "mir_acc", "symbol", "entrez", "experiment", "pmid", "tissue")];
+        } else {
+          res <- data.frame(mir_id = character(0), mir_acc = character(0), symbol = character(0), entrez = character(0),
+                            experiment = character(0), pmid = character(0), tissue = character(0), stringsAsFactors = FALSE);
+        }
         res$Literature <- rep("NA", nrow(res));
         res$Database <- rep("NA", nrow(res));
-        res$tableType <- "mir2gene"; # Add tableType
-        res$originalRowId <- 1:nrow(res); # Assuming row order as original ID
+        res$tableType <- rep("mir2gene", nrow(res)); # Add tableType
+        res$originalRowId <- seq_len(nrow(res)); # Assuming row order as original ID
         colnames(res) <- c("ID", "Accession", "Gene", "Entrez", "Experiment", "Literature", "Tissue", "TableType", "OriginalRowId");
         tf.res2 = res
 
@@ -133,7 +139,7 @@ my.snp.mir.mapping <- function(){
           ID1=tf.res[, "Entrez"],
           Name2=tf.res[, "rsID"], # Adjust if "Name" is not the correct column
           ID2=tf.res[, "rsID"],
-          tableType = "snp2tfbs",
+          tableType = rep("snp2tfbs", nrow(tf.res)),
           originalRowId = tf.res[, "OriginalRowId"],
           stringsAsFactors = FALSE
         ));
@@ -143,7 +149,7 @@ my.snp.mir.mapping <- function(){
           ID1=tf.res2[, "Entrez"],
           Name2=tf.res2[, "ID"],
           ID2=tf.res2[, "Accession"],
-          tableType = "mir2gene",
+          tableType = rep("mir2gene", nrow(tf.res2)),
           originalRowId = tf.res2[, "OriginalRowId"],
           stringsAsFactors = FALSE
         ));
