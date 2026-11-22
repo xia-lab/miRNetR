@@ -611,6 +611,9 @@ print(statement);
       }
     }
   }
+  # no hit is a table of the same columns: a caller selects "tissue" whether or not a row came back (a SNP list with no binding-site gene stopped at
+  # mir2gene's "undefined columns selected")
+  if (nrow(mir.dic) == 0 && !("tissue" %in% colnames(mir.dic))) mir.dic[["tissue"]] <- character(0);
 
   return(mir.dic);
 }

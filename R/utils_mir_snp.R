@@ -9,12 +9,13 @@ my.snp.mir.mapping <- function(){
   hit.inx <- match(snpidVec, snp.dic$rsid);
 
   na.hits <- is.na(hit.inx);
+  # the hits are both tables' (the binding-site hits were counted, then replaced by snp2mir's alone: a list of binding-site SNPs was "No hits found")
+  snp.num <- snp.dic;
   if(sum(na.hits) > 0){
     unmatched.snp <- snpidVec[na.hits];
     snp.dic2 <- Query.miRNetDB(paste(sqlite.path, "snp2mirbs", sep=""), unmatched.snp, dataSet$org, dataSet$idType);
     snp.num <- rbind(snp.dic[,1:2], snp.dic2[,1:2])
   }
-  snp.num <- snp.dic;
   hit.num <- nrow(snp.num)
   if (hit.num == 0) {
     current.msg <<- "No hits found in the database. The SNP list has not been annotated to miRNA or miRNA-binding sites. Please check your input.";
@@ -35,7 +36,7 @@ my.snp.mir.mapping <- function(){
           ID1 = snp.dic[,"Mature_Acc"],
           Name2 = snp.dic[,"rsid"],
           ID2 = snp.dic[,"rsid"],
-          tableType = "snp2mir", # Data table type
+          tableType = rep("snp2mir", nrow(snp.dic)), # Data table type
           originalRowId = rownames(snp.dic), # Assuming row order is the original ID
           stringsAsFactors = FALSE
         ));
@@ -44,7 +45,7 @@ my.snp.mir.mapping <- function(){
           ID1 = mir.dic[,"mir_acc"],
           Name2 = mir.dic[,"symbol"],
           ID2 = mir.dic[,"entrez"],
-          tableType = "mir2gene", # Data table type
+          tableType = rep("mir2gene", nrow(mir.dic)), # Data table type
           originalRowId = rownames(mir.dic), # Assuming row order is the original ID
           stringsAsFactors = FALSE
         ));
@@ -65,13 +66,14 @@ my.snp.mir.mapping <- function(){
       mir.dic2 <- Query.miRNetDB(paste(sqlite.path, "mir2gene", sep=""), idVec2, dataSet$org, "entrez");
       mir.dic2 <- na.omit(mir.dic2);
 
-      # for network
+      # for network: a list whose unmatched SNPs sit in no binding site gives no rows here, and every column follows the row count (a single
+      # "snp2mirbs" beside no rows stopped the whole mapping: "arguments imply differing number of rows: 0, 1", as on snp2tfbs below)
         snp.edge2 <- na.omit(data.frame(
           Name1 = snp.dic2[,"symbol"], 
           ID1 = snp.dic2[,"entrez"], 
           Name2 = snp.dic2[,"rsid"],
           ID2 = snp.dic2[,"rsid"],
-          tableType = "snp2mirbs", # Data table type
+          tableType = rep("snp2mirbs", nrow(snp.dic2)), # Data table type
           originalRowId = rownames(snp.dic2), # Assuming row order is the original ID
           stringsAsFactors = FALSE
         ));
@@ -81,7 +83,7 @@ my.snp.mir.mapping <- function(){
           ID1 = mir.dic2[,"entrez"], 
           Name2 = mir.dic2[,"mir_id"],
           ID2 = mir.dic2[,"mir_acc"],
-          tableType = "mir2gene", # Specify the actual query type
+          tableType = rep("mir2gene", nrow(mir.dic2)), # Specify the actual query type
           originalRowId = rownames(mir.dic2), # Assuming row order is the original ID
           stringsAsFactors = FALSE
         ));
@@ -193,7 +195,7 @@ my.snp.mir.mapping <- function(){
           ID1 = snp.dic[,"Mature_Acc"],
           Name2 = snp.dic[,"rsid"],
           ID2 = snp.dic[,"rsid"],
-          tableType = "snp2mir", # Data table type
+          tableType = rep("snp2mir", nrow(snp.dic)), # Data table type
           originalRowId = rownames(snp.dic), # Assuming row order is the original ID
           stringsAsFactors = FALSE
         ));        
@@ -202,7 +204,7 @@ my.snp.mir.mapping <- function(){
           ID1 = mir.dic[,"mir_acc"],
           Name2 = mir.dic[,"symbol"],
           ID2 = mir.dic[,"entrez"],
-          tableType = "mir2gene", # Data table type
+          tableType = rep("mir2gene", nrow(mir.dic)), # Data table type
           originalRowId = rownames(mir.dic), # Assuming row order is the original ID
           stringsAsFactors = FALSE
         ));
