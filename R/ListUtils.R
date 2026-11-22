@@ -533,6 +533,9 @@ QueryMultiListMir <- function(){
       mir.mappedu <<- rbind(mir.mappedu, mir.mat);
 
       colnames(res) <- c("ID","Accession","Molecule", "Pubchem_ID", "Experiment", "Literature", "Tissue");
+      # one molecule, one node: the table writes a few names twice, once with a trailing space ("Ginsenoside Rh2 "), which made two nodes of one
+      # molecule. Trimmed after the query matched the input above (a molecule picked by its untrimmed name still matches).
+      if (input.type == "mir2molecule") res[, "Molecule"] <- trimws(res[, "Molecule"]);
       display.res <- res;
       edge.res <- data.frame(Source=res[,"Accession"],Target=res[,"Molecule"]);    # IDs
       if(nrow(res)!=0){
